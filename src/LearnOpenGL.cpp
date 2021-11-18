@@ -3,6 +3,9 @@
 // GLFW handles the opengl context, window management, and user input
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <string>
+
+#include "ShaderProgram.h"
 
 // create a callback function that runs whenever the window gets resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -17,37 +20,6 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true); // close the window when esc key pressed
 }
 
-// For now, just store the shader code in a const string at the top of the file
-const char* vertexShaderSource = 
-	"#version 330 core\n" // opengl version 3.3, using the core profile
-	// create a vertex attribute aPos
-	// the position variable has attribute position 0
-	"layout (location = 0) in vec3 aPos;\n"
-	// the color variable has attribute position 1
-	"layout (location = 1) in vec3 aColor;\n"
-	// specify a color output to send to the fragment shader
-	// NOTE: some ppl say to use the 'varying' keyword instead of in/out. This is now deprecated
-	// see: https://stackoverflow.com/questions/34627576/why-did-glsl-change-varying-to-in-out
-	"out vec3 ourColor;"
-	"void main()\n"
-	"{\n"
-	// gl_Position is a built-in variable, and the final output of a vertex shader
-	// Note that our vertex data is already in NDC, but usually we'd have to transform
-	// from world -> normalized device coords so that they fall within OpenGL's visible region
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n" // vec4, with w = 1.0
-	"	ourColor = aColor;\n" // set ourColor to the input color we got from the vertex data
-	"}\0";
-const char* fragmentShaderSource =
-	"#version 330 core\n" // see above^
-	"out vec4 FragColor;\n" // frag shader must ALWAYS output a vec4 for color
-	"in vec3 ourColor;" // use same and type as vert shader, OpenGL will link them together
-	//"uniform vec4 ourColor;\n"
-	"void main()\n"
-	"{\n"
-	//"	FragColor = vertexColor;\n" 
-	"	FragColor = vec4(ourColor, 1.0);\n"
-	"}\0";
-
 int main()
 {
 	// ----------------------- HELLO WINDOW ----------------------------------
@@ -55,6 +27,7 @@ int main()
 	// from https:// www.glfw.org/docs/latest/window.html#window_hints
 	// GLFW_CONTEXT_VERSION_MAJORand GLFW_CONTEXT_VERSION_MINOR specify the client API version that the created context must be compatible with.
 	// The exact behavior of these hints depend on the requested client API.
+	// (i.e. does the user have a recent-enough version of opengl installed?)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // make sure the user is using OpenGL 3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	// specifies which OpenGL profile to create the context for. 
@@ -81,7 +54,7 @@ int main()
 		return -1;
 	}
 
-	// Tell openGL the size of the rendering window (viewport)
+	// Tell openGL the size of the rendering window (viewport), which is the same size as our glfw window here
 	// 1st 2 params set the location of the lower left corner, next 2 set the width/height
 	glViewport(0, 0, 800, 600); // I think this is optional, since the framebuffer_size_callback should handle this
 	// bind the resizing function to the 'window resizing' action
@@ -90,63 +63,8 @@ int main()
 
 
 	// ----------------------- HELLO TRIANGLE ------------------------
-	// Create the Vertex Shader
-	unsigned int vertexShader; // the shader is an OpenGL object, so it has an ID
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// Attach the shader source code to the shader object
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	// compile the shader
-	glCompileShader(vertexShader);
-	// Check if the shader compilation was successful
-	int success; // create variables to pass by reference
-	char infoLog[512]; // storage container for error msg
-	// check for successful compilation
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	// if failed, retrieve error msg
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Create the fragment shader (color calculation)
-	// Use the same process as the vertex shader
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	// check for successful compilation
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	// if failed, retrieve error msg
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Link the shaders together into a shader program (multiple shaders linked together)
-	// Note: when linking, it links the OUTPUTS of each shader to the INPUTS of the NEXT shader
-	unsigned int shaderProgram; // object's ID
-	shaderProgram = glCreateProgram(); // create the program
-	// Attach the shaders to the program
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	// Link the two attached shaders together
-	glLinkProgram(shaderProgram);
-	// handle error checking, just like before
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	// finally, activate the program
-	glUseProgram(shaderProgram);
-	// Now, every shader and rendering call will use this program object (and our custom shaders)
-	// Since the shaders are now linked to the program, we don't need them anymore
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
+	ShaderProgram basic_shader;
+	basic_shader.Init("../resources/simple_vert.glsl", "../resources/simple_frag.glsl");
 	
 	// So, create an array of vertices in Normalized Device Coordinates (range -1 to 1)
 	// the glviewport command is how opengl converts between NDC and the screen space coords (which have their origin in top left)
@@ -283,7 +201,7 @@ int main()
 		// ^ in general, anytime a function is overloaded it will have a postfix for the type (OpenGL is built in C, so no overload support)
 		// ex: glUniformfv = float vector/array (we could also use that here), glUniformui = unsigned int, etc...
 		*/
-		glUseProgram(shaderProgram);
+		basic_shader.Activate();
 		// Draw our triangle using our Vertex Array Object (VAO)
 		// bind our VAO, which has all of the buffer/attribute settings. Since we only have 1 object it isn't
 		// strictly necessary that we bind it each time, but it's a good general practice
@@ -310,7 +228,7 @@ int main()
 	//  optional: de-allocate all resources once they've outlived their purpose:
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
+	basic_shader.Delete();
 
 	glfwTerminate(); // clean up all of GLFW's resources that we allocated
 	return 0;
