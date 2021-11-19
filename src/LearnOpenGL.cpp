@@ -1,9 +1,12 @@
-#include <glad/glad.h> // glad manages interfacing with drivers to get specific opengl implementations of functions
+#include <iostream>
+#include <string>
+
+// glad manages interfacing with drivers to get access
+// to opengl functions & constants
+#include <glad/glad.h> 
 // include glad before glfw
 // GLFW handles the opengl context, window management, and user input
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <string>
 
 #include "ShaderProgram.h"
 
@@ -64,7 +67,7 @@ int main()
 
 	// ----------------------- HELLO TRIANGLE ------------------------
 	ShaderProgram basic_shader;
-	basic_shader.Init("../resources/simple_vert.glsl", "../resources/simple_frag.glsl");
+	basic_shader.Init("resources/simple_vert.glsl", "resources/simple_frag.glsl");
 	
 	// So, create an array of vertices in Normalized Device Coordinates (range -1 to 1)
 	// the glviewport command is how opengl converts between NDC and the screen space coords (which have their origin in top left)

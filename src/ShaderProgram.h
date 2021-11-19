@@ -1,8 +1,11 @@
 #pragma once
 
-// Get opengl function headers
 #include <glad/glad.h>
 
+/// 
+/// Base class for all shaders, manages the compilation & 
+/// lifetime of a shader program
+/// 
 class ShaderProgram {
 public:
 	ShaderProgram();
