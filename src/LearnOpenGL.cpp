@@ -1,20 +1,14 @@
 #include <iostream>
 #include <string>
 
-// glad manages interfacing with drivers to get access
-// to opengl functions & constants
+// TODO: I shouldn't need to include glad and glfw here, should be abstracted
+// behind helper classes
+// Always include glad before glfw
 #include <glad/glad.h> 
-// include glad before glfw
-// GLFW handles the opengl context, window management, and user input
 #include <GLFW/glfw3.h>
 
 #include "ShaderProgram.h"
-
-// create a callback function that runs whenever the window gets resized
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height); // re-specify the viewport's size
-}
+#include "GameInstance.h"
 
 // handle user input using glfw's getkey function
 void processInput(GLFWwindow* window)
@@ -26,43 +20,8 @@ void processInput(GLFWwindow* window)
 int main()
 {
 	// ----------------------- HELLO WINDOW ----------------------------------
-	glfwInit();  // initialize GLFW
-	// from https:// www.glfw.org/docs/latest/window.html#window_hints
-	// GLFW_CONTEXT_VERSION_MAJORand GLFW_CONTEXT_VERSION_MINOR specify the client API version that the created context must be compatible with.
-	// The exact behavior of these hints depend on the requested client API.
-	// (i.e. does the user have a recent-enough version of opengl installed?)
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // make sure the user is using OpenGL 3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	// specifies which OpenGL profile to create the context for. 
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // explicitly use the core profile - don't include backwards-compatible features
-	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // only needed for Mac
-
-	// Next, create a window object
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Getting Started", NULL, NULL);
-	// make the context of the window the main context on the current thread
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-
-	// Initialize GLAD so that OpenGL has the right function pointers
-	// pass GLAD the function (from glfw) to load the address of the OpenGL function pointers
-	// a.k.a let GLAD handle loading the openGL function pointers instead of glfw?
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-
-	// Tell openGL the size of the rendering window (viewport), which is the same size as our glfw window here
-	// 1st 2 params set the location of the lower left corner, next 2 set the width/height
-	glViewport(0, 0, 800, 600); // I think this is optional, since the framebuffer_size_callback should handle this
-	// bind the resizing function to the 'window resizing' action
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	// in general, this is where we'll want to register any other callbacks, like joystick input
+	GameOptions game_options{ 800, 600, "Spider Game" };
+	GameInstance spider_game(game_options);
 
 
 	// ----------------------- HELLO TRIANGLE ------------------------
@@ -181,10 +140,10 @@ int main()
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
-	while (!glfwWindowShouldClose(window)) // has GLFW been told to close?
+	while (!glfwWindowShouldClose(spider_game.GetWindow())) // has GLFW been told to close?
 	{
 		// input
-		processInput(window); // handle user input using a custom function (this isn't built-in)
+		processInput(spider_game.GetWindow()); // handle user input using a custom function (this isn't built-in)
 
 		// rendering commands
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // set the void color to dark green-blue (STATE-SETTING function)
@@ -224,15 +183,15 @@ int main()
 		//   4: offset or array ref, we don't need to worry abt it now
 
 		// check and call events, swap buffers
-		glfwSwapBuffers(window); // swap the color buffers
+		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
 		glfwPollEvents(); // have any events been triggered (i.e. input?)
 	}
 
 	//  optional: de-allocate all resources once they've outlived their purpose:
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	// TODO: eventually, this should be wrapped up in another class
 	basic_shader.Delete();
 
-	glfwTerminate(); // clean up all of GLFW's resources that we allocated
 	return 0;
 }

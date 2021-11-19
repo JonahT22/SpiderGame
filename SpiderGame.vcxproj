@@ -20,11 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glad.c" />
+    <ClCompile Include="src\GameInstance.cpp" />
     <ClCompile Include="src\LearnOpenGL.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameInstance.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
