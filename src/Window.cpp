@@ -19,6 +19,8 @@ Window::Window(const int width, const int height, const char* title) {
 
 	/* ----- Bind any input callbacks here ----- */
 	// Associate this 'Window' instance with the glfwWindow that was created
+	// Use the "user pointer", which is a way to reroute static glfw calls to a specific
+	//   class instance.
 	glfwSetWindowUserPointer(glfwWindow, this);
 	glfwSetFramebufferSizeCallback(glfwWindow, ResizeCallback);
 }

@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\glad.c" />
     <ClCompile Include="src\GameInstance.cpp" />
-    <ClCompile Include="src\LearnOpenGL.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
