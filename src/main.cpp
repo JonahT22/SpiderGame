@@ -12,7 +12,7 @@
 
 int main()
 {
-	// ----------------------- HELLO WINDOW ----------------------------------
+	// Initialize the game and main rendering window
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	GameInstance spider_game(game_options);
 

@@ -17,10 +17,13 @@ Window::Window(const int width, const int height, const char* title) {
 	}
 	glfwMakeContextCurrent(glfwWindow);
 
+	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+
 	/* ----- Bind any input callbacks here ----- */
-	// Associate this 'Window' instance with the glfwWindow that was created
-	// Use the "user pointer", which is a way to reroute static glfw calls to a specific
+	// Associate this 'Window' instance with the glfwWindow that was created using
+	//   the "user pointer", which is a way to reroute static glfw calls to a specific
 	//   class instance.
+	//   See https://stackoverflow.com/questions/55145966/what-does-glfwgetwindowuserpointer-do/55195385#55195385
 	glfwSetWindowUserPointer(glfwWindow, this);
 	glfwSetFramebufferSizeCallback(glfwWindow, ResizeCallback);
 	glfwSetKeyCallback(glfwWindow, KeyCallback);
