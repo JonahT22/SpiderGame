@@ -24,7 +24,7 @@ GameInstance::GameInstance(const GameOptions options) {
 	mainWindow = std::make_unique<Window>(options.windowWidth, options.windowHeight,
 	                                      options.windowName);
 	// Call the window's resizing function to initialize the OpenGL window size
-	mainWindow->Resize(options.windowWidth, options.windowHeight);
+	mainWindow->ResizeEvent(options.windowWidth, options.windowHeight);
 
 	// Initialize GLAD so that OpenGL has the right function pointers.
 	// Pass GLAD the function (from glfw) that loads the OpenGL function pointers

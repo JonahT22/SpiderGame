@@ -10,13 +10,6 @@
 #include "ShaderProgram.h"
 #include "GameInstance.h"
 
-// handle user input using glfw's getkey function
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true); // close the window when esc key pressed
-}
-
 int main()
 {
 	// ----------------------- HELLO WINDOW ----------------------------------
@@ -142,9 +135,6 @@ int main()
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
 	while (!glfwWindowShouldClose(spider_game.GetWindow())) // has GLFW been told to close?
 	{
-		// input
-		processInput(spider_game.GetWindow()); // handle user input using a custom function (this isn't built-in)
-
 		// rendering commands
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // set the void color to dark green-blue (STATE-SETTING function)
 		glClear(GL_COLOR_BUFFER_BIT); // only clear the color buffer, not depth or stencil buffer (STATE-USING function)
