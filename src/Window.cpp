@@ -18,16 +18,12 @@ Window::Window(const int width, const int height, const char* title) {
 	glfwMakeContextCurrent(glfwWindow);
 
 	/* ----- Bind any input callbacks here ----- */
+	// Associate this 'Window' instance with the glfwWindow that was created
+	glfwSetWindowUserPointer(glfwWindow, this);
 	glfwSetFramebufferSizeCallback(glfwWindow, ResizeCallback);
 }
 
 void Window::Resize(int width, int height) {
-	// First params set the location of the lower left corner, next 2 set the width/height
-	glViewport(0, 0, width, height);
-}
-
-void Window::ResizeCallback(GLFWwindow* window, int width, int height) {
-	// TODO: this should just reroute the call to the resize() function
 	// First params set the location of the lower left corner, next 2 set the width/height
 	glViewport(0, 0, width, height);
 }

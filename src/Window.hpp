@@ -19,7 +19,14 @@ public:
 
 private:
 	/* Function callbacks - Reroutes to custom functions */
-	static void ResizeCallback(GLFWwindow* window, int width, int height);
+	inline static void ResizeCallback(GLFWwindow* window, int width, int height) {
+		// Reroute the static resize callback to a custom Resize Function
+		//   in a specific Window object instance (this routing is set
+		//   in the Window object's constructor)
+		// Cast the user pointer (which is a reference to any class object) to a Window
+		Window* customWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+		customWindow->Resize(width, height);
+	}
 
 	GLFWwindow* glfwWindow = nullptr;
 };

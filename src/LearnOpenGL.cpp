@@ -4,7 +4,7 @@
 // TODO: I shouldn't need to include glad and glfw here, should be abstracted
 // behind helper classes
 // Always include glad before glfw
-#include <glad/glad.h> 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "ShaderProgram.h"
