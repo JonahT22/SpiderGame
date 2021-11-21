@@ -8,6 +8,11 @@ ShaderProgram::ShaderProgram() :
 	programID(0)
 {}
 
+ShaderProgram::~ShaderProgram() {
+	// Completely deallocate this shader
+	glDeleteProgram(programID);
+}
+
 void ShaderProgram::Compile(const char* vert_path, const char* frag_path) {
 	/* ----- Get the shader source code ----- */
 	// Open the shader files
@@ -80,10 +85,6 @@ void ShaderProgram::Activate() {
 
 void ShaderProgram::Deactivate() {
 	glUseProgram(0);
-}
-
-void ShaderProgram::Delete() {
-	glDeleteProgram(programID);
 }
 
 GLint ShaderProgram::GetUniform(const GLchar* name) {

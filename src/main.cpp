@@ -47,8 +47,5 @@ int main()
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
 		glfwPollEvents(); // have any events been triggered (i.e. input?)
 	}
-	// TODO: eventually, this should be wrapped up in another class
-	basic_shader.Delete();
-
 	return 0;
 }
