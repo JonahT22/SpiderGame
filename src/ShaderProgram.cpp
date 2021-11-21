@@ -8,7 +8,7 @@ ShaderProgram::ShaderProgram() :
 	programID(0)
 {}
 
-void ShaderProgram::Init(const char* vert_path, const char* frag_path) {
+void ShaderProgram::Compile(const char* vert_path, const char* frag_path) {
 	/* ----- Get the shader source code ----- */
 	// Open the shader files
 	std::ifstream vert_file(vert_path);
@@ -86,4 +86,25 @@ void ShaderProgram::Delete() {
 	glDeleteProgram(programID);
 }
 
+GLint ShaderProgram::GetUniform(const GLchar* name) {
+	// TODO: probably also need to check that this shader is active
+	GLint location = glGetUniformLocation(programID, name);
+	if (location >= 0) {
+		return location;
+	}
+	else {
+		std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
+		std::cerr << std::endl;
+		abort();
+	}
+}
 
+void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value) {
+	GLint location = GetUniform(name);
+	glUniform1i(location, value);
+}
+
+void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value) {
+	GLint location = GetUniform(name);
+	glUniform1f(location, value);
+}

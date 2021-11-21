@@ -17,6 +17,8 @@ Window::Window(const int width, const int height, const char* title) {
 	}
 	glfwMakeContextCurrent(glfwWindow);
 
+	// Print OpenGL version. Don't need to print GLSL version since GLSL versions match
+	//   with OpenGL for all versions after OpenGL 3.3
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	/* ----- Bind any input callbacks here ----- */

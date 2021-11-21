@@ -20,7 +20,7 @@ int main()
 
 	// ----------------------- HELLO TRIANGLE ------------------------
 	ShaderProgram basic_shader;
-	basic_shader.Init("resources/simple_vert.glsl", "resources/simple_frag.glsl");
+	basic_shader.Compile("resources/simple_vert.glsl", "resources/simple_frag.glsl");
 	Mesh square_mesh;
 	square_mesh.LoadMesh("asdf");
 
@@ -34,21 +34,14 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // set the void color to dark green-blue (STATE-SETTING function)
 		glClear(GL_COLOR_BUFFER_BIT); // only clear the color buffer, not depth or stencil buffer (STATE-USING function)
 		
-		// ---------------------------SHADERS--------------------------
-		/* Practice with uniforms: 
-		float timeValue = glfwGetTime();
-		// interp a value from 0 to 1
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		// Get the location of the uniform variable that we defined in the frag shader (-1 means not found)
-		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-		// set the shader (MUST be done before updating the uniform's value)
-		glUseProgram(shaderProgram); 
-		// set 'ourColor' to just green (alpha = 1). Note: uniform4f sets a value on the CURRENT shader, so have to set the shader first
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f); 
-		// ^ in general, anytime a function is overloaded it will have a postfix for the type (OpenGL is built in C, so no overload support)
-		// ex: glUniformfv = float vector/array (we could also use that here), glUniformui = unsigned int, etc...
-		*/
 		basic_shader.Activate();
+		// Practice with uniforms:
+		GLfloat time = glfwGetTime();
+		// interp a value from 0 to 1
+		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
+		// Set the uniform that's defined in the frag shader
+		//   Note: the shader must be activated before calling this
+		basic_shader.SetFloatUniform("greenStrength", greenStrength);
 		square_mesh.Render();
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
