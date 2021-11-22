@@ -11,8 +11,7 @@
 #include "GameInstance.h"
 #include "Mesh.h"
 
-int main()
-{
+int main() {
 	// Initialize the game and main rendering window
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	GameInstance spider_game(game_options);
@@ -26,14 +25,14 @@ int main()
 
 	//  uncomment this call to draw in wireframe polygons.
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
+
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
-	while (!glfwWindowShouldClose(spider_game.GetWindow())) // has GLFW been told to close?
-	{
+	// has GLFW been told to close? 
+	while (!glfwWindowShouldClose(spider_game.GetWindow())) {
 		// rendering commands
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // set the void color to dark green-blue (STATE-SETTING function)
 		glClear(GL_COLOR_BUFFER_BIT); // only clear the color buffer, not depth or stencil buffer (STATE-USING function)
-		
+
 		basic_shader.Activate();
 		// Practice with uniforms:
 		GLfloat time = glfwGetTime();

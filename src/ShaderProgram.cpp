@@ -69,8 +69,7 @@ void ShaderProgram::Compile(const char* vert_path, const char* frag_path) {
 	glLinkProgram(programID);
 	// Handle error checking, just like before
 	glGetProgramiv(programID, GL_LINK_STATUS, &success);
-	if (!success)
-	{
+	if (!success) {
 		glGetProgramInfoLog(programID, 512, NULL, infoLog);
 		std::cerr << "Error linking shader program!\n" << infoLog << std::endl;
 	}
@@ -96,7 +95,7 @@ GLint ShaderProgram::GetUniform(const GLchar* name) {
 		std::cerr << std::endl;
 		return -1;
 	}
-	
+
 	// Check that the uniform's name exists on the shader
 	GLint location = glGetUniformLocation(programID, name);
 	if (location < 0) {
@@ -104,7 +103,7 @@ GLint ShaderProgram::GetUniform(const GLchar* name) {
 		std::cerr << std::endl;
 		return -1;
 	}
-	
+
 	return location;
 }
 

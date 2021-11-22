@@ -42,6 +42,14 @@ void Mesh::LoadMesh(const std::string& filename) {
 		0.0f, 0.0f, 0.0f   // top left 
 	};
 	colorBuffer.assign(std::begin(colors), std::end(colors));
+	// Texture coords, defined with (0,0) = bottom left
+	GLfloat tex_coords[] = {
+		1.0, 1.0,  // top right
+		1.0, 0.0,  // bottom right
+		0.0, 0.0,  // bottom left
+		0.0, 1.0   // top left
+	};
+	// TODO: assign texcoord buffer
 
 	// Tells openGL which vertices to draw in what order
 	//   (used by the Element Buffer Object)
