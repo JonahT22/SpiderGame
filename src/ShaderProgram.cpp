@@ -88,16 +88,24 @@ void ShaderProgram::Deactivate() {
 }
 
 GLint ShaderProgram::GetUniform(const GLchar* name) {
-	// TODO: probably also need to check that this shader is active
-	GLint location = glGetUniformLocation(programID, name);
-	if (location >= 0) {
-		return location;
+	// Check that this shader is active in the opengl context
+	GLint current_program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
+	if (programID != (GLuint)current_program) {
+		std::cerr << "ERROR: Attempted to set a uniform in a non-activated shader!";
+		std::cerr << std::endl;
+		return -1;
 	}
-	else {
+	
+	// Check that the uniform's name exists on the shader
+	GLint location = glGetUniformLocation(programID, name);
+	if (location < 0) {
 		std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
 		std::cerr << std::endl;
-		abort();
+		return -1;
 	}
+	
+	return location;
 }
 
 void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value) {
