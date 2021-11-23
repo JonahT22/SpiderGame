@@ -24,12 +24,14 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\stb_image_instantiate.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameInstance.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Window.hpp" />
   </ItemGroup>
   <ItemGroup>

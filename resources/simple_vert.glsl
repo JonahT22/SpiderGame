@@ -2,16 +2,16 @@
 #version 330 core
 
 /* ----- Attributes ----- */
-// The position variable has attribute position 0
 layout (location = 0) in vec3 aPos;
-// The color variable has attribute position 1
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in vec2 aTexCoord;
 
 /* ----- Outputs ----- */
-layout (location = 1) in vec3 aColor;
-// Specify a color output to send to the fragment shader
-// NOTE: some ppl say to use the 'varying' keyword instead of in/out. This is now deprecated
-// see: https://stackoverflow.com/questions/34627576/why-did-glsl-change-varying-to-in-out
-out vec3 vertColor;
+out vertexInfo {
+	vec3 vertColor;
+	vec2 texCoord;
+};
+
 
 void main() {
 	// gl_Position is a built-in variable, and the final output of a vertex shader
@@ -20,4 +20,5 @@ void main() {
 	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0); // vec4, with w = 1.0
 	// set ourColor to the input color we got from the vertex data
 	vertColor = aColor;
+	texCoord = aTexCoord;
 }

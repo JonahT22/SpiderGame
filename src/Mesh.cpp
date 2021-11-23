@@ -158,7 +158,7 @@ void Mesh::SetupVertexArray() {
 	glBindBuffer(GL_ARRAY_BUFFER, texCoordBufferID);
 	glBufferData(GL_ARRAY_BUFFER, texCoordBuffer.size() * sizeof(GLfloat),
 	             &texCoordBuffer[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(2);
 
 	// Element Buffer
