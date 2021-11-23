@@ -49,7 +49,7 @@ void Mesh::LoadMesh(const std::string& filename) {
 		0.0, 0.0,  // bottom left
 		0.0, 1.0   // top left
 	};
-	// TODO: assign texcoord buffer
+	texCoordBuffer.assign(std::begin(tex_coords), std::end(tex_coords));
 
 	// Tells openGL which vertices to draw in what order
 	//   (used by the Element Buffer Object)
@@ -98,6 +98,7 @@ void Mesh::SetupVertexArray() {
 	// Create VBOs - Big buffers for sending a bunch of data to the GPU at once
 	glGenBuffers(1, &positionBufferID);
 	glGenBuffers(1, &colorBufferID);
+	glGenBuffers(1, &texCoordBufferID);
 	// Create the EBO - a way to specify both the vertices, and the order to draw them.
 	//   This lets you do things like draw a rectangle by only specifying 4 points
 	//   (otherwise, you'd have to define two triangles: 6 points,
@@ -152,6 +153,13 @@ void Mesh::SetupVertexArray() {
 	             &colorBuffer[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
+
+	// Texture Coordinate Data
+	glBindBuffer(GL_ARRAY_BUFFER, texCoordBufferID);
+	glBufferData(GL_ARRAY_BUFFER, texCoordBuffer.size() * sizeof(GLfloat),
+	             &texCoordBuffer[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(2);
 
 	// Element Buffer
 	// From now on, binding to the VAO will also bind to this EBO, Letting us use

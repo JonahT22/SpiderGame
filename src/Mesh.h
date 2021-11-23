@@ -35,5 +35,7 @@ private:
 	// TODO: color probably shouldn't be stored on a point-by-point basis
 	std::vector<GLfloat> colorBuffer;
 	GLuint colorBufferID;
+	std::vector<GLfloat> texCoordBuffer;
+	GLuint texCoordBufferID;
 };
 
