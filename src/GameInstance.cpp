@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Window.hpp"
-
 GameInstance::GameInstance(const GameOptions options) {
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {

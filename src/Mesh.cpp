@@ -17,7 +17,7 @@ Mesh::~Mesh() {
 	glDeleteBuffers(1, &colorBufferID);
 }
 
-void Mesh::LoadMesh(const std::string& filename) {
+void Mesh::LoadMesh(const char* filename) {
 	// TODO: later, load the mesh from a file. For now, just hardcode
 	//   the mesh's points
 
@@ -65,22 +65,28 @@ void Mesh::LoadMesh(const std::string& filename) {
 	// TODO: Should this be a separate function, or can this be part of loadmesh?
 }
 
+void Mesh::LoadTexture(const char* filename, const TextureOptions& options) {
+	texture.LoadFromFile(filename, options);
+}
+
 void Mesh::Render() {
+	texture.Bind();
 	// Start with the VAO, which has all of the buffer/attribute settings
 	glBindVertexArray(vertexArrayID);
-	/* This code is for if we want to draw straight from the vertex buffer
-	  glDrawArrays(GL_TRIANGLES, 0, 3);
-	  // ^ 1: the primitive type that we want to draw
-	  //   2: The starting index of the vertex array that we want to draw
-	  //   3: How many vertices we want to draw
-	*/
-	// Instead, let's draw from the element buffer that's bound to our VAO
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	// Then, draw the mesh using indexed drawing & the element buffer
+	glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
 	// ^ 1: the primitive type (just like the VBO DrawArrays version)
 	//   2: # of elements to draw (we have 6 indices, so draw 6 vertices
 	//   3: the type of the indices
 	//   4: offset or array ref, we don't need to worry abt it now
 
+	// If drawing straight from the VBO (w/out indexed drawing) is desired, use this:
+	/*
+	  glDrawArrays(GL_TRIANGLES, 0, 3);
+	  // ^ 1: the primitive type that we want to draw
+	  //   2: The starting index of the vertex array that we want to draw
+	  //   3: How many vertices we want to draw
+	*/
 }
 
 void Mesh::SetupVertexArray() {

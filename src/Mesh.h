@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
 #include <vector>
 
 #include <glad/glad.h>
 
+#include "Texture.h"
 
 ///
 /// Base class for any object that is made from a collection of renderable triangles
@@ -15,7 +15,9 @@ public:
 	~Mesh();
 
 	// Load mesh data into buffer vectors, but don't create the opengl buffer objects
-	void LoadMesh(const std::string& filename);
+	void LoadMesh(const char* filename);
+	// Create the texture object that this mesh will use
+	void LoadTexture(const char* filename, const TextureOptions& options);
 	// Draw this mesh onto the screen
 	void Render();
 
@@ -42,5 +44,10 @@ private:
 	GLuint colorBufferID;
 	std::vector<GLfloat> texCoordBuffer;
 	GLuint texCoordBufferID;
+
+	// Texture associated with this mesh
+	// Note: for now, every object can have only 1 Texture, and textures cannot be
+	//   shared by multiple meshes
+	Texture texture;
 };
 
