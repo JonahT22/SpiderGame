@@ -6,6 +6,8 @@
 // Always include glad before glfw
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "ShaderProgram.h"
 #include "GameInstance.h"
@@ -35,17 +37,34 @@ int main() {
 
 	//  uncomment this call to draw in wireframe polygons.
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// TODO: add an option here to enable/disable backface culling
 
+	// Set up the transformation matrices
+	glm::mat4 P = glm::perspective(glm::radians(45.0f), game_options.windowWidth / (float)game_options.windowHeight,
+	                               0.1f, 100.0f);
+	glm::mat4 V = glm::mat4(1.0f);
+	V = glm::translate(V, glm::vec3(0.0f, 0.0f, -3.0f));
+	// Send transformation matrices to the shader
+	basic_shader.Activate();
+	basic_shader.SetMat4Uniform("V", V);
+	basic_shader.SetMat4Uniform("P", P);
+
+	glEnable(GL_DEPTH_TEST);
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
 	// has GLFW been told to close? 
 	while (!glfwWindowShouldClose(spider_game.GetWindow())) {
-		// rendering commands
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // set the void color to dark green-blue (STATE-SETTING function)
-		glClear(GL_COLOR_BUFFER_BIT); // only clear the color buffer, not depth or stencil buffer (STATE-USING function)
+		// set the void color to dark green-blue (STATE-SETTING function)
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		// Clear the color & depth buffers (STATE-USING function)
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		basic_shader.Activate();
 		// Practice with uniforms:
 		GLfloat time = glfwGetTime();
+		// Rotate over time
+		glm::mat4 M = glm::mat4(1.0f);
+		M = glm::rotate(M, time, glm::vec3(1.0f, 1.0f, 0.0f));
+		basic_shader.SetMat4Uniform("M", M);
 		// interp a value from 0 to 1
 		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
 		// Set the uniform that's defined in the frag shader

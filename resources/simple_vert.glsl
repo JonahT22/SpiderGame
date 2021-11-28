@@ -5,6 +5,11 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 
+/* ----- Uniforms ----- */
+// Model, view, and projection matrices
+uniform mat4 M;
+uniform mat4 V;
+uniform mat4 P;
 
 /* ----- Outputs ----- */
 out vertexInfo {
@@ -14,6 +19,6 @@ out vertexInfo {
 
 void main() {
 	// gl_Position is a built-in variable, and the final output of a vertex shader
-	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0); // vec4, with w = 1.0
+	gl_Position = P * V * M * vec4(aPos, 1.0);
 	texCoord = aTexCoord;
 }
