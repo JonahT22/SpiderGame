@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 /// 
 /// Base class for all shaders, manages the compilation & 
@@ -22,6 +23,7 @@ public:
 	// Uniform setters
 	void SetIntUniform(const GLchar* name, const GLint value);
 	void SetFloatUniform(const GLchar* name, const GLfloat value);
+	void SetMat4Uniform(const GLchar* name, const glm::mat4& matrix);
 
 private:
 	GLuint programID;

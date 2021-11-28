@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include <glm/gtc/type_ptr.hpp>
+
 ShaderProgram::ShaderProgram() :
 	programID(0)
 {}
@@ -115,4 +117,9 @@ void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value) {
 void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value) {
 	GLint location = GetUniform(name);
 	glUniform1f(location, value);
+}
+
+void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix) {
+	GLint location = GetUniform(name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
