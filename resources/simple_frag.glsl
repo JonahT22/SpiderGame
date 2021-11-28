@@ -9,14 +9,14 @@ uniform sampler2D mainTexture;
 
 /* ----- In/Out ----- */
 in vertexInfo {
-	vec3 vertColor;
 	vec2 texCoord;
 };
 // frag shader must ALWAYS output a vec4 for color
 out vec4 fragColor;
 
 void main() {
-	vec4 rainbowColor = vec4(vertColor.r, vertColor.g * greenStrength, vertColor.b, 1.0);
+	// TODO: temporary thing for learning uniforms
+	vec4 rainbowColor = vec4(1.0, greenStrength, 1.0, 1.0);
 	// Combine the nearest vertex color & the texture sample
 	//fragColor = mix(texture(mainTexture, texCoord), rainbowColor, 0.5);
 	fragColor = texture(mainTexture, texCoord) * rainbowColor;
