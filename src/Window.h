@@ -1,7 +1,13 @@
 #pragma once
 
+// TODO: current issue: this glad include shouldn't be necessary, but removing it
+//   causes build errors. Keeping it causes game crash. Has something to do with
+//   recently-added owningGame property
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+
+class GameInstance;
 
 /// 
 /// Manages the current window & player inputs. Also sets up 
@@ -9,7 +15,8 @@
 /// 
 class Window {
 public:
-	Window(const int height, const int width, const char* title);
+	Window(const int height, const int width, const char* title,
+	       const GameInstance* owner);
 	~Window() = default;
 
 	// Called when the user changes the window size
@@ -32,6 +39,8 @@ public:
 
 private:
 	GLFWwindow* glfwWindow = nullptr;
+	// Reference to the game manager that created this window
+	const GameInstance* owningGame = nullptr;
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;
 	glm::vec2 mousePos = glm::vec2(0.0f);

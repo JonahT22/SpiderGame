@@ -2,7 +2,10 @@
 
 #include <iostream>
 
-Window::Window(const int width, const int height, const char* title) {
+#include "GameInstance.h"
+
+Window::Window(const int width, const int height, const char* title,
+               const GameInstance* owner) : owningGame(owner) {
 	// Make sure GLFW has been initialized
 	glfwInit();
 
@@ -53,6 +56,20 @@ void Window::CharEvent(unsigned int codepoint) {
 
 void Window::CursorPosEvent(double x_pos, double y_pos) {
 	// std::cout << "Mouse is at (" << x_pos << ", " << y_pos << ")\n";
+	
+	// Note: This cursor position event will still be called even if the window isn't
+	//   in focus, so check whether the cursor is captured first
+	if (cursorCaptured) {
+		if (owningGame != nullptr) {
+			glm::vec2 newPos(x_pos, y_pos);
+			owningGame->InputMoveCamera(newPos - mousePos);
+			mousePos = newPos;
+		}
+		else {
+			std::cerr << "ERROR: Invalid GameInstance ref on window object!";
+			std::cerr << std::endl;
+		}
+	}
 }
 
 void Window::MouseButtonEvent(int button, int action, int mods) {

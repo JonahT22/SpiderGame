@@ -8,6 +8,7 @@
 
 #include "Camera.h"
 #include "ShaderProgram.h"
+#include "Window.h"
 
 GameInstance::GameInstance(const GameOptions options) {
 	/* ----- Set up GLFW ----- */
@@ -27,7 +28,7 @@ GameInstance::GameInstance(const GameOptions options) {
 
 	/* ----- Create the game window ----- */
 	mainWindow = std::make_unique<Window>(options.windowWidth, options.windowHeight,
-	                                      options.windowName);
+	                                      options.windowName, this);
 	// Call the window's resizing function to initialize the OpenGL window size
 	mainWindow->ResizeEvent(options.windowWidth, options.windowHeight);
 
@@ -49,8 +50,16 @@ GameInstance::~GameInstance() {
 	glfwTerminate();
 }
 
+GLFWwindow* GameInstance::GetWindow() const {
+	return mainWindow->GetWindow();
+}
+
 void GameInstance::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
+}
+
+void GameInstance::InputMoveCamera(glm::vec2 motion) const {
+	std::cout << "Moving camera!" << std::endl;
 }
 
 void GameInstance::SetupScene(const char* filename) {

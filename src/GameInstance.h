@@ -3,10 +3,11 @@
 #include <memory>
 
 // Always include glad before glfw
-#include <glad/glad.h> 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
-#include "Window.h"
+class Window;
 class Camera;
 class ShaderProgram;
 
@@ -28,10 +29,13 @@ public:
 	
 	// Getters
 	// TODO: this shouldn't be necessary
-	GLFWwindow* GetWindow() const { return mainWindow->GetWindow(); }
+	GLFWwindow* GetWindow() const;
 
 	// Setters
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
+
+	// Input events (from the mainWindow)
+	void InputMoveCamera(glm::vec2 motion) const;
 
 	// Other Functions
 	void SetupScene(const char* filename);
