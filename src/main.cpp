@@ -53,11 +53,6 @@ int main() {
 		basic_shader.Activate();
 		// Practice with uniforms:
 		GLfloat time = glfwGetTime();
-		
-		// Move the camera
-		mainCamera->SetLocation(glm::vec3(sin(2.0f * time), 0.0f, 6.0f));
-		// Note: scaling the camera up will make the scene appear smaller
-		mainCamera->SetScale(glm::vec3(sin(5.0f * time), 0.2 * sin(50.0f * time) + 1.0, 1.0f));
 
 		// Rotate the box
 		glm::mat4 M = glm::mat4(1.0f);

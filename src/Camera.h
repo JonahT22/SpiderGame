@@ -17,9 +17,6 @@ public:
 	// Getters
 	const GLfloat* GetProjectionMtxPtr() const;
 	const GLfloat* GetViewMtxPtr() const;
-	// TODO: temporary
-	const glm::mat4 GetProjectionMtx() const { return projectionMtx; }
-	const glm::mat4 GetViewMtx() const { return viewMtx; }
 
 	// Setters
 	void SetFovDegrees(const float new_fov);
@@ -39,7 +36,6 @@ private:
 	float clipFar;
 	// Aspect ratio of the window that is rendering this camera's view (width/height)
 	float aspectRatio;
-	// TODO: is it okay to have a scale transform on a camera?
 	Transform transform;
 
 	// Store the projection and view matrices on this camera object

@@ -15,13 +15,11 @@ Camera::Camera() :
 	UpdateViewMtx();
 }
 
-const GLfloat* Camera::GetProjectionMtxPtr() const
-{
+const GLfloat* Camera::GetProjectionMtxPtr() const {
 	return glm::value_ptr(projectionMtx);
 }
 
-const GLfloat* Camera::GetViewMtxPtr() const
-{
+const GLfloat* Camera::GetViewMtxPtr() const {
 	return glm::value_ptr(viewMtx);
 }
 
