@@ -62,9 +62,6 @@ void GameInstance::InputMoveCamera(glm::vec2 motion) const {
 	if (!cameraRef.expired()) {
 		cameraRef.lock()->ApplyRotationInput(motion);
 	}
-	else {
-		std::cerr << "ERROR: Tried to apply camera input, but there is no camera ";
-		std::cerr << "active in the Game Instance!" << std::endl;
 }
 
 void GameInstance::UpdateCameraAspect(const float new_aspect) const {

@@ -62,8 +62,6 @@ void Window::CharEvent(unsigned int codepoint) {
 }
 
 void Window::CursorPosEvent(double x_pos, double y_pos) {
-	// std::cout << "Mouse is at (" << x_pos << ", " << y_pos << ")\n";
-	
 	// Note: This cursor position event will still be called even if the window isn't
 	//   in focus, so check whether the cursor is captured first
 	if (cursorCaptured) {

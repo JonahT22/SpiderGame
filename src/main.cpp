@@ -40,9 +40,7 @@ int main() {
 	std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
 	mainCamera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
 	mainCamera->SetArmLength(5.0f);
-	// TODO: troubleshoot - I thought an angle of +90 would rotate camera CW, but it
-	//   actually rotated CCW.
-	mainCamera->SetArmAngleDegrees(glm::vec2(0.0f, 90.0f));
+	mainCamera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
 	spider_game.SetCurrentCamera(mainCamera);
 
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------

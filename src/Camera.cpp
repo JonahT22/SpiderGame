@@ -11,7 +11,7 @@ Camera::Camera() :
 	clipFar(100.0f),
 	transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 	rotSpeed(0.005),
-	fixedArmLength(5.0f),
+	armLength(5.0f),
 	armAngle(glm::vec2(0.0f)),
 	maxVerticalAngle((glm::pi<float>() / 2.0) - 0.05)
 {
@@ -43,7 +43,7 @@ void Camera::SetAspectRatio(const float new_aspect) {
 }
 
 void Camera::SetArmLength(const float new_length) {
-	fixedArmLength = new_length;
+	armLength = new_length;
 	UpdateViewMtx();
 }
 
@@ -67,11 +67,10 @@ void Camera::ApplyRotationInput(const glm::vec2& input) {
 	armAngle.x -= input.y * rotSpeed;
 
 	// Clamp vertical rotations
-	
 	if (armAngle.x >= maxVerticalAngle) {
 		armAngle.x = maxVerticalAngle;
 	}
-	if (armAngle.x <= -1.0f * maxVerticalAngle) {
+	else if (armAngle.x <= -1.0f * maxVerticalAngle) {
 		armAngle.x = -1.0f * maxVerticalAngle;
 	}
 	UpdateViewMtx();
@@ -82,14 +81,11 @@ void Camera::UpdateProjectionMtx() {
 }
 
 void Camera::UpdateViewMtx() {
-	// TODO: There's probably a way to shortcut the inverse of a transformation matrix
-	// TODO: This assumes the camera is NOT parented to anything. When this camera
-	//   gets attached to an object, make sure I'm getting the WORLD-SPACE view matrix
-
+	// Note: if armangles are specified w.r.t a
 	// Set the camera's location based on its arm length/angle
-	transform.loc.x = fixedArmLength * cos(armAngle.x) * cos(armAngle.y);
-	transform.loc.y = fixedArmLength * sin(armAngle.x);
-	transform.loc.z = fixedArmLength * cos(armAngle.x) * sin(armAngle.y);
+	transform.loc.x = armLength * cos(armAngle.x) * cos(armAngle.y);
+	transform.loc.y = armLength * sin(armAngle.x);
+	transform.loc.z = armLength * cos(armAngle.x) * sin(armAngle.y);
 
 	// Note: this assumes that the camera is not parented to any objects, and
 	//   that it is always looking torward the world origin

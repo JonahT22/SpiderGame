@@ -44,10 +44,12 @@ private:
 	// Multiplier applied to mouse inputs
 	float rotSpeed;
 	// How far should the camera be from its parent as it rotates?
-	float fixedArmLength;
+	float armLength;
 	// Rotation of the camera's arm, relative to the camera's parent
 	//   X = rotation around the camera's parent's RIGHT axis
 	//   Y = rotation around the camera's parent's UP axis
+	// Point the rotation axis away from you, angle+ is CW rotation on the resulting plane
+	//   ex: armAngle.y = pi/4 means it's rotated halfway between +X axis and +Z axis
 	glm::vec2 armAngle;
 	// Maximum value of armAngle.x (must be LESS than pi/2)
 	const float maxVerticalAngle;
