@@ -24,6 +24,7 @@ public:
 	void SetIntUniform(const GLchar* name, const GLint value);
 	void SetFloatUniform(const GLchar* name, const GLfloat value);
 	void SetMat4Uniform(const GLchar* name, const glm::mat4& matrix);
+	void SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr);
 
 private:
 	GLuint programID;

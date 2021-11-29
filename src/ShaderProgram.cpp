@@ -123,3 +123,10 @@ void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix) 
 	GLint location = GetUniform(name);
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
+
+void ShaderProgram::SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr) {
+	// Set a mat4 directly from a pointer to its first element (i.e. call
+	//   glm::value_ptr on the matrix BEFORE sending it to this function)
+	GLint location = GetUniform(name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, matrix_ptr);
+}

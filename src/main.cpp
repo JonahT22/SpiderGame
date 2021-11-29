@@ -14,6 +14,8 @@
 #include "Mesh.h"
 // TODO: this shouldn't be necessary
 #include "Texture.h"
+// TODO: this shouldn't be necessary
+#include "Camera.h"
 
 int main() {
 	// Initialize the game and main rendering window
@@ -34,20 +36,15 @@ int main() {
 	square_mesh2.LoadMesh("asdf");
 	square_mesh2.LoadTexture("resources/awesomeface.png", tex_options);
 
+	// Create the camera
+	std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
+	mainCamera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
+	mainCamera->SetLocation(glm::vec3(0.0f, 0.0f, 3.0f));
+	spider_game.SetCurrentCamera(mainCamera);
 
 	//  uncomment this call to draw in wireframe polygons.
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	// TODO: add an option here to enable/disable backface culling
-
-	// Set up the transformation matrices
-	glm::mat4 P = glm::perspective(glm::radians(45.0f), game_options.windowWidth / (float)game_options.windowHeight,
-	                               0.1f, 100.0f);
-	glm::mat4 V = glm::mat4(1.0f);
-	V = glm::translate(V, glm::vec3(0.0f, 0.0f, -3.0f));
-	// Send transformation matrices to the shader
-	basic_shader.Activate();
-	basic_shader.SetMat4Uniform("V", V);
-	basic_shader.SetMat4Uniform("P", P);
 
 	glEnable(GL_DEPTH_TEST);
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
@@ -61,21 +58,32 @@ int main() {
 		basic_shader.Activate();
 		// Practice with uniforms:
 		GLfloat time = glfwGetTime();
-		// Rotate over time
+		
+		// Move the camera
+		mainCamera->SetLocation(glm::vec3(sin(2.0f * time), 0.0f, 6.0f));
+		// Note: scaling the camera up will make the scene appear smaller
+		mainCamera->SetScale(glm::vec3(sin(5.0f * time), 0.2 * sin(50.0f * time) + 1.0, 1.0f));
+
+		// Rotate the box
 		glm::mat4 M = glm::mat4(1.0f);
 		M = glm::rotate(M, time, glm::vec3(1.0f, 1.0f, 0.0f));
 		basic_shader.SetMat4Uniform("M", M);
-		// interp a value from 0 to 1
+		
+		// Set the box's color
 		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
 		// Set the uniform that's defined in the frag shader
 		//   Note: the shader must be activated before calling this
 		basic_shader.SetFloatUniform("greenStrength", greenStrength);
-		if ((int)floor(time) % 2 == 0) {
+		
+		// Render the boxes
+		spider_game.RenderScene(basic_shader);
+		if ((int)floor(2 * time) % 2 == 0) {
 			square_mesh.Render();
 		}
 		else {
 			square_mesh2.Render();
 		}
+
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
 		glfwPollEvents(); // have any events been triggered (i.e. input?)

@@ -2,6 +2,13 @@
 
 #include <iostream>
 
+// TODO: temporary
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
+#include "Camera.h"
+#include "ShaderProgram.h"
+
 GameInstance::GameInstance(const GameOptions options) {
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {
@@ -37,4 +44,33 @@ GameInstance::GameInstance(const GameOptions options) {
 GameInstance::~GameInstance() {
 	// clean up all of GLFW's resources that were allocated
 	glfwTerminate();
+}
+
+void GameInstance::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
+	cameraRef = new_camera;
+}
+
+void GameInstance::SetupScene(const char* filename) {
+	// Load the scene geometry from the file, which should also create the character
+	//   and place it at the start location. Then, get a ref to the player's camera
+	//   from the scene and hook up the window's input events to the character
+	// TODO: might be useful to have a "playercontroller" class that has a
+	//   "control rotation" and "control velocity" inputs that the camera & 
+	//   character reference for their functions
+}
+
+void GameInstance::RenderScene(ShaderProgram& shader) {
+	// TODO: later, this will do all of the rendering commands. For now, just use
+	//   it to test getting the view/projection matrices from the camera
+
+	// Try to get a reference to the camera. Only proceed if it exists
+	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
+		// Send transformation matrices to the shader
+		shader.Activate();
+		shader.SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
+		shader.SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
+	}
+	else {
+		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
+	}
 }

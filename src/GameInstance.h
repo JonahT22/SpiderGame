@@ -7,7 +7,10 @@
 #include <GLFW/glfw3.h>
 
 #include "Window.h"
+class Camera;
+class ShaderProgram;
 
+// TODO: rendering options, like wireframe & backface culling
 struct GameOptions {
 	const int windowWidth = 256;
 	const int windowHeight = 256;
@@ -17,14 +20,27 @@ struct GameOptions {
 /// 
 /// Manages setup & lifetime for glfw, glad, and major game systems
 /// 
+/// TODO: probably should rename this class to "Renderer"
 class GameInstance {
 public:
 	GameInstance(const GameOptions options);
 	~GameInstance();
+	
+	// Getters
 	// TODO: this shouldn't be necessary
 	GLFWwindow* GetWindow() const { return mainWindow->GetWindow(); }
 
+	// Setters
+	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
+
+	// Other Functions
+	void SetupScene(const char* filename);
+	void RenderScene(ShaderProgram& shader);
+
 private:
+	// The gameinstance has exclusive control over the rendering window
 	std::unique_ptr<Window> mainWindow;
+	// Store a weak reference to the player's camera - it can disappear/change at any time
+	std::weak_ptr<Camera> cameraRef;
 };
 
