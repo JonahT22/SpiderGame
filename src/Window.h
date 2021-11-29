@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 /// 
 /// Manages the current window & player inputs. Also sets up 
@@ -23,11 +24,19 @@ public:
 	void CursorPosEvent(double x_pos, double y_pos);
 	// Called when a mouse button is clicked or released
 	void MouseButtonEvent(int button, int action, int mods);
+	// Called when the user focuses/unfocuses on this window
+	void FocusEvent(int focused);
 
 	// TODO: this shouldn't be necessary
 	GLFWwindow* GetWindow() const { return glfwWindow; }
 
 private:
+	GLFWwindow* glfwWindow = nullptr;
+	// Keep track of the mouse's position
+	bool cursorCaptured = false;
+	glm::vec2 mousePos = glm::vec2(0.0f);
+	// TODO: this is where I'd keep track of any more inputs (like key toggles)
+
 	/* Function callbacks - Reroutes to custom functions */
 	// Reroute the static callbacks to custom functions in a specific Window object 
 	//   instance (this routing is set in the Window object's constructor)
@@ -55,7 +64,9 @@ private:
 		Window* custom_window = static_cast<Window*>(glfwGetWindowUserPointer(window));
 		custom_window->MouseButtonEvent(button, action, mods);
 	}
-
-	GLFWwindow* glfwWindow = nullptr;
+	inline static void FocusCallback(GLFWwindow* window, int focused) {
+		Window* custom_window = static_cast<Window*>(glfwGetWindowUserPointer(window));
+		custom_window->FocusEvent(focused);
+	}
 };
 

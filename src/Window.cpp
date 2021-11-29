@@ -32,6 +32,7 @@ Window::Window(const int width, const int height, const char* title) {
 	glfwSetCharCallback(glfwWindow, CharCallback);
 	glfwSetCursorPosCallback(glfwWindow, CursorPosCallback);
 	glfwSetMouseButtonCallback(glfwWindow, MouseButtonCallback);
+	glfwSetWindowFocusCallback(glfwWindow, FocusCallback);
 }
 
 void Window::ResizeEvent(int width, int height) {
@@ -56,4 +57,25 @@ void Window::CursorPosEvent(double x_pos, double y_pos) {
 
 void Window::MouseButtonEvent(int button, int action, int mods) {
 	// std::cout << "Mouse event recieved: " << button << std::endl;
+	
+	// Check if the cursor has already been captured
+	cursorCaptured = (glfwGetInputMode(glfwWindow, GLFW_CURSOR) == GLFW_CURSOR_DISABLED);
+	if (!cursorCaptured) {
+		// If capturing the mouse cursor for the first time, initialize mouse position
+		double x, y;
+		glfwGetCursorPos(glfwWindow, &x, &y);
+		mousePos = glm::vec2(x, y);
+		// Hide the mouse cursor and set the 'captured' flag
+		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		cursorCaptured = true;
+	}
+}
+
+void Window::FocusEvent(int focused) {
+	// 'focused' is either GLFW_TRUE or GLFW_FALSE
+	if (focused == GLFW_FALSE) {
+		// Release the mouse cursor when focus is lost
+		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		cursorCaptured = false;
+	}
 }
