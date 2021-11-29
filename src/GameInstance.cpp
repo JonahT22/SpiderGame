@@ -59,7 +59,13 @@ void GameInstance::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 }
 
 void GameInstance::InputMoveCamera(glm::vec2 motion) const {
-	std::cout << "Moving camera!" << std::endl;
+	if (!cameraRef.expired()) {
+		cameraRef.lock()->ApplyRotationInput(motion);
+	}
+	else {
+		std::cerr << "ERROR: Tried to apply camera input, but there is no camera ";
+		std::cerr << "active in the Game Instance!" << std::endl;
+	}
 }
 
 void GameInstance::SetupScene(const char* filename) {

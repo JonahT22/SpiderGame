@@ -27,6 +27,7 @@ public:
 	void SetScale(const glm::vec3& new_scale);
 
 	// Player Inputs
+	void ApplyRotationInput(const glm::vec2& input);
 
 private:
 	// Vertical FOV of the camera in radians
@@ -36,7 +37,10 @@ private:
 	float clipFar;
 	// Aspect ratio of the window that is rendering this camera's view (width/height)
 	float aspectRatio;
+	// Location, rotation, and scale of the camera relative to its parent
 	Transform transform;
+	// Multiplier applied to mouse inputs
+	float rotSpeed;
 
 	// Store the projection and view matrices on this camera object
 	glm::mat4 projectionMtx;
