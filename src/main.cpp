@@ -42,11 +42,6 @@ int main() {
 	mainCamera->SetLocation(glm::vec3(0.0f, 0.0f, 3.0f));
 	spider_game.SetCurrentCamera(mainCamera);
 
-	//  uncomment this call to draw in wireframe polygons.
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// TODO: add an option here to enable/disable backface culling
-
-	glEnable(GL_DEPTH_TEST);
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
 	// has GLFW been told to close? 
 	while (!glfwWindowShouldClose(spider_game.GetWindow())) {

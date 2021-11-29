@@ -39,6 +39,9 @@ GameInstance::GameInstance(const GameOptions options) {
 		std::cerr << "Error: Failed to initialize GLAD!" << std::endl;
 		abort();
 	}
+
+	// Enable Z-buffer checking
+	glEnable(GL_DEPTH_TEST);
 }
 
 GameInstance::~GameInstance() {
