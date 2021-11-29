@@ -34,6 +34,7 @@ public:
 
 	// Input events (from the mainWindow)
 	void InputMoveCamera(glm::vec2 motion) const;
+	void UpdateCameraAspect(const float new_aspect) const;
 
 	// Other Functions
 	void SetupScene(const char* filename);

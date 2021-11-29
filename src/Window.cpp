@@ -41,6 +41,13 @@ Window::Window(const int width, const int height, const char* title,
 void Window::ResizeEvent(int width, int height) {
 	// First params set the location of the lower left corner, next 2 set the width/height
 	glViewport(0, 0, width, height);
+	if (owningGame != nullptr) {
+		owningGame->UpdateCameraAspect(width / (float)height);
+	}
+	else {
+		std::cerr << "ERROR: Invalid GameInstance ref on window object!";
+		std::cerr << std::endl;
+	}
 }
 
 void Window::KeyEvent(int key, int scancode, int action, int mods) {
