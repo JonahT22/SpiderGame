@@ -61,9 +61,9 @@ void Window::CursorPosEvent(double x_pos, double y_pos) {
 	//   in focus, so check whether the cursor is captured first
 	if (cursorCaptured) {
 		if (owningGame != nullptr) {
-			glm::vec2 newPos(x_pos, y_pos);
-			owningGame->InputMoveCamera(newPos - mousePos);
-			mousePos = newPos;
+			glm::vec2 new_pos(x_pos, y_pos);
+			owningGame->InputMoveCamera(new_pos - mousePos);
+			mousePos = new_pos;
 		}
 		else {
 			std::cerr << "ERROR: Invalid GameInstance ref on window object!";

@@ -1,9 +1,5 @@
 #pragma once
 
-// TODO: current issue: this glad include shouldn't be necessary, but removing it
-//   causes build errors. Keeping it causes game crash. Has something to do with
-//   recently-added owningGame property
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 

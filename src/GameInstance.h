@@ -10,6 +10,7 @@
 class Window;
 class Camera;
 class ShaderProgram;
+struct GLFWwindow;
 
 // TODO: rendering options, like wireframe & backface culling
 struct GameOptions {

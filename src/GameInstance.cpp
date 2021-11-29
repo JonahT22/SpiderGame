@@ -5,6 +5,9 @@
 // TODO: temporary
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
+// Always include glad before glfw
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "Camera.h"
 #include "ShaderProgram.h"
