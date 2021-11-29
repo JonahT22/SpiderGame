@@ -22,9 +22,11 @@ public:
 	void SetFovDegrees(const float new_fov);
 	void SetFovRadians(const float new_fov);
 	void SetAspectRatio(const float new_aspect);
-	void SetLocation(const glm::vec3& new_location);
-	void SetRotation(const glm::vec3& new_rotation);
-	void SetScale(const glm::vec3& new_scale);
+	void SetArmLength(const float new_length);
+	void SetArmAngleDegrees(const glm::vec2 new_angle);
+	void SetArmAngleRadians(const glm::vec2 new_angle);
+	// Note: there are NO setters for loc, rot, or scale. These are controlled by the
+	//   parent object & player inputs
 
 	// Player Inputs
 	void ApplyRotationInput(const glm::vec2& input);
@@ -37,10 +39,18 @@ private:
 	float clipFar;
 	// Aspect ratio of the window that is rendering this camera's view (width/height)
 	float aspectRatio;
-	// Location, rotation, and scale of the camera relative to its parent
+	// Location, rotation, and scale of the camera. Controlled by the arm's length & angle
 	Transform transform;
 	// Multiplier applied to mouse inputs
 	float rotSpeed;
+	// How far should the camera be from its parent as it rotates?
+	float fixedArmLength;
+	// Rotation of the camera's arm, relative to the camera's parent
+	//   X = rotation around the camera's parent's RIGHT axis
+	//   Y = rotation around the camera's parent's UP axis
+	glm::vec2 armAngle;
+	// Maximum value of armAngle.x (must be LESS than pi/2)
+	const float maxVerticalAngle;
 
 	// Store the projection and view matrices on this camera object
 	glm::mat4 projectionMtx;

@@ -10,7 +10,10 @@ Camera::Camera() :
 	clipNear(0.1f),
 	clipFar(100.0f),
 	transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-	rotSpeed(0.005)
+	rotSpeed(0.005),
+	fixedArmLength(5.0f),
+	armAngle(glm::vec2(0.0f)),
+	maxVerticalAngle((glm::pi<float>() / 2.0) - 0.05)
 {
 	UpdateProjectionMtx();
 	UpdateViewMtx();
@@ -39,18 +42,19 @@ void Camera::SetAspectRatio(const float new_aspect) {
 	UpdateProjectionMtx();
 }
 
-void Camera::SetLocation(const glm::vec3& new_location) {
-	transform.loc = new_location;
+void Camera::SetArmLength(const float new_length) {
+	fixedArmLength = new_length;
 	UpdateViewMtx();
 }
 
-void Camera::SetRotation(const glm::vec3& new_rotation) {
-	transform.rot = new_rotation;
+void Camera::SetArmAngleDegrees(const glm::vec2 new_angle) {
+	armAngle.x = glm::radians(new_angle.x);
+	armAngle.y = glm::radians(new_angle.y);
 	UpdateViewMtx();
 }
 
-void Camera::SetScale(const glm::vec3& new_scale) {
-	transform.scale = new_scale;
+void Camera::SetArmAngleRadians(const glm::vec2 new_angle) {
+	armAngle = new_angle;
 	UpdateViewMtx();
 }
 
@@ -59,8 +63,17 @@ void Camera::ApplyRotationInput(const glm::vec2& input) {
 	//   So, x-inputs should rotate around the y (vertical) axis, and vice versa
 	// Also, subtract the inputs so that positive mouse inputs result in
 	//   CCW (negative) rotations
-	transform.rot.y -= input.x * rotSpeed;
-	transform.rot.x -= input.y * rotSpeed;
+	armAngle.y -= input.x * rotSpeed;
+	armAngle.x -= input.y * rotSpeed;
+
+	// Clamp vertical rotations
+	
+	if (armAngle.x >= maxVerticalAngle) {
+		armAngle.x = maxVerticalAngle;
+	}
+	if (armAngle.x <= -1.0f * maxVerticalAngle) {
+		armAngle.x = -1.0f * maxVerticalAngle;
+	}
 	UpdateViewMtx();
 }
 
@@ -70,5 +83,15 @@ void Camera::UpdateProjectionMtx() {
 
 void Camera::UpdateViewMtx() {
 	// TODO: There's probably a way to shortcut the inverse of a transformation matrix
-	viewMtx = glm::inverse(transform.GetMatrix());
+	// TODO: This assumes the camera is NOT parented to anything. When this camera
+	//   gets attached to an object, make sure I'm getting the WORLD-SPACE view matrix
+
+	// Set the camera's location based on its arm length/angle
+	transform.loc.x = fixedArmLength * cos(armAngle.x) * cos(armAngle.y);
+	transform.loc.y = fixedArmLength * sin(armAngle.x);
+	transform.loc.z = fixedArmLength * cos(armAngle.x) * sin(armAngle.y);
+
+	// Note: this assumes that the camera is not parented to any objects, and
+	//   that it is always looking torward the world origin
+	viewMtx = glm::lookAt(transform.loc, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }

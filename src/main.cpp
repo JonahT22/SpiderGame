@@ -27,19 +27,22 @@ int main() {
 	ShaderProgram basic_shader;
 	basic_shader.Compile("resources/simple_vert.glsl", "resources/simple_frag.glsl");
 	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
-								GL_LINEAR, GL_RGB, GL_RGB };
-	Mesh square_mesh;
-	square_mesh.LoadMesh("asdf");
-	square_mesh.LoadTexture("resources/wall.jpg", tex_options);
-	tex_options.externalFormat = GL_RGBA;
-	Mesh square_mesh2;
-	square_mesh2.LoadMesh("asdf");
-	square_mesh2.LoadTexture("resources/awesomeface.png", tex_options);
+								GL_LINEAR, GL_RGB, GL_RGBA };
+	Mesh cube1;
+	cube1.LoadMesh("asdf");
+	cube1.LoadTexture("resources/awesomeface.png", tex_options);
+
+	Mesh cube2;
+	cube2.LoadMesh("asdf");
+	cube2.LoadTexture("resources/awesomeface.png", tex_options);
 
 	// Create the camera
 	std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
 	mainCamera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
-	mainCamera->SetLocation(glm::vec3(0.0f, 0.0f, 3.0f));
+	mainCamera->SetArmLength(5.0f);
+	// TODO: troubleshoot - I thought an angle of +90 would rotate camera CW, but it
+	//   actually rotated CCW.
+	mainCamera->SetArmAngleDegrees(glm::vec2(0.0f, 90.0f));
 	spider_game.SetCurrentCamera(mainCamera);
 
 	// ------------------------------------- RENDER LOOP ------------------------------------------------------
@@ -53,11 +56,6 @@ int main() {
 		basic_shader.Activate();
 		// Practice with uniforms:
 		GLfloat time = glfwGetTime();
-
-		// Rotate the box
-		glm::mat4 M = glm::mat4(1.0f);
-		M = glm::rotate(M, time, glm::vec3(1.0f, 1.0f, 0.0f));
-		basic_shader.SetMat4Uniform("M", M);
 		
 		// Set the box's color
 		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
@@ -67,12 +65,14 @@ int main() {
 		
 		// Render the boxes
 		spider_game.RenderScene(basic_shader);
-		if ((int)floor(2 * time) % 2 == 0) {
-			square_mesh.Render();
-		}
-		else {
-			square_mesh2.Render();
-		}
+		// Set box 1 location to center of scene
+		glm::mat4 M = glm::mat4(1.0f);
+		basic_shader.SetMat4Uniform("M", M);
+		cube1.Render();
+		// Set box 2 location beside box 1
+		M = glm::translate(M, glm::vec3(2.0f, 0.0f, 0.0f));
+		basic_shader.SetMat4Uniform("M", M);
+		cube2.Render();
 
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
