@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -31,5 +33,14 @@ public:
 	// TODO: convert all euler rots to quats
 	glm::vec3 rot;
 	glm::vec3 scale;
+
+	friend std::ostream& operator<<(std::ostream& os, const Transform& t);
 private:
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Transform& t) {
+	os << "Loc: (" << t.loc.x << ", " << t.loc.y << ", " << t.loc.z << ")\n";
+	os << "Rot: (" << t.rot.x << ", " << t.rot.y << ", " << t.rot.z << ")\n";
+	os << "Scale: (" << t.scale.x << ", " << t.scale.y << ", " << t.scale.z << ")\n";
+	return os;
+}
