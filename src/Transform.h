@@ -30,12 +30,10 @@ public:
 	~Transform() = default;
 
 	glm::mat4 GetMatrix() {
-		// TODO: this needs to be tested
 		glm::mat4 M(1.0f);
 		M = glm::translate(M, loc);
 		M *= glm::mat4_cast(rot);
 		M = glm::scale(M, scale);
-		std::cerr << "Warning: Transform::GetMatrix() has not been tested" << std::endl;
 		return M;
 	}
 
