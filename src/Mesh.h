@@ -23,8 +23,6 @@ public:
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 private:
-	void SetupVertexArray();
-
 	// Vertex Array Object - holds the mappings between buffers and attributes
 	GLuint vertexArrayID;
 
