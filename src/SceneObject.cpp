@@ -35,6 +35,9 @@ void SceneObject::AddChildObject(std::shared_ptr<SceneObject> new_object) {
 }
 
 void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
+	// TODO: don't pass in parent transform. Instead, store a weak ref to the parent,
+	//   and get the parent's model mtx directly.
+	// If this weak ref is invalid, use an identity matrix instead
 	modelMtx = parent_transform * rootTransform.GetMatrix();
 
 	// Propagate this object's transformation matrix to its children
