@@ -38,7 +38,7 @@ public:
 
 	// Other Functions
 	void SetupScene(const char* filename);
-	void RenderScene(ShaderProgram& shader);
+	void RenderScene(std::shared_ptr<ShaderProgram> shader);
 
 private:
 	// The gameinstance has exclusive control over the rendering window

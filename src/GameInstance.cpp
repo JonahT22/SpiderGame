@@ -79,16 +79,16 @@ void GameInstance::SetupScene(const char* filename) {
 	//   character reference for their functions
 }
 
-void GameInstance::RenderScene(ShaderProgram& shader) {
+void GameInstance::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 	// TODO: later, this will do all of the rendering commands. For now, just use
 	//   it to test getting the view/projection matrices from the camera
 
-	// Try to get a reference to the camera. Only proceed if it exists
+	// Try to get a reference to the camera. Only proceed if it is valid
 	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
 		// Send transformation matrices to the shader
-		shader.Activate();
-		shader.SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
-		shader.SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
+		shader->Activate();
+		shader->SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
+		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
 	}
 	else {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
