@@ -16,7 +16,9 @@ struct GameOptions {
 };
 
 ///
-/// Manages setup & lifetime for glfw, glad, and major game systems
+/// Handles rendering frames, calling physics updates, managing the
+///   main rendering window and currently-active scene, and sending player
+///   inputs to the correct objects
 ///
 class GameEngine {
 public:
