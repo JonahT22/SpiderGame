@@ -16,6 +16,17 @@ public:
 	// TODO: when this object dies, all its children should probably be destroyed too
 	~SceneObject() = default;
 
+	/* ----- Getters ----- */
+	glm::vec3 GetRelativeLocation() const;
+	glm::quat GetRelativeRotation() const;
+	glm::vec3 GetRelativeScale() const;
+
+	/* ----- Setters ----- */
+	void SetRelativeLocation(glm::vec3 loc);
+	void SetRelativeRotation(glm::quat rot);
+	void SetRelativeRotationDegrees(glm::vec3 euler_rot);
+	void SetRelativeScale(glm::vec3 scale);
+
 	/* ----- Other Functions ----- */
 	void AddChildObject(std::shared_ptr<SceneObject> new_object);
 	// Given the local->world transform of this object's parent, find this object's model mtx
