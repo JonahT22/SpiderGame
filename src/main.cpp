@@ -23,9 +23,19 @@ int main() {
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	GameEngine spider_game(game_options);
 
-	/* ----- Create scene geometry ----- */
+	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
 	basic_shader->Compile("resources/simple_vert.glsl", "resources/simple_frag.glsl");
+	
+	/* ----- Create the camera ----- */
+	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>();
+	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
+	main_camera->SetArmLength(5.0f);
+	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
+	//main_camera->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 2.0f));
+	spider_game.SetCurrentCamera(main_camera);
+
+	/* ----- Create scene geometry ----- */
 	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
 								GL_LINEAR, GL_RGB, GL_RGBA };
 	auto cube1 = std::make_shared<Mesh>();
@@ -36,19 +46,27 @@ int main() {
 	auto cube2 = std::make_shared<Mesh>();
 	cube2->GenerateCubeMesh();
 	cube2->LoadTexture("resources/awesomeface.png", tex_options);
-	cube2->SetRelativeLocation(glm::vec3(2.0f, 0.0f, 0.0f));
-	cube2->SetRelativeRotationDegrees(glm::vec3(0.0f, 45.0f, 30.0f));
-	cube2->SetRelativeScale(glm::vec3(1.0f, 0.5f, 0.5f));
+	cube2->SetRelativeLocation(glm::vec3(1.0f, 0.0f, 0.0f));
+	cube2->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	
+	auto cube3 = std::make_shared<Mesh>();
+	cube3->GenerateCubeMesh();
+	cube3->LoadTexture("resources/awesomeface.png", tex_options);
+	cube3->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 1.0f));
+	cube3->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
 	cube1->AddChildObject(cube2);
+	cube1->AddChildObject(cube3);
 	cube1->PhysicsUpdate(glm::mat4(1.0f));
 
-	/* ----- Create the camera ----- */
-	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>();
-	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
-	main_camera->SetArmLength(5.0f);
-	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
-	spider_game.SetCurrentCamera(main_camera);
+	auto cameraCube = std::make_shared<Mesh>();
+	cameraCube->GenerateCubeMesh();
+	tex_options.externalFormat = GL_RGB;
+	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
+	cameraCube->SetRelativeLocation(glm::vec3(-2.0f, 0.0f, 0.0f));
+	cameraCube->SetRelativeRotationDegrees(glm::vec3(0.0f, -30.0f, 0.0));
+	cameraCube->AddChildObject(main_camera);
+	cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 
 	/* ----- Render Loop ----- */
 	// has GLFW been told to close?
@@ -70,10 +88,13 @@ int main() {
 		
 		// Render the boxes
 		spider_game.RenderScene(basic_shader);
-		cube1->SetRelativeRotationDegrees(glm::vec3(50.0 * time, 0.0f, 0.0f));
-		cube1->PhysicsUpdate(glm::mat4(1.0f));
+		// cube1->SetRelativeRotation(glm::vec3(0.0f, 10 * time, 0.0f));
+		// cube1->PhysicsUpdate(glm::mat4(1.0f));
 		cube1->Render(basic_shader);
 		cube2->Render(basic_shader);
+		cube3->Render(basic_shader);
+		cameraCube->Render(basic_shader);
+		main_camera->Render(basic_shader);
 
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers

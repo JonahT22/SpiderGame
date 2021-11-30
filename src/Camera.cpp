@@ -4,12 +4,12 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_access.hpp>
 
 Camera::Camera() :
 	fovY(glm::radians(45.0)),
 	clipNear(0.1f),
 	clipFar(100.0f),
-	transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 	rotSpeed(0.005),
 	armLength(5.0f),
 	armAngle(glm::vec2(0.0f)),
@@ -17,6 +17,18 @@ Camera::Camera() :
 {
 	UpdateProjectionMtx();
 	UpdateViewMtx();
+}
+
+void Camera::PhysicsUpdate(const glm::mat4& parent_transform) {
+	// Do the same as the SceneObject physicsupdate, but also update the view
+	//   matrix afterward to get any updates to this camera's transform
+	SceneObject::PhysicsUpdate(parent_transform);
+	UpdateViewMtx();
+}
+
+void Camera::Render(const std::shared_ptr<ShaderProgram> shader) {
+	// TODO: define a quick visualization for cameras, but don't draw this
+	//   camera if it's the main camera being referenced by the GameEngine
 }
 
 const GLfloat* Camera::GetProjectionMtxPtr() const {
@@ -82,13 +94,19 @@ void Camera::UpdateProjectionMtx() {
 }
 
 void Camera::UpdateViewMtx() {
-	// Note: if armangles are specified w.r.t a
 	// Set the camera's location based on its arm length/angle
-	transform.loc.x = armLength * cos(armAngle.x) * cos(armAngle.y);
-	transform.loc.y = armLength * sin(armAngle.x);
-	transform.loc.z = armLength * cos(armAngle.x) * sin(armAngle.y);
+	glm::vec3 viewPos;
+	viewPos.x = armLength * cos(armAngle.x) * cos(armAngle.y);
+	viewPos.y = armLength * sin(armAngle.x);
+	viewPos.z = armLength * cos(armAngle.x) * sin(armAngle.y);
 
-	// Note: this assumes that the camera is not parented to any objects, and
-	//   that it is always looking torward the world origin
-	viewMtx = glm::lookAt(transform.loc, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	// Extract the root's world position from the model matrix, and offset
+	//   the camera's position by that amount. Cast to a vec3, dropping the
+	//   4th (w) component of the last column
+	glm::vec3 worldPosOffset = glm::column(modelMtx, 3);
+	viewPos += worldPosOffset;
+
+	viewMtx = glm::lookAt(viewPos, worldPosOffset, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	// TODO: this doesn't take the rotation & scale of the parent object into account
 }

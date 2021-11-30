@@ -4,15 +4,20 @@
 #include <glm/glm.hpp>
 
 #include "Transform.h"
+#include "SceneObject.h"
 
 /// 
-/// Controllable camera that always points toward the center of its parent object from
+/// Controllable camera that always points toward its root transform from
 /// a fixed distance.
 ///
-class Camera {
+class Camera : public SceneObject {
 public:
 	Camera();
 	~Camera() = default;
+
+	// Override functions from SceneObject class
+	virtual void PhysicsUpdate(const glm::mat4& parent_transform) override;
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 	// Getters
 	const GLfloat* GetProjectionMtxPtr() const;
@@ -41,8 +46,6 @@ private:
 	float clipFar;
 	// Aspect ratio of the window that is rendering this camera's view (width/height)
 	float aspectRatio;
-	// Location, rotation, and scale of the camera. Controlled by the arm's length & angle
-	Transform transform;
 	// Multiplier applied to mouse inputs
 	float rotSpeed;
 	// How far should the camera be from its parent as it rotates?
@@ -58,6 +61,8 @@ private:
 
 	// Store the projection and view matrices on this camera object
 	glm::mat4 projectionMtx;
+	// Note: the view matrix is stored in WORLD space, so it can be accessed directly
+	//   by shaders
 	glm::mat4 viewMtx;
 	void UpdateProjectionMtx();
 	void UpdateViewMtx();
