@@ -4,12 +4,13 @@
 
 #include <glad/glad.h>
 
+#include "SceneObject.h"
 #include "Texture.h"
 
 ///
 /// Base class for any object that is made from a collection of renderable triangles
 ///
-class Mesh {
+class Mesh : public SceneObject {
 public:
 	Mesh();
 	~Mesh();
@@ -19,7 +20,7 @@ public:
 	// Create the texture object that this mesh will use
 	void LoadTexture(const char* filename, const TextureOptions& options);
 	// Draw this mesh onto the screen
-	void Render();
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 private:
 	void SetupVertexArray();
