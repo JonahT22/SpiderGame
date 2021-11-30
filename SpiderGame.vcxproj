@@ -24,6 +24,7 @@
     <ClCompile Include="src\GameInstance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\SceneObject.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\stb_image_instantiate.cpp" />
     <ClCompile Include="src\Texture.cpp" />
