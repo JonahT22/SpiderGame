@@ -29,8 +29,10 @@ public:
 
 	/* ----- Other Functions ----- */
 	void AddChildObject(std::shared_ptr<SceneObject> new_object);
-	// Given the local->world transform of this object's parent, find this object's model mtx
+	// Given the local->world transform of this object's parent, find this
+	//   object's (world) model mtx and iterate recursively to update child matrices
 	virtual void PhysicsUpdate(const glm::mat4& parent_transform);
+	// Draw this object, and ONLY this object. Do not draw children
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) = 0;
 
 protected:

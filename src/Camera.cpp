@@ -59,8 +59,9 @@ void Camera::SetArmAngleRadians(const glm::vec2 new_angle) {
 }
 
 void Camera::ApplyRotationInput(const glm::vec2& input) {
-	// Note: inputs are in screen-space (x = horizontal, y = vertical).
-	//   So, x-inputs should rotate around the y (vertical) axis, and vice versa
+	// Note: inputs are provided in screen-space
+	//   So, x-inputs should rotate around the y (vertical) axis, and
+	//   y-inputs should rotate around the x (horizontal) axis
 	// Also, subtract the inputs so that positive mouse inputs result in
 	//   CCW (negative) rotations
 	armAngle.y -= input.x * rotSpeed;

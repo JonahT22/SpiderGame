@@ -27,6 +27,8 @@ public:
 	void SetArmAngleRadians(const glm::vec2 new_angle);
 	// Note: there are NO setters for loc, rot, or scale. These are controlled by the
 	//   parent object & player inputs
+	// TODO: this will change. You can set the loc, rot, and scale of the camera's
+	//   rootcomponent, but not the loc & rot of the camera itself
 
 	// Player Inputs
 	void ApplyRotationInput(const glm::vec2& input);
