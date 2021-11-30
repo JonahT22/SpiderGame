@@ -64,7 +64,7 @@ int main() {
 	tex_options.externalFormat = GL_RGB;
 	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
 	cameraCube->SetRelativeLocation(glm::vec3(-2.0f, 0.0f, 0.0f));
-	cameraCube->SetRelativeRotationDegrees(glm::vec3(0.0f, -30.0f, 0.0));
+	cameraCube->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	cameraCube->AddChildObject(main_camera);
 	cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 
@@ -88,11 +88,12 @@ int main() {
 		
 		// Render the boxes
 		spider_game.RenderScene(basic_shader);
-		// cube1->SetRelativeRotation(glm::vec3(0.0f, 10 * time, 0.0f));
-		// cube1->PhysicsUpdate(glm::mat4(1.0f));
 		cube1->Render(basic_shader);
 		cube2->Render(basic_shader);
 		cube3->Render(basic_shader);
+		
+		cameraCube->SetRelativeRotation(glm::vec3(0.0f, time, 0.0f));
+		cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 		cameraCube->Render(basic_shader);
 		main_camera->Render(basic_shader);
 

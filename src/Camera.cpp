@@ -94,19 +94,29 @@ void Camera::UpdateProjectionMtx() {
 }
 
 void Camera::UpdateViewMtx() {
-	// Set the camera's location based on its arm length/angle
+	// Note: there are 3 coordinate spaces in play here.
+	//   World space: coordinate space of the scene
+	//   Local space: coordinate space of the rootComponent, set by the rootTransform
+	//     inherited from the SceneObject class
+	//   Orbit space: coordinate space of the camera view, set by the armLength and
+	//     armAngle
+	// To get the viewMtx, we need a transformation matrix from world -> orbit space
+
+	// Set the camera's orbit-space location based on the arm length & rotation
 	glm::vec3 viewPos;
 	viewPos.x = armLength * cos(armAngle.x) * cos(armAngle.y);
 	viewPos.y = armLength * sin(armAngle.x);
 	viewPos.z = armLength * cos(armAngle.x) * sin(armAngle.y);
-
-	// Extract the root's world position from the model matrix, and offset
-	//   the camera's position by that amount. Cast to a vec3, dropping the
-	//   4th (w) component of the last column
-	glm::vec3 worldPosOffset = glm::column(modelMtx, 3);
-	viewPos += worldPosOffset;
-
-	viewMtx = glm::lookAt(viewPos, worldPosOffset, glm::vec3(0.0f, 1.0f, 0.0f));
-
-	// TODO: this doesn't take the rotation & scale of the parent object into account
+	
+	// TODO: check if roll rotations are handled, might need to also adjust this
+	//   up vector
+	// Using the local camera location, find a transformation matrix from the
+	//   the rootComponent space -> camera's orbit view space
+	glm::mat4 orbitMtx;
+	orbitMtx = glm::lookAt(viewPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	
+	// Find the total transformation matrix from world space -> camera orbit view space.
+	// Note that this is the opposite order from going local -> world, since
+	//   the view matrix defines a world -> local transformation
+	viewMtx = orbitMtx * glm::inverse(modelMtx);
 }
