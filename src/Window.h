@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-class GameInstance;
+class GameEngine;
 
 /// 
 /// Manages the current window & player inputs. Also sets up 
@@ -12,7 +12,7 @@ class GameInstance;
 class Window {
 public:
 	Window(const int height, const int width, const char* title,
-	       const GameInstance* owner);
+	       const GameEngine* owner);
 	~Window() = default;
 
 	// Called when the user changes the window size
@@ -35,7 +35,7 @@ public:
 private:
 	GLFWwindow* glfwWindow = nullptr;
 	// Reference to the game manager that created this window
-	const GameInstance* owningGame = nullptr;
+	const GameEngine* owningGame = nullptr;
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;
 	glm::vec2 mousePos = glm::vec2(0.0f);

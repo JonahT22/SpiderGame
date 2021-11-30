@@ -1,4 +1,4 @@
-#include "GameInstance.h"
+#include "GameEngine.h"
 
 #include <iostream>
 
@@ -10,7 +10,7 @@
 #include "ShaderProgram.h"
 #include "Window.h"
 
-GameInstance::GameInstance(const GameOptions options) {
+GameEngine::GameEngine(const GameOptions options) {
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {
 		std::cerr << "Error during GLFW Initialization!" << std::endl;
@@ -45,32 +45,32 @@ GameInstance::GameInstance(const GameOptions options) {
 	glEnable(GL_DEPTH_TEST);
 }
 
-GameInstance::~GameInstance() {
+GameEngine::~GameEngine() {
 	// clean up all of GLFW's resources that were allocated
 	glfwTerminate();
 }
 
-GLFWwindow* GameInstance::GetWindow() const {
+GLFWwindow* GameEngine::GetWindow() const {
 	return mainWindow->GetWindow();
 }
 
-void GameInstance::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
+void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
 }
 
-void GameInstance::InputMoveCamera(glm::vec2 motion) const {
+void GameEngine::InputMoveCamera(glm::vec2 motion) const {
 	if (!cameraRef.expired()) {
 		cameraRef.lock()->ApplyRotationInput(motion);
 	}
 }
 
-void GameInstance::UpdateCameraAspect(const float new_aspect) const {
+void GameEngine::UpdateCameraAspect(const float new_aspect) const {
 	if (!cameraRef.expired()) {
 		cameraRef.lock()->SetAspectRatio(new_aspect);
 	}
 }
 
-void GameInstance::SetupScene(const char* filename) {
+void GameEngine::SetupScene(const char* filename) {
 	// Load the scene geometry from the file, which should also create the character
 	//   and place it at the start location. Then, get a ref to the player's camera
 	//   from the scene and hook up the window's input events to the character
@@ -79,7 +79,7 @@ void GameInstance::SetupScene(const char* filename) {
 	//   character reference for their functions
 }
 
-void GameInstance::RenderScene(std::shared_ptr<ShaderProgram> shader) {
+void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 	// TODO: later, this will do all of the rendering commands. For now, just use
 	//   it to test getting the view/projection matrices from the camera
 

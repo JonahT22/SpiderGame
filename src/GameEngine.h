@@ -18,10 +18,10 @@ struct GameOptions {
 ///
 /// Manages setup & lifetime for glfw, glad, and major game systems
 ///
-class GameInstance {
+class GameEngine {
 public:
-	GameInstance(const GameOptions options);
-	~GameInstance();
+	GameEngine(const GameOptions options);
+	~GameEngine();
 	
 	// Getters
 	GLFWwindow* GetWindow() const;

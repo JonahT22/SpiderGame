@@ -11,7 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "ShaderProgram.h"
-#include "GameInstance.h"
+#include "GameEngine.h"
 #include "Mesh.h"
 // TODO: this shouldn't be necessary
 #include "Texture.h"
@@ -21,7 +21,7 @@
 int main() {
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
-	GameInstance spider_game(game_options);
+	GameEngine spider_game(game_options);
 
 	/* ----- Create scene geometry ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();

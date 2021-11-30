@@ -31,9 +31,6 @@ void SceneObject::SetRelativeScale(glm::vec3 scale) {
 }
 
 void SceneObject::AddChildObject(std::shared_ptr<SceneObject> new_object) {
-	// TODO: should probably check that the new object doesn't have this object
-	//   in any of its children. Can do this by giving each object a unique ID and 
-	//   searching for this ID among the new_object's children
 	childObjects.emplace_back(std::weak_ptr<SceneObject>(new_object));
 }
 

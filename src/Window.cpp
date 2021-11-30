@@ -2,10 +2,10 @@
 
 #include <iostream>
 
-#include "GameInstance.h"
+#include "GameEngine.h"
 
 Window::Window(const int width, const int height, const char* title,
-               const GameInstance* owner) : owningGame(owner) {
+               const GameEngine* owner) : owningGame(owner) {
 	// Make sure GLFW has been initialized
 	glfwInit();
 
@@ -45,7 +45,7 @@ void Window::ResizeEvent(int width, int height) {
 		owningGame->UpdateCameraAspect(width / (float)height);
 	}
 	else {
-		std::cerr << "ERROR: Invalid GameInstance ref on window object!";
+		std::cerr << "ERROR: Invalid GameEngine ref on window object!";
 		std::cerr << std::endl;
 	}
 }
@@ -71,7 +71,7 @@ void Window::CursorPosEvent(double x_pos, double y_pos) {
 			mousePos = new_pos;
 		}
 		else {
-			std::cerr << "ERROR: Invalid GameInstance ref on window object!";
+			std::cerr << "ERROR: Invalid GameEngine ref on window object!";
 			std::cerr << std::endl;
 		}
 	}
