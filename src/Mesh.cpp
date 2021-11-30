@@ -21,9 +21,29 @@ Mesh::~Mesh() {
 }
 
 void Mesh::LoadMesh(const char* filename, const bool use_EBO) {
-	// TODO: later, load the mesh from a file. For now, just hardcode
-	//   the mesh's points as a cube
+	std::cerr << "ERROR: Mesh::LoadMesh() is not yet implemented!" << std::endl;
+	abort();
 
+	/* ----- Load vertex data from file ----- */
+
+	/* ----- If the file has index data, load the EBO ----- */
+	useEBO = use_EBO;
+	if (useEBO) {
+		// The EBO tells openGL which vertices to draw in what order
+		// Hardcoded points to show the general idea:
+		GLuint indices[] = {
+			// These are hardcoded indices for a plane
+			// Note that we start from 0!
+			0, 1, 3,  // first triangle
+			1, 2, 3   // second triangle
+		};
+		elementBuffer.assign(std::begin(indices), std::end(indices));
+	}
+	SetupVertexArray();
+}
+
+void Mesh::GenerateCubeMesh() {
+	useEBO = false;
 	// Specify the positions in Normalized Device Coordinates (range -1 to 1,
 	//   where 0,0,0 is the center of the world)
 	// OpenGL converts this to screen-space coordinates (where 0,0 = top left)
@@ -75,19 +95,47 @@ void Mesh::LoadMesh(const char* filename, const bool use_EBO) {
 	};
 	vertexBuffer.assign(std::begin(positions), std::end(positions));
 
-	useEBO = use_EBO;
-	if (useEBO) {
-		// Tells openGL which vertices to draw in what order
-		//   (used by the Element Buffer Object)
-		GLuint indices[] = {  //  note that we start from 0!
-			// These are hardcoded indices for a plane
-			0, 1, 3,   //  first triangle
-			1, 2, 3    //  second triangle
-		};
-		elementBuffer.assign(std::begin(indices), std::end(indices));
+	SetupVertexArray();
+}
+
+void Mesh::LoadTexture(const char* filename, const TextureOptions& options) {
+	texture.LoadFromFile(filename, options);
+}
+
+void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {
+	// The shader should already be bound before drawing this mesh
+	if (!shader->IsShaderActive()) {
+		std::cout << "WARNING: Shader object was not bound before rendering a mesh.";
+		std::cout << " For best performance, shaders should not be activated/deactivated";
+		std::cout << " on a per-mesh basis. Activating the shader for this mesh...";
+		std::cout << std::endl;
+		shader->Activate();
 	}
-	
-	/* ----- Create the vertex array object ----- */
+	shader->SetMat4Uniform("M", modelMtx);
+	// Set the mesh's texture to texture unit 0 (default)
+	texture.Bind();
+	// Load this mesh's buffer/attribute settings
+	glBindVertexArray(vertexArrayID);
+	// Draw the mesh using either indexed EBO drawing or raw VBO drawing
+	if (useEBO) {
+		// Draw the mesh using indexed drawing & the element buffer
+		glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
+		// ^ 1: the primitive type (just like the VBO DrawArrays version)
+		//   2: # of elements to draw (we have 6 indices, so draw 6 vertices
+		//   3: the type of the indices
+		//   4: offset or array ref, we don't need to worry abt it now
+	}
+	else {
+		// Draw straight from the VBO (w/out indexed drawing)
+		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size() / 5);
+		// ^ 1: the primitive type that we want to draw
+		//   2: The starting index of the vertex array that we want to draw
+		//   3: How many vertices we want to draw
+	}
+}
+
+void Mesh::SetupVertexArray() {
+		/* ----- Create the vertex array object ----- */
 	// VAO - Stores the buffer & attribute configurations for this object, so you
 	//   don't have to re-specify how the attributes are set up each time you draw
 	//   the object (just bind the VAO and you're good)
@@ -175,41 +223,4 @@ void Mesh::LoadMesh(const char* filename, const bool use_EBO) {
 	//   unbind this while VAO is active, or VAO will stop recognizing it as
 	//   the current EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void Mesh::LoadTexture(const char* filename, const TextureOptions& options) {
-	texture.LoadFromFile(filename, options);
-}
-
-void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {
-	// The shader should already be bound before drawing this mesh
-	if (!shader->IsShaderActive()) {
-		std::cout << "WARNING: Shader object was not bound before rendering a mesh.";
-		std::cout << " For best performance, shaders should not be activated/deactivated";
-		std::cout << " on a per-mesh basis. Activating the shader for this mesh...";
-		std::cout << std::endl;
-		shader->Activate();
-	}
-	shader->SetMat4Uniform("M", modelMtx);
-
-	// TODO: add a check to see if the texture is valid / has been loaded
-	texture.Bind();
-	// Start with the VAO, which has all of the buffer/attribute settings
-	glBindVertexArray(vertexArrayID);
-	
-	if (useEBO) {
-		// Draw the mesh using indexed drawing & the element buffer
-		glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
-		// ^ 1: the primitive type (just like the VBO DrawArrays version)
-		//   2: # of elements to draw (we have 6 indices, so draw 6 vertices
-		//   3: the type of the indices
-		//   4: offset or array ref, we don't need to worry abt it now
-	}
-	else {
-		// Draw straight from the VBO (w/out indexed drawing)
-		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size() / 5);
-		// ^ 1: the primitive type that we want to draw
-		//   2: The starting index of the vertex array that we want to draw
-		//   3: How many vertices we want to draw
-	}
 }

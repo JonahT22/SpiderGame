@@ -15,14 +15,18 @@ public:
 	Mesh();
 	~Mesh();
 
-	// Load mesh data into buffer vectors, but don't create the opengl buffer objects
+	// Load mesh data into buffer vectors
 	void LoadMesh(const char* filename, const bool use_EBO = false);
+	// Create a hardcoded cube for testing
+	void GenerateCubeMesh();
 	// Create the texture object that this mesh will use
 	void LoadTexture(const char* filename, const TextureOptions& options);
 	// Draw this mesh onto the screen
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 private:
+	void SetupVertexArray();
+
 	// Vertex Array Object - holds the mappings between buffers and attributes
 	GLuint vertexArrayID;
 

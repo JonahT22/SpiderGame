@@ -29,12 +29,12 @@ int main() {
 	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
 								GL_LINEAR, GL_RGB, GL_RGBA };
 	auto cube1 = std::make_shared<Mesh>();
-	cube1->LoadMesh("asdf");
+	cube1->GenerateCubeMesh();
 	cube1->LoadTexture("resources/awesomeface.png", tex_options);
 	cube1->SetRelativeLocation(glm::vec3(0.0f));
 
 	auto cube2 = std::make_shared<Mesh>();
-	cube2->LoadMesh("asdf");
+	cube2->GenerateCubeMesh();
 	cube2->LoadTexture("resources/awesomeface.png", tex_options);
 	cube2->SetRelativeLocation(glm::vec3(2.0f, 0.0f, 0.0f));
 	cube2->SetRelativeRotationDegrees(glm::vec3(0.0f, 45.0f, 30.0f));
