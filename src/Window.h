@@ -30,7 +30,6 @@ public:
 	// Called when the user focuses/unfocuses on this window
 	void FocusEvent(int focused);
 
-	// TODO: this shouldn't be necessary
 	GLFWwindow* GetWindow() const { return glfwWindow; }
 
 private:
@@ -40,7 +39,7 @@ private:
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;
 	glm::vec2 mousePos = glm::vec2(0.0f);
-	// TODO: this is where I'd keep track of any more inputs (like key toggles)
+	// If key toggles are ever necessary, keep track of them here
 
 	/* Function callbacks - Reroutes to custom functions */
 	// Reroute the static callbacks to custom functions in a specific Window object 

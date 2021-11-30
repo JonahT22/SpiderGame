@@ -27,7 +27,8 @@ public:
 	// Compile & link the shader program
 	void Compile(const char* vert_path, const char* frag_path);
 	void Activate();
-	// TODO: is this necessary?
+	// Note: deactivating shaders is optional
+	//   (See https://stackoverflow.com/questions/13546461/what-does-gluseprogram0-do)
 	void Deactivate();
 
 private:

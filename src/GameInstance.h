@@ -9,24 +9,21 @@ class Camera;
 class ShaderProgram;
 struct GLFWwindow;
 
-// TODO: rendering options, like wireframe & backface culling
 struct GameOptions {
 	const int windowWidth = 256;
 	const int windowHeight = 256;
 	const char* windowName = "New Game Window";
 };
 
-/// 
+///
 /// Manages setup & lifetime for glfw, glad, and major game systems
-/// 
-/// TODO: probably should rename this class to "Renderer"
+///
 class GameInstance {
 public:
 	GameInstance(const GameOptions options);
 	~GameInstance();
 	
 	// Getters
-	// TODO: this shouldn't be necessary
 	GLFWwindow* GetWindow() const;
 
 	// Setters

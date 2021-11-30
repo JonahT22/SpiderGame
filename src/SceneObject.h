@@ -13,7 +13,6 @@ class ShaderProgram;
 class SceneObject {
 public:
 	SceneObject() = default;
-	// TODO: when this object dies, all its children should probably be destroyed too
 	~SceneObject() = default;
 
 	/* ----- Getters ----- */
