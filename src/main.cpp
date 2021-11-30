@@ -70,6 +70,8 @@ int main() {
 		
 		// Render the boxes
 		spider_game.RenderScene(basic_shader);
+		cube1->SetRelativeRotationDegrees(glm::vec3(50.0 * time, 0.0f, 0.0f));
+		cube1->PhysicsUpdate(glm::mat4(1.0f));
 		cube1->Render(basic_shader);
 		cube2->Render(basic_shader);
 
