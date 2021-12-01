@@ -85,7 +85,6 @@ void GameEngine::SetupScene(const char* filename) {
 	//   character reference for their functions
 
 	// TODO: load the cubemap image paths from the scene file
-	skybox = std::make_unique<Skybox>();
 	const char* cube_map_image_paths[6] = {
 		"resources/skybox/right.jpg",
 		"resources/skybox/left.jpg",
@@ -94,8 +93,7 @@ void GameEngine::SetupScene(const char* filename) {
 		"resources/skybox/front.jpg",
 		"resources/skybox/back.jpg",
 	};
-	skybox->LoadCubeMap(cube_map_image_paths);
-	skybox->GenerateSkyboxMesh();
+	skybox = std::make_unique<Skybox>(cube_map_image_paths);
 }
 
 void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {

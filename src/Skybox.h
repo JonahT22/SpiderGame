@@ -11,29 +11,24 @@ class ShaderProgram;
 /// 
 /// Note: even though the skybox shares properties with textures and meshes, it should
 ///   NOT share any inheritance with them. The skybox should be created and managed by
-///   the GameEngine directly, and should not be moved or parented to other objects
+///   the GameEngine directly, and should not be managed by or parented to other objects
 /// 
 class Skybox {
 public:
-	Skybox();
+	// Supply exactly 6 texture files, given in the following order:
+	//   Right, Left, Top, Bottom, Front, Back
+	Skybox(const char* filenames[6]);
 	~Skybox();
 
-	// Load exactly 6 textures into a cubemap, supplied in the following order:
-	//   Right, Left, Top, Bottom, Front, Back
-	void LoadCubeMap(const char* filenames[6]);
-	// Load a simple cube with only vertex data
-	void GenerateSkyboxMesh();
 	void Render();
 
 private:
 	// ID of the texure object that holds this skybox's cubemap
-	GLuint cubeMapID;
-
+	GLuint cubeMapID = 0;
 	// Vertex Array Object - holds the mappings between buffers and attributes
-	GLuint vertexArrayID;
-
+	GLuint vertexArrayID = 0;
 	// VBO for this skybox's mesh data
 	std::vector<GLfloat> vertexBuffer;
-	GLuint vertexBufferID;
+	GLuint vertexBufferID = 0;
 };
 

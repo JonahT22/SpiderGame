@@ -7,19 +7,8 @@
 #include "ShaderProgram.h"
 
 // TODO: should I just automatically call loadcubemap and generateskyboxmesh from here?
-Skybox::Skybox() :
-	cubeMapID(0),
-	vertexArrayID(0),
-	vertexBufferID(0)
-{}
-
-Skybox::~Skybox() {
-	// Deallocate the vertex buffer and array
-	glDeleteVertexArrays(1, &vertexArrayID);
-	glDeleteBuffers(1, &vertexBufferID);
-}
-
-void Skybox::LoadCubeMap(const char* filenames[6]) {
+Skybox::Skybox(const char* filenames[6]) {
+	/* ----- Load the Cubemap from the texture files ----- */
 	// Create the texture object
 	glGenTextures(1, &cubeMapID);
 	// Set this texture as the current cubemap texture
@@ -52,9 +41,8 @@ void Skybox::LoadCubeMap(const char* filenames[6]) {
 	// Note: Cubemaps don't use 2D texture coordinates, they use 3D vectors to sample the
 	//   texture. So, we also need to set behavior for the 3rd texture coordinate
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-}
 
-void Skybox::GenerateSkyboxMesh() {
+	/* ----- Generate a hardcoded mesh for the skybox ----- */
 	GLfloat positions[] = {     
 		-1.0f,  1.0f, -1.0f,
 		-1.0f, -1.0f, -1.0f,
@@ -117,6 +105,12 @@ void Skybox::GenerateSkyboxMesh() {
 	// Unbind the VAO and VBO for safety
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+Skybox::~Skybox() {
+	// Deallocate the vertex buffer and array
+	glDeleteVertexArrays(1, &vertexArrayID);
+	glDeleteBuffers(1, &vertexBufferID);
 }
 
 void Skybox::Render() {
