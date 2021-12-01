@@ -22,6 +22,8 @@ public:
 	// Getters
 	const GLfloat* GetProjectionMtxPtr() const;
 	const GLfloat* GetViewMtxPtr() const;
+	const glm::mat4 GetProjectionMtx() const;
+	const glm::mat4 GetViewMtx() const;
 
 	// Setters
 	void SetFovDegrees(const float new_fov);

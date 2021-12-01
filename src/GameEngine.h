@@ -7,6 +7,7 @@
 class Window;
 class Camera;
 class ShaderProgram;
+class Skybox;
 struct GLFWwindow;
 
 struct GameOptions {
@@ -38,11 +39,17 @@ public:
 	// Other Functions
 	void SetupScene(const char* filename);
 	void RenderScene(std::shared_ptr<ShaderProgram> shader);
+	// TODO: this should eventually be combined with RenderScene, but can only be called
+	//   after all scene geometry is finished rendering
+	void RenderSkybox(std::shared_ptr<ShaderProgram> shader);
 
 private:
-	// The gameinstance has exclusive control over the rendering window
+	/* ----- Objects that the GameEngine exclusively controls ----- */
 	std::unique_ptr<Window> mainWindow;
-	// Store a weak reference to the player's camera - it can disappear/change at any time
+	std::unique_ptr<Skybox> skybox;
+
+	/* ----- Objects that the GameEngine references, but have lifetimes controlled by
+	other objects ----- */
 	std::weak_ptr<Camera> cameraRef;
 };
 

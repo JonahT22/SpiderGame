@@ -39,6 +39,14 @@ const GLfloat* Camera::GetViewMtxPtr() const {
 	return glm::value_ptr(viewMtx);
 }
 
+const glm::mat4 Camera::GetProjectionMtx() const {
+	return projectionMtx;
+}
+
+const glm::mat4 Camera::GetViewMtx() const {
+	return viewMtx;
+}
+
 void Camera::SetFovDegrees(const float new_fov) {
 	fovY = glm::radians(new_fov);
 	UpdateProjectionMtx();
@@ -102,15 +110,13 @@ void Camera::UpdateViewMtx() {
 	//     armAngle
 	// To get the viewMtx, we need a transformation matrix from world -> orbit space
 
-	// Set the camera's orbit-space location based on the arm length & rotation
+	// Set the local-space location of the camera view based on the arm length & rotation
 	glm::vec3 viewPos;
 	viewPos.x = armLength * cos(armAngle.x) * cos(armAngle.y);
 	viewPos.y = armLength * sin(armAngle.x);
 	viewPos.z = armLength * cos(armAngle.x) * sin(armAngle.y);
 	
-	// TODO: check if roll rotations are handled, might need to also adjust this
-	//   up vector
-	// Using the local camera location, find a transformation matrix from the
+	// Using the local-space camera location, find a transformation matrix from the
 	//   the rootComponent space -> camera's orbit view space
 	glm::mat4 orbitMtx;
 	orbitMtx = glm::lookAt(viewPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));

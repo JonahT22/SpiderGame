@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\glad.c" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Skybox.h" />
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\SceneObject.h" />
@@ -42,7 +44,9 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\skybox_frag.glsl" />
     <None Include="resources\simple_frag.glsl" />
+    <None Include="resources\skybox_vert.glsl" />
     <None Include="resources\simple_vert.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

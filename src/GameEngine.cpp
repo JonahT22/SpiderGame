@@ -5,9 +5,13 @@
 // Always include glad before glfw
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
+//TODO remove
+#include <glm/gtx/string_cast.hpp>
 
 #include "Camera.h"
 #include "ShaderProgram.h"
+#include "Skybox.h"
 #include "Window.h"
 
 GameEngine::GameEngine(const GameOptions options) {
@@ -35,14 +39,16 @@ GameEngine::GameEngine(const GameOptions options) {
 	// Initialize GLAD so that OpenGL has the right function pointers.
 	// Pass GLAD the function (from glfw) that loads the OpenGL function pointers
 	// Note: there must be a current context on this thread for this to work
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cerr << "Error: Failed to initialize GLAD!" << std::endl;
 		abort();
 	}
-
+	
 	// Enable Z-buffer checking
 	glEnable(GL_DEPTH_TEST);
+	// Change the depth check from < to <=, so that skyboxes (which always have a depth
+	//   of 1) can still pass depth tests
+	glDepthFunc(GL_LEQUAL);
 }
 
 GameEngine::~GameEngine() {
@@ -77,6 +83,19 @@ void GameEngine::SetupScene(const char* filename) {
 	// TODO: might be useful to have a "playercontroller" class that has a
 	//   "control rotation" and "control velocity" inputs that the camera & 
 	//   character reference for their functions
+
+	// TODO: load the cubemap image paths from the scene file
+	skybox = std::make_unique<Skybox>();
+	const char* cube_map_image_paths[6] = {
+		"resources/skybox/right.jpg",
+		"resources/skybox/left.jpg",
+		"resources/skybox/top.jpg",
+		"resources/skybox/bottom.jpg",
+		"resources/skybox/front.jpg",
+		"resources/skybox/back.jpg",
+	};
+	skybox->LoadCubeMap(cube_map_image_paths);
+	skybox->GenerateSkyboxMesh();
 }
 
 void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
@@ -85,7 +104,7 @@ void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 
 	// Try to get a reference to the camera. Only proceed if it is valid
 	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
-		// Send transformation matrices to the shader
+		// Send camera matrices to the shader
 		shader->Activate();
 		shader->SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
 		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
@@ -93,4 +112,22 @@ void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 	else {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
 	}
+}
+
+void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
+	// TODO: this should re-use the camera lock from before
+	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
+		// Send camera matrices to the shader
+		shader->Activate();
+		// Remove the translation factors from the view matrix by casting to a mat3
+		// This works because the mat3->mat4 conversion places a 1 into unfilled
+		//   diagonals, essentially setting the last column to (0, 0, 0, 1)
+		shader->SetMat4Uniform("V", glm::mat4(glm::mat3(currentCamera->GetViewMtx())));
+		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
+	}
+	else {
+		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
+	}
+	// Note: the skybox MUST be drawn last
+	skybox->Render();
 }

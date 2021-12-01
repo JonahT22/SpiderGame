@@ -22,10 +22,13 @@ int main() {
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	GameEngine spider_game(game_options);
+	spider_game.SetupScene("asdf");
 
 	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
 	basic_shader->Compile("resources/simple_vert.glsl", "resources/simple_frag.glsl");
+	auto skybox_shader = std::make_shared<ShaderProgram>();
+	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
 	
 	/* ----- Create the camera ----- */
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>();
@@ -64,7 +67,6 @@ int main() {
 	tex_options.externalFormat = GL_RGB;
 	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
 	cameraCube->SetRelativeLocation(glm::vec3(-2.0f, 0.0f, 0.0f));
-	cameraCube->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	cameraCube->AddChildObject(main_camera);
 	cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 
@@ -72,7 +74,7 @@ int main() {
 	// has GLFW been told to close?
 	while (!glfwWindowShouldClose(spider_game.GetWindow())) {
 		// Set the void color to dark green-blue (STATE-SETTING function)
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		// Clear the color & depth buffers (STATE-USING function)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -92,10 +94,13 @@ int main() {
 		cube2->Render(basic_shader);
 		cube3->Render(basic_shader);
 		
-		cameraCube->SetRelativeRotation(glm::vec3(0.0f, time, 0.0f));
+		cameraCube->SetRelativeRotation(glm::vec3(0.0f, 0.0f, 0.5 * time));
 		cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 		cameraCube->Render(basic_shader);
 		main_camera->Render(basic_shader);
+
+		// Temporary: after everything is finished, render the skybox
+		spider_game.RenderSkybox(skybox_shader);
 
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
