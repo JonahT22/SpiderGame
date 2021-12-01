@@ -94,8 +94,6 @@ int main() {
 		cube2->Render(basic_shader);
 		cube3->Render(basic_shader);
 		
-		cameraCube->SetRelativeRotation(glm::vec3(0.0f, 0.0f, 0.5 * time));
-		cameraCube->PhysicsUpdate(glm::mat4(1.0f));
 		cameraCube->Render(basic_shader);
 		main_camera->Render(basic_shader);
 

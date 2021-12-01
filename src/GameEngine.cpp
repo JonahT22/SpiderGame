@@ -85,13 +85,14 @@ void GameEngine::SetupScene(const char* filename) {
 	//   character reference for their functions
 
 	// TODO: load the cubemap image paths from the scene file
+	// TODO: detect image file type, choose RGB or RGBA in texture loader
 	const char* cube_map_image_paths[6] = {
-		"resources/skybox/right.jpg",
-		"resources/skybox/left.jpg",
-		"resources/skybox/top.jpg",
-		"resources/skybox/bottom.jpg",
-		"resources/skybox/front.jpg",
-		"resources/skybox/back.jpg",
+		"resources/skybox1/right.jpg",
+		"resources/skybox1/left.jpg",
+		"resources/skybox1/top.jpg",
+		"resources/skybox1/bottom.jpg",
+		"resources/skybox1/front.jpg",
+		"resources/skybox1/back.jpg",
 	};
 	skybox = std::make_unique<Skybox>(cube_map_image_paths);
 }
