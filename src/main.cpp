@@ -26,9 +26,9 @@ int main() {
 
 	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
-	basic_shader->Compile("resources/simple_vert.glsl", "resources/simple_frag.glsl");
+	basic_shader->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
 	auto skybox_shader = std::make_shared<ShaderProgram>();
-	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
+	skybox_shader->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
 	
 	/* ----- Create the camera ----- */
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>();

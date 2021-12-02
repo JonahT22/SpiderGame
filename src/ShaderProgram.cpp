@@ -45,25 +45,25 @@ bool ShaderProgram::IsShaderActive() {
 }
 
 void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value,
-                                  bool verbose = false) {
+                                  bool verbose) {
 	GLint location = GetUniform(name, verbose);
 	glUniform1i(location, value);
 }
 
 void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value,
-                                    bool verbose = false) {
+                                    bool verbose) {
 	GLint location = GetUniform(name, verbose);
 	glUniform1f(location, value);
 }
 
 void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix,
-                                   bool verbose = false) {
+                                   bool verbose) {
 	GLint location = GetUniform(name, verbose);
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void ShaderProgram::SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr,
-                                      bool verbose = false) {
+                                      bool verbose) {
 	// Set a mat4 directly from a pointer to its first element (i.e. call
 	//   glm::value_ptr on the matrix BEFORE sending it to this function)
 	GLint location = GetUniform(name, verbose);
