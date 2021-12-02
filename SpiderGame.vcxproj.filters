@@ -48,6 +48,9 @@
     <ClCompile Include="src\Skybox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h">
@@ -80,18 +83,27 @@
     <ClInclude Include="src\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\simple_frag.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\simple_vert.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="resources\skybox_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\skybox_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\normal_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\normal_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\unlit_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\unlit_vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
