@@ -15,12 +15,12 @@ ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(programID);
 }
 
-GLint ShaderProgram::GetUniform(const GLchar* name) {
+GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) {
 	// Check that this shader is active in the opengl context
 	GLint current_program;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
 	if (programID != (GLuint)current_program) {
-		std::cerr << "ERROR: Attempted to set a uniform in a non-activated shader!";
+		std::cerr << "ERROR: Attempted to get a uniform from a non-activated shader!";
 		std::cerr << std::endl;
 		return -1;
 	}
@@ -28,8 +28,10 @@ GLint ShaderProgram::GetUniform(const GLchar* name) {
 	// Check that the uniform's name exists on the shader
 	GLint location = glGetUniformLocation(programID, name);
 	if (location < 0) {
-		std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
-		std::cerr << std::endl;
+		if (verbose) {
+			std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
+			std::cerr << std::endl;
+		}
 		return -1;
 	}
 
@@ -42,25 +44,29 @@ bool ShaderProgram::IsShaderActive() {
 	return (current_program == programID);
 }
 
-void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value) {
-	GLint location = GetUniform(name);
+void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value,
+                                  bool verbose = false) {
+	GLint location = GetUniform(name, verbose);
 	glUniform1i(location, value);
 }
 
-void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value) {
-	GLint location = GetUniform(name);
+void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value,
+                                    bool verbose = false) {
+	GLint location = GetUniform(name, verbose);
 	glUniform1f(location, value);
 }
 
-void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix) {
-	GLint location = GetUniform(name);
+void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix,
+                                   bool verbose = false) {
+	GLint location = GetUniform(name, verbose);
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void ShaderProgram::SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr) {
+void ShaderProgram::SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr,
+                                      bool verbose = false) {
 	// Set a mat4 directly from a pointer to its first element (i.e. call
 	//   glm::value_ptr on the matrix BEFORE sending it to this function)
-	GLint location = GetUniform(name);
+	GLint location = GetUniform(name, verbose);
 	glUniformMatrix4fv(location, 1, GL_FALSE, matrix_ptr);
 }
 
@@ -81,7 +87,6 @@ void ShaderProgram::Compile(const char* vert_path, const char* frag_path) {
 	                        (std::istreambuf_iterator<char>()));
 	std::string frag_string((std::istreambuf_iterator<char>(frag_file)),
 	                        (std::istreambuf_iterator<char>()));
-
 	const char* vert_data = vert_string.c_str();
 	const char* frag_data = frag_string.c_str();
 

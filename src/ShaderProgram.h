@@ -13,15 +13,15 @@ public:
 	~ShaderProgram();
 	
 	/* ----- Getters ----- */
-	// Check if a provided uniform name exists
-	GLint GetUniform(const GLchar* name);
+	// Return index of uniform if it exists, -1 if it doesn't
+	GLint GetUniform(const GLchar* name, bool verbose = false);
 	bool IsShaderActive();
 
 	/* ----- Setters ----- */
-	void SetIntUniform(const GLchar* name, const GLint value);
-	void SetFloatUniform(const GLchar* name, const GLfloat value);
-	void SetMat4Uniform(const GLchar* name, const glm::mat4& matrix);
-	void SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr);
+	void SetIntUniform(const GLchar* name, const GLint value, bool verbose = false);
+	void SetFloatUniform(const GLchar* name, const GLfloat value, bool verbose = false);
+	void SetMat4Uniform(const GLchar* name, const glm::mat4& matrix, bool verbose = false);
+	void SetMat4UniformPtr(const GLchar* name, const GLfloat* matrix_ptr, bool verbose = false);
 
 	/* ----- Other Functions ----- */
 	// Compile & link the shader program
