@@ -198,11 +198,11 @@ void Mesh::SetupVertexArray() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
 	// Setup the normal attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
 	                      (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	// Setup the texCoord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
 	                      (void*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
 
