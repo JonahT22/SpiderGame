@@ -15,6 +15,7 @@ uniform mat4 P;
 /* ----- Outputs ----- */
 out vertexInfo {
 	vec2 texCoord;
+	vec3 normal;
 };
 
 
@@ -22,4 +23,6 @@ void main() {
 	// gl_Position is a built-in variable, and the final output of a vertex shader
 	gl_Position = P * V * M * vec4(aPos, 1.0);
 	texCoord = aTexCoord;
+	// TODO: need to multiply by invT
+	normal = aNor;
 }
