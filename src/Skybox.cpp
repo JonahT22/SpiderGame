@@ -6,7 +6,6 @@
 
 #include "ShaderProgram.h"
 
-// TODO: should I just automatically call loadcubemap and generateskyboxmesh from here?
 Skybox::Skybox(const char* filenames[6]) {
 	/* ----- Load the Cubemap from the texture files ----- */
 	// Create the texture object

@@ -22,7 +22,6 @@ int main() {
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	auto spider_game = std::make_shared<GameEngine>(game_options);
-	// TODO: test with an invalid/missing camera, should just render from 0,0,0, not crash
 	spider_game->SetupScene("asdf");
 
 	/* ----- Create shader objects ----- */
