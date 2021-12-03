@@ -2,7 +2,9 @@
 #version 330 core
 
 /* ----- Attributes ----- */
-layout (location = 0) in vec3 aPos;
+// Note: aPos is declared as a vec4 here, but it is sent as a vec3. OpenGL automatically
+// adds a 'w' value of 1.0
+layout (location = 0) in vec4 aPos;
 layout (location = 1) in vec3 aNor;
 layout (location = 2) in vec2 aTexCoord;
 
@@ -20,6 +22,6 @@ out vertexInfo {
 
 void main() {
 	// gl_Position is a built-in variable, and the final output of a vertex shader
-	gl_Position = P * V * M * vec4(aPos, 1.0);
+	gl_Position = P * V * M * aPos;
 	texCoord = aTexCoord;
 }
