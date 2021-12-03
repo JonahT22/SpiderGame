@@ -63,3 +63,7 @@ void Texture::Bind(GLuint texture_unit) const {
 	glActiveTexture(GL_TEXTURE0 + texture_unit);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 }
+
+bool Texture::IsLoaded() {
+	return (textureID > 0);
+}

@@ -114,7 +114,9 @@ void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {
 	}
 	shader->SetMat4Uniform("M", modelMtx);
 	// Set the mesh's texture to texture unit 0 (default)
-	texture.Bind();
+	if (texture.IsLoaded()) {
+		texture.Bind();
+	}
 	// Load this mesh's buffer/attribute settings
 	glBindVertexArray(vertexArrayID);
 	// Draw the mesh using either indexed EBO drawing or raw VBO drawing

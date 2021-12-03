@@ -27,6 +27,10 @@ public:
 	// Binds this texture to the provided texture unit (default = 0)
 	void Bind(GLuint texture_unit = 0) const;
 
+	/* ----- Getters ----- */
+	// Has this texture been assigned an image file?
+	bool IsLoaded();
+
 private:
 	GLuint textureID;
 };

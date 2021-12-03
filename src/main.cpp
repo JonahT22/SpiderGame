@@ -26,7 +26,7 @@ int main() {
 
 	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
-	basic_shader->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
+	basic_shader->Compile("resources/normal_vert.glsl", "resources/normal_frag.glsl");
 	auto skybox_shader = std::make_shared<ShaderProgram>();
 	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
 	
