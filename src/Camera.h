@@ -22,6 +22,7 @@ public:
 	// Getters
 	const GLfloat* GetProjectionMtxPtr() const;
 	const GLfloat* GetViewMtxPtr() const;
+	const GLfloat* GetViewMtxInvTPtr() const;
 	const glm::mat4 GetProjectionMtx() const;
 	const glm::mat4 GetViewMtx() const;
 
@@ -66,6 +67,8 @@ private:
 	// Note: the view matrix is stored in WORLD space, so it can be accessed directly
 	//   by shaders
 	glm::mat4 viewMtx;
+	// Inverse transpose of the view mtx, for transforming normals
+	glm::mat4 viewMtxInvT;
 	void UpdateProjectionMtx();
 	void UpdateViewMtx();
 };

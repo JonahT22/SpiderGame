@@ -32,13 +32,15 @@ public:
 	//   object's (world) model mtx and iterate recursively to update child matrices
 	virtual void PhysicsUpdate(const glm::mat4& parent_transform);
 	// Draw this object, and ONLY this object. Do not draw children
-	virtual void Render(const std::shared_ptr<ShaderProgram> shader) = 0;
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader);
 
 protected:
 	// Transform relative to this object's parent
 	Transform rootTransform;
 	// Model matrix for this object (i.e. object-to-WORLD) transformation
 	glm::mat4 modelMtx;
+	// Inverse transpose of the model matrix, used for transforming normals
+	glm::mat4 modelMtxInvT;
 	// List of SceneObjects that are attached to this object
 	std::vector<std::weak_ptr<SceneObject> > childObjects;
 };

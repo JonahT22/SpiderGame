@@ -106,6 +106,7 @@ void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 		// Send camera matrices to the shader
 		shader->Activate();
 		shader->SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
+		shader->SetMat4UniformPtr("V_invT", currentCamera->GetViewMtxInvTPtr());
 		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
 	}
 	else {

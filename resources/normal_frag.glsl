@@ -10,5 +10,7 @@ in vertexInfo {
 out vec4 fragColor;
 
 void main() {
-	fragColor = vec4((0.5 * normal) + vec3(0.5, 0.5, 0.5), 1.0);
+	// Barycentric interpolation can make the normal vector length less than 1
+	vec3 nVec = normalize(normal);
+	fragColor = vec4((0.5 * nVec) + vec3(0.5, 0.5, 0.5), 1.0);
 }

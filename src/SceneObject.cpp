@@ -43,6 +43,7 @@ void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
 
 	// Find this object's local -> world transform
 	modelMtx = parent_transform * rootTransform.GetMatrix();
+	modelMtxInvT = glm::transpose(glm::inverse(modelMtx));
 
 	// Propagate this object's transformation matrix to its children
 	for (auto& child : childObjects) {
@@ -66,4 +67,5 @@ void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) {
 		shader->Activate();
 	}
 	shader->SetMat4Uniform("M", modelMtx);
+	shader->SetMat4Uniform("M_invT", modelMtxInvT);
 }

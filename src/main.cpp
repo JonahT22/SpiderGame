@@ -35,7 +35,6 @@ int main() {
 	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
 	main_camera->SetArmLength(5.0f);
 	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
-	//main_camera->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 2.0f));
 	spider_game.SetCurrentCamera(main_camera);
 
 	/* ----- Create scene geometry ----- */

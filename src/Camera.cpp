@@ -40,6 +40,10 @@ const GLfloat* Camera::GetViewMtxPtr() const {
 	return glm::value_ptr(viewMtx);
 }
 
+const GLfloat* Camera::GetViewMtxInvTPtr() const {
+	return glm::value_ptr(viewMtxInvT);
+}
+
 const glm::mat4 Camera::GetProjectionMtx() const {
 	return projectionMtx;
 }
@@ -126,4 +130,5 @@ void Camera::UpdateViewMtx() {
 	// Note that this is the opposite order from going local -> world, since
 	//   the view matrix defines a world -> local transformation
 	viewMtx = orbitMtx * glm::inverse(modelMtx);
+	viewMtxInvT = glm::transpose(glm::inverse(viewMtx));
 }
