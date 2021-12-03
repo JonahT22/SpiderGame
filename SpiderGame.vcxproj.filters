@@ -106,5 +106,11 @@
     <None Include="resources\unlit_vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\silhouette_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\silhouette_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

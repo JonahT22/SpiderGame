@@ -27,7 +27,7 @@ int main() {
 
 	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
-	basic_shader->Compile("resources/normal_vert.glsl", "resources/normal_frag.glsl");
+	basic_shader->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
 	auto skybox_shader = std::make_shared<ShaderProgram>();
 	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
 	
@@ -86,7 +86,9 @@ int main() {
 		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
 		// Set the uniform that's defined in the frag shader
 		//   Note: the shader must be activated before calling this
-		basic_shader->SetFloatUniform("greenStrength", greenStrength);
+		if (basic_shader->GetUniform("greenStrength") != -1) {
+			basic_shader->SetFloatUniform("greenStrength", greenStrength, true);
+		}
 		
 		// Render the boxes
 		spider_game->RenderScene(basic_shader);

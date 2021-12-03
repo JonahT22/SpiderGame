@@ -112,16 +112,11 @@ void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 	// TODO: later, this will do all of the rendering commands. For now, just use
 	//   it to test getting the view/projection matrices from the camera
 
-	// Try to get a reference to the camera. Only proceed if it is valid
-	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
-		// Send camera matrices to the shader
-		shader->Activate();
-		shader->SetMat4UniformPtr("V", currentCamera->GetViewMtxPtr());
-		shader->SetMat4UniformPtr("V_invT", currentCamera->GetViewMtxInvTPtr());
-		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
-	}
-	else {
-		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
+	shader->Activate();
+	// Send projection matrix to the shader, if necessary
+	if (shader->GetUniform("P") != -1) {
+		std::shared_ptr<Camera> main_camera = GetMainCamera();
+		shader->SetMat4Uniform("P", main_camera->GetProjectionMtx());
 	}
 }
 
@@ -134,9 +129,8 @@ void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
 		// Remove the translation factors from the view matrix by casting to a mat3
 		// This works because the mat3->mat4 conversion places a 1 into unfilled
 		//   diagonals, essentially setting the last column to (0, 0, 0, 1)
-		shader->SetMat4Uniform("V", glm::mat4(glm::mat3(currentCamera->GetViewMtx())));
-		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
 		glm::mat4 view = glm::mat4(glm::mat3(main_camera->GetViewMtx()));
+		shader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view);
 	}
 	else {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;

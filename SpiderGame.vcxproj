@@ -48,6 +48,8 @@
   <ItemGroup>
     <None Include="resources\normal_frag.glsl" />
     <None Include="resources\normal_vert.glsl" />
+    <None Include="resources\silhouette_frag.glsl" />
+    <None Include="resources\silhouette_vert.glsl" />
     <None Include="resources\skybox_frag.glsl" />
     <None Include="resources\unlit_frag.glsl" />
     <None Include="resources\skybox_vert.glsl" />

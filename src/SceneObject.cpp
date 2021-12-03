@@ -4,6 +4,7 @@
 
 #include "ShaderProgram.h"
 #include "GameEngine.h"
+#include "Camera.h"
 
 SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine) :
 	engineRef(engine)
@@ -48,7 +49,6 @@ void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
 
 	// Find this object's local -> world transform
 	modelMtx = parent_transform * rootTransform.GetMatrix();
-	modelMtxInvT = glm::transpose(glm::inverse(modelMtx));
 
 	// Propagate this object's transformation matrix to its children
 	for (auto& child : childObjects) {
@@ -71,6 +71,30 @@ void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) {
 		std::cout << std::endl;
 		shader->Activate();
 	}
-	shader->SetMat4Uniform("M", modelMtx);
-	shader->SetMat4Uniform("M_invT", modelMtxInvT);
+
+	// Try getting a shared reference to the game engine
+	if (std::shared_ptr<const GameEngine> engine = engineRef.lock()) {
+		// Get the main camera to access the view and projection matrices
+		std::shared_ptr<Camera> main_camera = engine->GetMainCamera();
+		const glm::mat4 model_view_mtx = main_camera->GetViewMtx() * modelMtx;
+		// Shaders might use the Mv matrix, or the Mvp matrix. Try sending both, and the
+		//   shader will ignore whichever is not being used.
+		// Note: Shaders should never use BOTH Mv and Mvp
+		if (shader->GetUniform("Mv") != -1) {
+			shader->SetMat4Uniform("Mv", model_view_mtx, true);
+		}
+		else if (shader->GetUniform("Mvp") != -1) {
+			shader->SetMat4Uniform("Mvp", main_camera->GetProjectionMtx() *
+			                       model_view_mtx, true);
+		}
+		// If the shader needs to transform normals into world space, it also needs the
+		//   inverse transpose of the modelview matrix:
+		if (shader->GetUniform("Mv_invT") != -1) {
+			shader->SetMat4Uniform("Mv_invT",
+			                       glm::transpose(glm::inverse(model_view_mtx)), true);
+		}
+	}
+	else {
+		std::cerr << "ERROR: Invalid engineRef access in SceneObject!" << std::endl;
+	}
 }

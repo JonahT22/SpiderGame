@@ -8,10 +8,8 @@ layout (location = 0) in vec4 aPos;
 layout (location = 1) in vec3 aNor;
 
 /* ----- Uniforms ----- */
-// Model, view, and projection matrices
-uniform mat4 M;
-uniform mat4 V;
-uniform mat4 P;
+// Model, view, and projection matrices (pre-multiplied as P * V * M)
+uniform mat4 Mvp;
 
 /* ----- Outputs ----- */
 out vertexInfo {
@@ -21,6 +19,6 @@ out vertexInfo {
 
 void main() {
 	// gl_Position is a built-in variable, and the final output of a vertex shader
-	gl_Position = P * V * M * aPos;
+	gl_Position = Mvp * aPos;
 	normal = aNor;
 }

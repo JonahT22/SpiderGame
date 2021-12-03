@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "Transform.h"
+class GameEngine;
 class ShaderProgram;
 
 /// 
@@ -40,9 +41,7 @@ protected:
 	// Transform relative to this object's parent
 	Transform rootTransform;
 	// Model matrix for this object (i.e. object-to-WORLD) transformation
-	glm::mat4 modelMtx;
-	// Inverse transpose of the model matrix, used for transforming normals
-	glm::mat4 modelMtxInvT;
+	glm::mat4 modelMtx = glm::mat4(1.0f);
 	// List of SceneObjects that are attached to this object
 	std::vector<std::weak_ptr<SceneObject> > childObjects;
 };
