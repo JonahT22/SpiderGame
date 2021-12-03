@@ -6,12 +6,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
-//TODO remove
-#include <glm/gtx/string_cast.hpp>
 
 #include "Camera.h"
 #include "ShaderProgram.h"
 #include "Skybox.h"
+#include "Scene.h"
 #include "Window.h"
 
 GameEngine::GameEngine(const GameOptions options) {
@@ -66,7 +65,7 @@ std::shared_ptr<Camera> GameEngine::GetMainCamera() const {
 	else {
 		std::cerr << "ERROR: Tried to get current camera, but there is no camera set in";
 		std::cerr << " the game engine!" << std::endl;
-		// 
+		// Construct an empty camera object
 		return std::make_shared<Camera>(enable_shared_from_this::weak_from_this());
 	}
 }
@@ -95,6 +94,10 @@ void GameEngine::SetupScene(const char* filename) {
 	//   "control rotation" and "control velocity" inputs that the camera & 
 	//   character reference for their functions
 
+	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
+	scene->LoadShaders("asdf");
+	scene->LoadHardcodedScene();
+
 	// TODO: load the cubemap image paths from the scene file
 	// TODO: detect image file type, choose RGB or RGBA in texture loader
 	const char* cube_map_image_paths[6] = {
@@ -108,21 +111,15 @@ void GameEngine::SetupScene(const char* filename) {
 	skybox = std::make_unique<Skybox>(cube_map_image_paths);
 }
 
-void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
-	// TODO: later, this will do all of the rendering commands. For now, just use
-	//   it to test getting the view/projection matrices from the camera
-
-	shader->Activate();
-	// Send projection matrix to the shader, if necessary
-	if (shader->GetUniform("P") != -1) {
-		std::shared_ptr<Camera> main_camera = GetMainCamera();
-		shader->SetMat4Uniform("P", main_camera->GetProjectionMtx());
-	}
+void GameEngine::RenderScene() {
+	// TODO: eventually, this should hold all of the rendering commands
+	scene->RenderScene();
 }
 
 void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
-	// TODO: this should re-use the camera ref from before
+	// TODO: skybox should be rendered by the scene
 	auto main_camera = GetMainCamera();
+	// Render the skybox
 	if (main_camera) {
 		// Send camera matrices to the shader
 		shader->Activate();
@@ -130,7 +127,7 @@ void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
 		// This works because the mat3->mat4 conversion places a 1 into unfilled
 		//   diagonals, essentially setting the last column to (0, 0, 0, 1)
 		glm::mat4 view = glm::mat4(glm::mat3(main_camera->GetViewMtx()));
-		shader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view);
+		shader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view, true);
 	}
 	else {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;

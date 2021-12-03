@@ -22,14 +22,13 @@ int main() {
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	auto spider_game = std::make_shared<GameEngine>(game_options);
-	spider_game->SetupScene("asdf");
 
-	/* ----- Create shader objects ----- */
-	auto basic_shader = std::make_shared<ShaderProgram>();
-	basic_shader->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
+	/* ----- Create the skybox shader ----- */
+	// TODO: the skybox shader should probably be its own thing in the scene,
+	//   not the gameengine. But keep it separate from the other shaders
 	auto skybox_shader = std::make_shared<ShaderProgram>();
 	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
-	
+
 	/* ----- Create the camera ----- */
 	auto main_camera = std::make_shared<Camera>(spider_game);
 	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
@@ -37,37 +36,8 @@ int main() {
 	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
 	spider_game->SetCurrentCamera(main_camera);
 
-	/* ----- Create scene geometry ----- */
-	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
-								GL_LINEAR, GL_RGB, GL_RGBA };
-	auto cube1 = std::make_shared<Mesh>(spider_game);
-	cube1->GenerateCubeMesh();
-	cube1->LoadTexture("resources/awesomeface.png", tex_options);
-	cube1->SetRelativeLocation(glm::vec3(0.0f));
-
-	auto cube2 = std::make_shared<Mesh>(spider_game);
-	cube2->GenerateCubeMesh();
-	cube2->LoadTexture("resources/awesomeface.png", tex_options);
-	cube2->SetRelativeLocation(glm::vec3(1.0f, 0.0f, 0.0f));
-	cube2->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
-	
-	auto cube3 = std::make_shared<Mesh>(spider_game);
-	cube3->GenerateCubeMesh();
-	cube3->LoadTexture("resources/awesomeface.png", tex_options);
-	cube3->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 1.0f));
-	cube3->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
-
-	cube1->AddChildObject(cube2);
-	cube1->AddChildObject(cube3);
-	cube1->PhysicsUpdate(glm::mat4(1.0f));
-
-	auto cameraCube = std::make_shared<Mesh>(spider_game);
-	cameraCube->GenerateCubeMesh();
-	tex_options.externalFormat = GL_RGB;
-	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
-	cameraCube->SetRelativeLocation(glm::vec3(-2.0f, 0.0f, 0.0f));
-	cameraCube->AddChildObject(main_camera);
-	cameraCube->PhysicsUpdate(glm::mat4(1.0f));
+	/* ----- Load the Scene Geometry ----- */
+	spider_game->SetupScene("asdf");
 
 	/* ----- Render Loop ----- */
 	// has GLFW been told to close?
@@ -77,26 +47,10 @@ int main() {
 		// Clear the color & depth buffers (STATE-USING function)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		basic_shader->Activate();
-		// Practice with uniforms:
 		GLfloat time = glfwGetTime();
 		
-		// Set the box's color
-		GLfloat greenStrength = (sin(2.0 * time) / 2.0f) + 0.5f;
-		// Set the uniform that's defined in the frag shader
-		//   Note: the shader must be activated before calling this
-		if (basic_shader->GetUniform("greenStrength") != -1) {
-			basic_shader->SetFloatUniform("greenStrength", greenStrength, true);
-		}
-		
 		// Render the boxes
-		spider_game->RenderScene(basic_shader);
-		cube1->Render(basic_shader);
-		cube2->Render(basic_shader);
-		cube3->Render(basic_shader);
-		
-		cameraCube->Render(basic_shader);
-		main_camera->Render(basic_shader);
+		spider_game->RenderScene();
 
 		// Temporary: after everything is finished, render the skybox
 		spider_game->RenderSkybox(skybox_shader);

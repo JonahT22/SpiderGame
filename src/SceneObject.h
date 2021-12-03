@@ -20,6 +20,7 @@ public:
 	glm::vec3 GetRelativeLocation() const;
 	glm::quat GetRelativeRotation() const;
 	glm::vec3 GetRelativeScale() const;
+	// TODO: GetParent
 
 	/* ----- Setters ----- */
 	void SetRelativeLocation(glm::vec3 loc);
