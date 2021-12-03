@@ -21,13 +21,16 @@ struct GameOptions {
 ///   main rendering window and currently-active scene, and sending player
 ///   inputs to the correct objects
 ///
-class GameEngine {
+/// Note: GameEngine must inherit from enable_shared_from_this so that it can populate
+///   newly-created SceneObjects with weak references to this GameEngine
+class GameEngine : public std::enable_shared_from_this<GameEngine> {
 public:
 	GameEngine(const GameOptions options);
 	~GameEngine();
 	
 	// Getters
 	GLFWwindow* GetWindow() const;
+	std::shared_ptr<Camera> GetMainCamera() const;
 
 	// Setters
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);

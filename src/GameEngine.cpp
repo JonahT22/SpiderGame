@@ -60,6 +60,17 @@ GLFWwindow* GameEngine::GetWindow() const {
 	return mainWindow->GetWindow();
 }
 
+std::shared_ptr<Camera> GameEngine::GetMainCamera() const {
+	if (std::shared_ptr<Camera> camera = cameraRef.lock())
+		return camera;
+	else {
+		std::cerr << "ERROR: Tried to get current camera, but there is no camera set in";
+		std::cerr << " the game engine!" << std::endl;
+		// 
+		return std::make_shared<Camera>(enable_shared_from_this::weak_from_this());
+	}
+}
+
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
 }
@@ -115,8 +126,9 @@ void GameEngine::RenderScene(std::shared_ptr<ShaderProgram> shader) {
 }
 
 void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
-	// TODO: this should re-use the camera lock from before
-	if (std::shared_ptr<Camera> currentCamera = cameraRef.lock()) {
+	// TODO: this should re-use the camera ref from before
+	auto main_camera = GetMainCamera();
+	if (main_camera) {
 		// Send camera matrices to the shader
 		shader->Activate();
 		// Remove the translation factors from the view matrix by casting to a mat3
@@ -124,6 +136,7 @@ void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
 		//   diagonals, essentially setting the last column to (0, 0, 0, 1)
 		shader->SetMat4Uniform("V", glm::mat4(glm::mat3(currentCamera->GetViewMtx())));
 		shader->SetMat4UniformPtr("P", currentCamera->GetProjectionMtxPtr());
+		glm::mat4 view = glm::mat4(glm::mat3(main_camera->GetViewMtx()));
 	}
 	else {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;

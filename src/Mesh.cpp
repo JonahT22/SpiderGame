@@ -4,7 +4,8 @@
 
 #include "ShaderProgram.h"
 
-Mesh::Mesh() :
+Mesh::Mesh(std::weak_ptr<const GameEngine> engine) :
+	SceneObject(engine),
 	vertexArrayID(0),
 	vertexBufferID(0),
 	elementBufferID(0),

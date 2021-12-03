@@ -12,7 +12,7 @@
 ///
 class Mesh : public SceneObject {
 public:
-	Mesh();
+	Mesh(std::weak_ptr<const GameEngine> engine);
 	~Mesh();
 
 	// Load mesh data into buffer vectors

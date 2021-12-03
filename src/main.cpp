@@ -21,8 +21,9 @@
 int main() {
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
-	GameEngine spider_game(game_options);
-	spider_game.SetupScene("asdf");
+	auto spider_game = std::make_shared<GameEngine>(game_options);
+	// TODO: test with an invalid/missing camera, should just render from 0,0,0, not crash
+	spider_game->SetupScene("asdf");
 
 	/* ----- Create shader objects ----- */
 	auto basic_shader = std::make_shared<ShaderProgram>();
@@ -31,27 +32,27 @@ int main() {
 	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
 	
 	/* ----- Create the camera ----- */
-	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>();
+	auto main_camera = std::make_shared<Camera>(spider_game);
 	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
 	main_camera->SetArmLength(5.0f);
 	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
-	spider_game.SetCurrentCamera(main_camera);
+	spider_game->SetCurrentCamera(main_camera);
 
 	/* ----- Create scene geometry ----- */
 	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
 								GL_LINEAR, GL_RGB, GL_RGBA };
-	auto cube1 = std::make_shared<Mesh>();
+	auto cube1 = std::make_shared<Mesh>(spider_game);
 	cube1->GenerateCubeMesh();
 	cube1->LoadTexture("resources/awesomeface.png", tex_options);
 	cube1->SetRelativeLocation(glm::vec3(0.0f));
 
-	auto cube2 = std::make_shared<Mesh>();
+	auto cube2 = std::make_shared<Mesh>(spider_game);
 	cube2->GenerateCubeMesh();
 	cube2->LoadTexture("resources/awesomeface.png", tex_options);
 	cube2->SetRelativeLocation(glm::vec3(1.0f, 0.0f, 0.0f));
 	cube2->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	
-	auto cube3 = std::make_shared<Mesh>();
+	auto cube3 = std::make_shared<Mesh>(spider_game);
 	cube3->GenerateCubeMesh();
 	cube3->LoadTexture("resources/awesomeface.png", tex_options);
 	cube3->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 1.0f));
@@ -61,7 +62,7 @@ int main() {
 	cube1->AddChildObject(cube3);
 	cube1->PhysicsUpdate(glm::mat4(1.0f));
 
-	auto cameraCube = std::make_shared<Mesh>();
+	auto cameraCube = std::make_shared<Mesh>(spider_game);
 	cameraCube->GenerateCubeMesh();
 	tex_options.externalFormat = GL_RGB;
 	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
@@ -71,7 +72,7 @@ int main() {
 
 	/* ----- Render Loop ----- */
 	// has GLFW been told to close?
-	while (!glfwWindowShouldClose(spider_game.GetWindow())) {
+	while (!glfwWindowShouldClose(spider_game->GetWindow())) {
 		// Set the void color to dark green-blue (STATE-SETTING function)
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		// Clear the color & depth buffers (STATE-USING function)
@@ -88,7 +89,7 @@ int main() {
 		basic_shader->SetFloatUniform("greenStrength", greenStrength);
 		
 		// Render the boxes
-		spider_game.RenderScene(basic_shader);
+		spider_game->RenderScene(basic_shader);
 		cube1->Render(basic_shader);
 		cube2->Render(basic_shader);
 		cube3->Render(basic_shader);
@@ -97,10 +98,10 @@ int main() {
 		main_camera->Render(basic_shader);
 
 		// Temporary: after everything is finished, render the skybox
-		spider_game.RenderSkybox(skybox_shader);
+		spider_game->RenderSkybox(skybox_shader);
 
 		// check and call events, swap buffers
-		glfwSwapBuffers(spider_game.GetWindow()); // swap the color buffers
+		glfwSwapBuffers(spider_game->GetWindow()); // swap the color buffers
 		glfwPollEvents(); // have any events been triggered (i.e. input?)
 	}
 	return 0;

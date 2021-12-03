@@ -3,6 +3,11 @@
 #include <iostream>
 
 #include "ShaderProgram.h"
+#include "GameEngine.h"
+
+SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine) :
+	engineRef(engine)
+{}
 
 glm::vec3 SceneObject::GetRelativeLocation() const {
 	return rootTransform.loc;

@@ -12,7 +12,7 @@
 ///
 class Camera : public SceneObject {
 public:
-	Camera();
+	Camera(std::weak_ptr<const GameEngine> engine);
 	~Camera() = default;
 
 	// Override functions from SceneObject class

@@ -12,7 +12,7 @@ class ShaderProgram;
 ///
 class SceneObject {
 public:
-	SceneObject() = default;
+	SceneObject(std::weak_ptr<const GameEngine> engine);
 	~SceneObject() = default;
 
 	/* ----- Getters ----- */
@@ -35,6 +35,8 @@ public:
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader);
 
 protected:
+	// Reference to the gameengine that created this object
+	std::weak_ptr<const GameEngine> engineRef;
 	// Transform relative to this object's parent
 	Transform rootTransform;
 	// Model matrix for this object (i.e. object-to-WORLD) transformation
