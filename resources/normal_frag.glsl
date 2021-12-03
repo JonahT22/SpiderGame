@@ -3,7 +3,6 @@
 
 /* ----- In/Out ----- */
 in vertexInfo {
-	vec2 texCoord;
 	vec3 normal;
 };
 // frag shader must ALWAYS output a vec4 for color
