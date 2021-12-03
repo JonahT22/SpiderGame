@@ -104,15 +104,10 @@ void Mesh::LoadTexture(const char* filename, const TextureOptions& options) {
 }
 
 void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {
-	// The shader should already be bound before drawing this mesh
-	if (!shader->IsShaderActive()) {
-		std::cout << "WARNING: Shader object was not bound before rendering a mesh.";
-		std::cout << " For best performance, shaders should not be activated/deactivated";
-		std::cout << " on a per-mesh basis. Activating the shader for this mesh...";
-		std::cout << std::endl;
-		shader->Activate();
-	}
-	shader->SetMat4Uniform("M", modelMtx);
+	// Call the parent's render function, which checks if the shader is bound and sends
+	//   the model/invT matrices
+	SceneObject::Render(shader);
+
 	// Set the mesh's texture to texture unit 0 (default)
 	if (texture.IsLoaded()) {
 		texture.Bind();

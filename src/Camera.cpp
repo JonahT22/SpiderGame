@@ -27,6 +27,7 @@ void Camera::PhysicsUpdate(const glm::mat4& parent_transform) {
 }
 
 void Camera::Render(const std::shared_ptr<ShaderProgram> shader) {
+	SceneObject::Render(shader);
 	// TODO: define a quick visualization for cameras, but don't draw this
 	//   camera if it's the main camera being referenced by the GameEngine
 }

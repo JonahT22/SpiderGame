@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "ShaderProgram.h"
+
 glm::vec3 SceneObject::GetRelativeLocation() const {
 	return rootTransform.loc;
 }
@@ -38,6 +40,8 @@ void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
 	// TODO: don't pass in parent transform. Instead, store a weak ref to the parent,
 	//   and get the parent's model mtx directly.
 	// If this weak ref is invalid, use an identity matrix instead
+
+	// Find this object's local -> world transform
 	modelMtx = parent_transform * rootTransform.GetMatrix();
 
 	// Propagate this object's transformation matrix to its children
@@ -50,4 +54,16 @@ void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
 			std::cerr << std::endl;
 		}
 	}
+}
+
+void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) {
+	// The shader should already be bound before drawing this mesh
+	if (!shader->IsShaderActive()) {
+		std::cout << "WARNING: Shader object was not bound before rendering a mesh.";
+		std::cout << " For best performance, shaders should not be activated/deactivated";
+		std::cout << " on a per-mesh basis. Activating the shader for this mesh...";
+		std::cout << std::endl;
+		shader->Activate();
+	}
+	shader->SetMat4Uniform("M", modelMtx);
 }
