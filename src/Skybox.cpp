@@ -14,6 +14,7 @@ Skybox::Skybox(const char* filenames[6]) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapID);
 
 	// Load the texture data from the image files
+	stbi_set_flip_vertically_on_load(false);
 	int width, height, num_channels;
 	for (size_t i = 0; i < 6; ++i) {
 		unsigned char* data = stbi_load(filenames[i], &width, &height, &num_channels, 0);
