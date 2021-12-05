@@ -13,8 +13,6 @@ struct TextureOptions {
 	GLenum maxFilter = GL_LINEAR;
 	// Used in glTexImage2D
 	GLenum internalFormat = GL_RGB;
-	// Used in glTexImage2D
-	GLenum externalFormat = GL_RGB;
 };
 
 /// 
@@ -25,7 +23,7 @@ public:
 	Texture();
 	~Texture() = default;
 
-	void LoadFromFile(const std::string& filename, const TextureOptions& options);
+	void LoadFromFile(const std::string& filename);
 	// Binds this texture to the provided texture unit (default = 0)
 	void Bind(GLuint texture_unit = 0) const;
 

@@ -100,8 +100,8 @@ void Mesh::GenerateCubeMesh() {
 	SetupVertexArray();
 }
 
-void Mesh::LoadTexture(const std::string& filename, const TextureOptions& options) {
-	texture.LoadFromFile(filename, options);
+void Mesh::LoadTexture(const std::string& filename) {
+	texture.LoadFromFile(filename);
 }
 
 void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {

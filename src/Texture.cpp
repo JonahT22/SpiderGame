@@ -8,7 +8,12 @@ Texture::Texture() :
 	textureID(0) 
 {}
 
-void Texture::LoadFromFile(const std::string& filename, const TextureOptions& options) {
+void Texture::LoadFromFile(const std::string& filename) {
+	// TODO: eventually, this should be read from the scene configuration file. For now,
+	//   just hardcode the texture options
+	TextureOptions options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
+	                            GL_LINEAR, GL_RGB };
+
 	// Create the texture object
 	glGenTextures(1, &textureID);
 	// Set this texture as the current texture, to be modified by further opengl calls
@@ -38,8 +43,10 @@ void Texture::LoadFromFile(const std::string& filename, const TextureOptions& op
 		//     even if it doesn't
 		//   GLenum type - what datatype is used to represent the image in the file?
 		//   const void* pixels - the raw data
+		// TODO: external format is currently hardcoded, but should be read from the number
+		//   of channels in the image
 		glTexImage2D(GL_TEXTURE_2D, 0, options.internalFormat, width, height, 0,
-			options.externalFormat, GL_UNSIGNED_BYTE, data);
+			GL_RGBA, GL_UNSIGNED_BYTE, data);
 		// Let OpenGL create the other mipmaps automatically, instead of calling glTexImage2D for them
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
