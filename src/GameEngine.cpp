@@ -112,6 +112,9 @@ void GameEngine::SetupScene(const std::string& filename) {
 }
 
 void GameEngine::RenderScene() {
+	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
+	//   timestep
+	scene->UpdateScenePhysics();
 	// TODO: eventually, this should hold all of the rendering commands
 	scene->RenderScene();
 }

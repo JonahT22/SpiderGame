@@ -17,7 +17,17 @@ Scene::Scene(std::weak_ptr<const GameEngine> engine) :
 	engineRef(engine) {}
 
 void Scene::UpdateScenePhysics() {
-
+	for (auto& object_ref : rootObjects) {
+		if (!object_ref.expired()) {
+			object_ref.lock()->PhysicsUpdate();
+		}
+		else {
+			// Eventually, the rootObjects list should updated whenever SceneObjects are
+			//   removed from the scene. For now, just print an error message
+			std::cerr << "ERROR: null reference to a SceneObject in rootObjects list";
+			std::cerr << "while updating scene physics!" << std::endl;
+		}
+	}
 }
 
 void Scene::RenderScene() {
@@ -94,23 +104,16 @@ void Scene::LoadSceneFile(const std::string filename) {
 		LoadSceneObject(meshes[i], new_mesh, object_name_map);
 	}
 
-	// TODO: for now, manually update all of the root meshes (to propagate parent
-	//   transforms to children)
-	object_name_map["cube_center"]->PhysicsUpdate(glm::mat4(1.0f));
-	object_name_map["camera_cube"]->PhysicsUpdate(glm::mat4(1.0f));
-	// TODO later, do this instead
-	//UpdateScenePhysics();
+	UpdateScenePhysics();
 }
 
 void Scene::AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-                             const std::weak_ptr<SceneObject>& parent,
                              const std::string shader_name) {
-	// TODO: I shouldn't need to pass in the parent here, just query it from the object
-	// TODO: temporary debugging stuff
+	// Attach this object to its parent, or mark it as a root object if it has no parent
+	std::weak_ptr<SceneObject> parent = object->GetParent();
 	std::string object_name = object->GetName();
 	if (parent.expired()) {
-		std::cout << "found a root object: " << object_name << std::endl;
-		// TODO: temporary hardcoding for camera
+		rootObjects.emplace_back(object);
 		if (object_name == "camera_cube") {
 			object->AddChildObject(engineRef.lock()->GetMainCamera());
 		}
@@ -157,7 +160,7 @@ void Scene::LoadSceneObject(const YAML::Node object_node,
 	std::string shader_name = YAML::GetMapVal<std::string>(object_node, "shader");
 
 	// Add the object to the shader's list, and set its parent-child relationships
-	AddObjectToScene(new_object, parent_object, shader_name);
+	AddObjectToScene(new_object, shader_name);
 
 	// Add this mesh to the mapping of object names
 	object_name_map[object_name] = new_object;

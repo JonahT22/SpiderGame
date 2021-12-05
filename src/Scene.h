@@ -30,7 +30,6 @@ public:
 	void LoadSceneFile(const std::string filename);
 	// Add a SceneObject to the Scene, to be drawn by the given shader
 	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-	                      const std::weak_ptr<SceneObject>& parent,
 	                      const std::string shader_name);
 
 private:
