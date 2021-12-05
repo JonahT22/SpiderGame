@@ -1,8 +1,8 @@
 #include "Scene.h"
 
 #include <iostream>
-#include <fstream>
 #include <cassert>
+#include <stdexcept>
 
 // TODO: is a full gameengine include necessary?
 #include "GameEngine.h"
@@ -67,14 +67,10 @@ void Scene::RenderScene() {
 }
 
 void Scene::LoadSceneFile(const std::string& filename) {
-	/* ----- Verify Scene File ----- */
-	// (yaml-cpp will silently crash if the file doesn't exist)
-	std::ifstream file(filename);
-	if (!file) {
-		std::cerr << "ERROR: Scene file \"" << filename << "\" not found!" << std::endl;
-		assert(0);
-	}
-	file.close();
+	// Catch any exceptions thrown by the YAML parser that aren't handled by custom
+	//   error messages
+	try {
+	// Load the scene file
 	YAML::Node full_scene = YAML::LoadFile(filename);
 
 	/* ----- Load Shaders ----- */
@@ -89,7 +85,7 @@ void Scene::LoadSceneFile(const std::string& filename) {
 		new_shader_list.first = std::make_shared<ShaderProgram>(shader_name);
 		// Load and compile the shader program from the filepaths provided in the YAML file
 		new_shader_list.first->Compile(YAML::GetMapVal<std::string>(shaders[i], "vert"),
-										YAML::GetMapVal<std::string>(shaders[i], "frag"));
+		                               YAML::GetMapVal<std::string>(shaders[i], "frag"));
 		// Store this shader list, with a blank vector of object ptrs to be populated later
 		allObjects.push_back(new_shader_list);
 		// Keep a mapping between each shader's name and its index in the allObjects list
@@ -140,6 +136,11 @@ void Scene::LoadSceneFile(const std::string& filename) {
 		cube_map_image_paths[i] = YAML::GetMapVal<std::string>(skybox_node, side_names[i]);
 	}
 	skybox = std::make_unique<Skybox>(cube_map_image_paths);
+
+	} // End try block
+	catch (std::exception& e) {
+		std::cerr << "ERROR::YAML parsing exception: " << e.what() << std::endl;
+	}
 
 	/* ----- Propagate parent-child transforms through the object hierarchy ----- */
 	UpdateScenePhysics();
