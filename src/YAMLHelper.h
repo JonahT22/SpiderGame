@@ -79,4 +79,22 @@ void PrintNodeType(const YAML::Node& node) {
 		std::cout << "Undefined" << std::endl;
 	}
 }
+
+// Check if a given node has a certain map field, then read it as the given type
+template <typename T>
+T GetMapVal(const YAML::Node& map, const std::string& field_name) {
+	if (!map.IsMap()) {
+		std::cerr << "ERROR: Tried to get a value from a map, but the provided node";
+		std::cerr << " is not a map!" << std::endl;
+		return T();
+	}
+	
+	if (!map[field_name]) {
+		std::cerr << "ERROR: tried to get field \"" << field_name << "\" from a";
+		std::cerr << " YAML map, but the field does not exist!" << std::endl;
+		return T();
+	}
+
+	return map[field_name].as<T>();
+}
 }
