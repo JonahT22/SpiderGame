@@ -11,7 +11,11 @@ SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine, const std::stri
 	objectName(name)
 {}
 
-glm::vec3 SceneObject::GetRelativeLocation() const {
+const glm::mat4& SceneObject::GetWorldTransformMtx() const {
+	return modelMtx;
+}
+
+const glm::vec3& SceneObject::GetRelativeLocation() const {
 	return rootTransform.loc;
 }
 
@@ -25,6 +29,20 @@ glm::vec3 SceneObject::GetRelativeScale() const {
 
 std::string SceneObject::GetName() const {
 	return objectName;
+}
+
+const std::weak_ptr<SceneObject>& SceneObject::GetParent() const {
+	return parent;
+}
+
+void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
+	childObjects.emplace_back(new_object);
+	// Pass a weak reference to the new child
+	new_object.lock()->SetParent(enable_shared_from_this::weak_from_this());
+}
+
+void SceneObject::SetParent(std::weak_ptr<SceneObject> new_parent) {
+	parent = new_parent;
 }
 
 void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
@@ -47,22 +65,21 @@ void SceneObject::SetRelativeTransform(const Transform& transform) {
 	rootTransform = transform;
 }
 
-void SceneObject::AddChildObject(std::shared_ptr<SceneObject> new_object) {
-	childObjects.emplace_back(std::weak_ptr<SceneObject>(new_object));
-}
-
-void SceneObject::PhysicsUpdate(const glm::mat4& parent_transform) {
-	// TODO: don't pass in parent transform. Instead, store a weak ref to the parent,
-	//   and get the parent's model mtx directly.
-	// If this weak ref is invalid, use an identity matrix instead
-
-	// Find this object's local -> world transform
-	modelMtx = parent_transform * rootTransform.GetMatrix();
+void SceneObject::PhysicsUpdate() {
+	// Find this object's local -> world transform using the parent's transform
+	if (!parent.expired()) {
+		modelMtx = parent.lock()->GetWorldTransformMtx() * rootTransform.GetMatrix();
+	}
+	else {
+		// If this object has no parent, then its relative transform is the same as its
+		//   world transform
+		modelMtx = rootTransform.GetMatrix();
+	}
 
 	// Propagate this object's transformation matrix to its children
 	for (auto& child : childObjects) {
 		if (!child.expired()) {
-			child.lock()->PhysicsUpdate(modelMtx);
+			child.lock()->PhysicsUpdate();
 		}
 		else {
 			std::cerr << "ERROR: Attempted to update physics on an invalid child object!";

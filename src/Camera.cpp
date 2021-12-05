@@ -20,10 +20,10 @@ Camera::Camera(std::weak_ptr<const GameEngine> engine, const std::string& name) 
 	UpdateViewMtx();
 }
 
-void Camera::PhysicsUpdate(const glm::mat4& parent_transform) {
+void Camera::PhysicsUpdate() {
 	// Do the same as the SceneObject physicsupdate, but also update the view
 	//   matrix afterward to get any updates to this camera's transform
-	SceneObject::PhysicsUpdate(parent_transform);
+	SceneObject::PhysicsUpdate();
 	UpdateViewMtx();
 }
 

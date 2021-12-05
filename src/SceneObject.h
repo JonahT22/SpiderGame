@@ -12,7 +12,7 @@ class ShaderProgram;
 /// 
 /// Base class for any object that can be placed in the world and rendered on the screen
 ///
-class SceneObject {
+class SceneObject : public std::enable_shared_from_this<SceneObject> {
 public:
 	SceneObject(std::weak_ptr<const GameEngine> engine, const std::string& name);
 	~SceneObject() = default;
@@ -23,8 +23,13 @@ public:
 	glm::vec3 GetRelativeScale() const;
 	std::string GetName() const;
 	// TODO: GetParent
+	const glm::mat4& GetWorldTransformMtx() const;
+	const std::string& GetName() const;
+	const std::weak_ptr<SceneObject>& GetParent() const;
 
 	/* ----- Setters ----- */
+	void AddChildObject(std::weak_ptr<SceneObject> new_object);
+	void SetParent(std::weak_ptr<SceneObject> new_parent);
 	void SetRelativeLocation(const glm::vec3 loc);
 	void SetRelativeRotation(const glm::quat rot);
 	void SetRelativeRotationDegrees(const glm::vec3 euler_rot);
@@ -32,10 +37,8 @@ public:
 	void SetRelativeTransform(const Transform& transform);
 
 	/* ----- Other Functions ----- */
-	void AddChildObject(std::shared_ptr<SceneObject> new_object);
-	// Given the local->world transform of this object's parent, find this
-	//   object's (world) model mtx and iterate recursively to update child matrices
-	virtual void PhysicsUpdate(const glm::mat4& parent_transform);
+	// Find this object's (world) model mtx and iterate recursively to update child matrices
+	virtual void PhysicsUpdate();
 	// Draw this object, and ONLY this object. Do not draw children
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader);
 
@@ -50,4 +53,6 @@ protected:
 	glm::mat4 modelMtx = glm::mat4(1.0f);
 	// List of other SceneObjects that are attached to this object
 	std::vector<std::weak_ptr<SceneObject> > childObjects;
+	// Object that this object is attached to
+	std::weak_ptr<SceneObject> parent;
 };

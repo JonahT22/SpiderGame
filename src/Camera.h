@@ -18,7 +18,7 @@ public:
 	~Camera() = default;
 
 	// Override functions from SceneObject class
-	virtual void PhysicsUpdate(const glm::mat4& parent_transform) override;
+	virtual void PhysicsUpdate() override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 	// Getters
