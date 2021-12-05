@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_access.hpp>
 
-Camera::Camera(std::weak_ptr<const GameEngine> engine, const std::string& name) :
+Camera::Camera(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name),
 	fovY(glm::radians(45.0)),
 	clipNear(0.1f),
@@ -28,7 +28,7 @@ void Camera::PhysicsUpdate() {
 	UpdateViewMtx();
 }
 
-void Camera::Render(const std::shared_ptr<ShaderProgram> shader) {
+void Camera::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	SceneObject::Render(shader);
 	// TODO: define a quick visualization for cameras, but don't draw this
 	//   camera if it's the main camera being referenced by the GameEngine

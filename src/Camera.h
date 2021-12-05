@@ -14,12 +14,12 @@
 ///
 class Camera : public SceneObject {
 public:
-	Camera(std::weak_ptr<const GameEngine> engine, const std::string& name);
+	Camera(std::weak_ptr<GameEngine> engine, const std::string& name);
 	~Camera() = default;
 
 	// Override functions from SceneObject class
 	virtual void PhysicsUpdate() override;
-	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
 	// Getters
 	const glm::mat4& GetProjectionMtx() const;

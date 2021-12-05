@@ -6,7 +6,7 @@
 #include "GameEngine.h"
 #include "Camera.h"
 
-SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine, const std::string& name) :
+SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	engineRef(engine),
 	objectName(name)
 {}
@@ -99,7 +99,7 @@ void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) {
 	}
 
 	// Try getting a shared reference to the game engine
-	if (std::shared_ptr<const GameEngine> engine = engineRef.lock()) {
+	if (std::shared_ptr<GameEngine> engine = engineRef.lock()) {
 		// Get the main camera to access the view and projection matrices
 		std::shared_ptr<Camera> main_camera = engine->GetMainCamera();
 		const glm::mat4 model_view_mtx = main_camera->GetViewMtx() * modelMtx;

@@ -14,7 +14,7 @@
 #include "Camera.h"
 #include "YAMLHelper.h"
 
-Scene::Scene(std::weak_ptr<const GameEngine> engine) :
+Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}
 
 void Scene::UpdateScenePhysics() {

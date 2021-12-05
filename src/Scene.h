@@ -41,7 +41,7 @@ private:
 	                     std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map);
 
 	// Weak reference to the GameEngine that manages this scene
-	std::weak_ptr<const GameEngine> engineRef;
+	std::weak_ptr<GameEngine> engineRef;
 	// Hash map from shader names to their indices in allObjects
 	// Note: All shaders must be loaded at the start of the game, and shaders cannot
 	//   be created/deleted during runtime (if that is necessary, make sure to update

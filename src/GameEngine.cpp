@@ -59,7 +59,9 @@ GLFWwindow* GameEngine::GetWindow() const {
 	return mainWindow->GetWindow();
 }
 
-std::shared_ptr<Camera> GameEngine::GetMainCamera() const {
+std::shared_ptr<Camera> GameEngine::GetMainCamera() {
+	// Note: This function cannot be declared as const. A const specifier prevents passing
+	//   a non-const weak_from_this to the empty camera constructor
 	if (std::shared_ptr<Camera> camera = cameraRef.lock())
 		return camera;
 	else {

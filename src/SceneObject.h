@@ -14,7 +14,7 @@ class ShaderProgram;
 ///
 class SceneObject : public std::enable_shared_from_this<SceneObject> {
 public:
-	SceneObject(std::weak_ptr<const GameEngine> engine, const std::string& name);
+	SceneObject(std::weak_ptr<GameEngine> engine, const std::string& name);
 	~SceneObject() = default;
 
 	/* ----- Getters ----- */
@@ -44,7 +44,7 @@ protected:
 	// Name of this object, for debugging and parenting on construction
 	const std::string objectName;
 	// Reference to the gameengine that created this object
-	std::weak_ptr<const GameEngine> engineRef;
+	std::weak_ptr<GameEngine> engineRef;
 	// Transform relative to this object's parent
 	Transform rootTransform;
 	// Model matrix for this object (i.e. object-to-WORLD) transformation
