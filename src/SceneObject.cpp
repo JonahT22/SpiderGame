@@ -19,15 +19,15 @@ const glm::vec3& SceneObject::GetRelativeLocation() const {
 	return rootTransform.loc;
 }
 
-glm::quat SceneObject::GetRelativeRotation() const {
+const glm::quat& SceneObject::GetRelativeRotation() const {
 	return rootTransform.rot;
 }
 
-glm::vec3 SceneObject::GetRelativeScale() const {
+const glm::vec3& SceneObject::GetRelativeScale() const {
 	return rootTransform.scale;
 }
 
-std::string SceneObject::GetName() const {
+const std::string& SceneObject::GetName() const {
 	return objectName;
 }
 

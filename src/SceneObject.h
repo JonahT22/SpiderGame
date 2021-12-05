@@ -18,12 +18,10 @@ public:
 	~SceneObject() = default;
 
 	/* ----- Getters ----- */
-	glm::vec3 GetRelativeLocation() const;
-	glm::quat GetRelativeRotation() const;
-	glm::vec3 GetRelativeScale() const;
-	std::string GetName() const;
-	// TODO: GetParent
 	const glm::mat4& GetWorldTransformMtx() const;
+	const glm::vec3& GetRelativeLocation() const;
+	const glm::quat& GetRelativeRotation() const;
+	const glm::vec3& GetRelativeScale() const;
 	const std::string& GetName() const;
 	const std::weak_ptr<SceneObject>& GetParent() const;
 
