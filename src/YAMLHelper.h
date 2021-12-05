@@ -35,6 +35,28 @@ struct convert<glm::vec3> {
 	}
 };
 
+// Custom parsing for glm::vec2's
+template<>
+struct convert<glm::vec2> {
+	// Writing vec2's to YAML files
+	static Node encode(const glm::vec2& rhs) {
+		Node node;
+		node.push_back(rhs.x);
+		node.push_back(rhs.y);
+		return node;
+	}
+	// Reading vec2's from YAML files
+	static bool decode(const Node& node, glm::vec2& rhs) {
+		if (!node.IsSequence() || node.size() != 2) {
+			return false;
+		}
+
+		rhs.x = node[0].as<float>();
+		rhs.y = node[1].as<float>();
+		return true;
+	}
+};
+
 // Custom parsing for the Transform class
 template<>
 struct convert<Transform> {
