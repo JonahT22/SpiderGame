@@ -11,6 +11,7 @@ Camera::Camera(std::weak_ptr<const GameEngine> engine, const std::string& name) 
 	fovY(glm::radians(45.0)),
 	clipNear(0.1f),
 	clipFar(100.0f),
+	aspectRatio(1.0f),
 	rotSpeed(0.005),
 	armLength(5.0f),
 	armAngle(glm::vec2(0.0f)),

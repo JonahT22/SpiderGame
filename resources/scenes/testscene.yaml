@@ -17,8 +17,9 @@ mesh_objects:
     -   name: "cube_center"
         # If no meshfile is given, a simple cube will be loaded for the object
         meshfile: ""
-        shader: "unlit"
         texture: "resources/textures/awesomeface.png"
+        # shader, relative_transform, and parent are inherited from SceneObject
+        shader: "unlit"
         relative_transform:
             location: [0.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
@@ -28,8 +29,8 @@ mesh_objects:
 
     -   name: "cube_x"
         meshfile: ""
-        shader: "normal"
         texture: "resources/textures/awesomeface.png"
+        shader: "normal"
         relative_transform:
             location: [1.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
@@ -48,9 +49,9 @@ mesh_objects:
 
     -   name: "camera_cube"
         meshfile: ""
-        shader: "unlit"
         # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
         texture: "resources/textures/awesomeface.png"
+        shader: "unlit"
         relative_transform:
             location: [-2.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
@@ -60,11 +61,13 @@ mesh_objects:
 
 camera_objects:
     -   name: "default_camera"
-        # Even cameras need to be attached to a shader, although this should be changed
-        #   in the future. Ideally, there should be a built-in minimal shader that
-        #   cameras can use
+        fov_y: 45.0
+        arm_length: 5.0
+        arm_angle: [30.0, 90.0]
+        
+        # Ideally, there should be a built-in minimal shader that cameras can use
         shader: "unlit"
-        # TODO: arm length & angle
+        
         relative_location: [0.0, 0.0, 0.0]
         relative_rotation: [0.0, 0.0, 0.0]
         relative_scale: [1.0, 1.0, 1.0]
