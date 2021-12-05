@@ -19,7 +19,6 @@ public:
 
 	void UpdateScenePhysics();
 	void RenderScene();
-	void LoadHardcodedScene();
 
 	/* ----- Getters ----- */
 
@@ -28,8 +27,7 @@ public:
 	void LoadSceneFile(const std::string filename);
 	// Add a SceneObject to the Scene, to be drawn by the given shader
 	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-	                      const std::string shader_name);
-	// TODO: functions for removing objects from the scene
+	                      const std::string shader_name, const bool is_root);
 
 private:
 	// Weak reference to the GameEngine that manages this scene

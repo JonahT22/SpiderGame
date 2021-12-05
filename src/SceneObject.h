@@ -27,6 +27,7 @@ public:
 	void SetRelativeRotation(const glm::quat rot);
 	void SetRelativeRotationDegrees(const glm::vec3 euler_rot);
 	void SetRelativeScale(const glm::vec3 scale);
+	void SetRelativeTransform(const Transform& transform);
 
 	/* ----- Other Functions ----- */
 	void AddChildObject(std::shared_ptr<SceneObject> new_object);

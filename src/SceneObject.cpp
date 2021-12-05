@@ -43,6 +43,10 @@ void SceneObject::SetRelativeScale(const glm::vec3 scale) {
 	rootTransform.scale = scale;
 }
 
+void SceneObject::SetRelativeTransform(const Transform& transform) {
+	rootTransform = transform;
+}
+
 void SceneObject::AddChildObject(std::shared_ptr<SceneObject> new_object) {
 	childObjects.emplace_back(std::weak_ptr<SceneObject>(new_object));
 }

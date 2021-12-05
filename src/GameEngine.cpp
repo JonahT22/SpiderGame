@@ -96,8 +96,7 @@ void GameEngine::SetupScene(const std::string& filename) {
 	//   character reference for their functions
 
 	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
-	scene->LoadShaders("asdf");
-	scene->LoadHardcodedScene();
+	scene->LoadSceneFile("resources/scenes/testscene.yaml");
 
 	// TODO: load the cubemap image paths from the scene file
 	// TODO: detect image file type, choose RGB or RGBA in texture loader
