@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -20,6 +21,7 @@ public:
 	glm::vec3 GetRelativeLocation() const;
 	glm::quat GetRelativeRotation() const;
 	glm::vec3 GetRelativeScale() const;
+	std::string GetName() const;
 	// TODO: GetParent
 
 	/* ----- Setters ----- */

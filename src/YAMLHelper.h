@@ -14,6 +14,7 @@ namespace YAML {
 // Define custom parsing for glm vec3's, using starter code from yaml-cpp tutorial page
 template<>
 struct convert<glm::vec3> {
+	// Writing vec3's to YAML files
 	static Node encode(const glm::vec3& rhs) {
 		Node node;
 		node.push_back(rhs.x);
