@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\glad.c" />
+    <ClCompile Include="..\..\include\glad.c" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
@@ -33,6 +33,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\stb_image.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Skybox.h" />
@@ -40,7 +41,6 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\SceneObject.h" />
     <ClInclude Include="src\ShaderProgram.h" />
-    <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Window.h" />
