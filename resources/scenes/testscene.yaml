@@ -1,19 +1,74 @@
 # Note: tabs are not allowed in yaml files, use spaces instead
-# All filepaths are given relative to the resources folder
+# All filepaths are given relative to the root SpiderGame folder
 # Use !!int or !!str to declare a value as specific type
 # Use --- to separate multiple documents in the same file
 
 # List of every shader that will be used in the lifetime of the game
 shaders:
-    - unlit:
-        name: "unlit"
-        vert: "shaders/unlit_vert.glsl"
-        frag: "shaders/unlit_frag.glsl"
-    - normal:
-        name: "normal"
-        vert: "shaders/normal_vert.glsl"
-        frag: "shaders/normal_frag.glsl"
+    -   name: "unlit"
+        vert: "resources/shaders/unlit_vert.glsl"
+        frag: "resources/shaders/unlit_frag.glsl"
 
-#objects:
-#    - Cube1:
-#        name: 
+    -   name: "normal"
+        vert: "resources/shaders/normal_vert.glsl"
+        frag: "resources/shaders/normal_frag.glsl"
+
+mesh_objects:
+    -   name: "cube_center"
+        # If no meshfile is given, a simple cube will be loaded for the object
+        meshfile: ""
+        shader: "unlit"
+        texture: "resources/textures/awesomeface.png"
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        # If parent_object is blank, this object is oriented to the world origin
+        parent: ""
+
+    -   name: "cube_x"
+        meshfile: ""
+        shader: "normal"
+        texture: "resources/textures/awesomeface.png"
+        relative_transform:
+            location: [1.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.5, 0.5, 0.5]
+        parent: "cube_center"
+
+    -   name: "cube_z"
+        meshfile: ""
+        shader: "normal"
+        texture: "resources/textures/awesomeface.png"
+        relative_transform:
+            location: [0.0, 0.0, 1.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.5, 0.5, 0.5]
+        parent: "cube_center"
+
+    -   name: "camera_cube"
+        meshfile: ""
+        shader: "unlit"
+        # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
+        texture: "resources/textures/awesomeface.png"
+        relative_transform:
+            location: [-2.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        # If parent_object is blank, this object is oriented to the world origin
+        parent: ""
+
+camera_objects:
+    -   name: "default_camera"
+        # Even cameras need to be attached to a shader, although this should be changed
+        #   in the future. Ideally, there should be a built-in minimal shader that
+        #   cameras can use
+        shader: "unlit"
+        # TODO: arm length & angle
+        relative_location: [0.0, 0.0, 0.0]
+        relative_rotation: [0.0, 0.0, 0.0]
+        relative_scale: [1.0, 1.0, 1.0]
+
+
+
+skybox:
