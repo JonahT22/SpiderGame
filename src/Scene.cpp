@@ -51,14 +51,8 @@ void Scene::LoadSceneFile(const std::string filename) {
 	YAML::Node full_scene = YAML::LoadFile(filename);
 
 	/* ----- Load Shaders ----- */
-	// Check that the scene file contains a list of shaders
-	if (!full_scene["shaders"]) {
-		// In the future, maybe make a 'default' shader
-		std::cerr << "ERROR: No shaders listed in the scene file \"" << filename;
-		std::cerr << "\"!" << std::endl;
-	}
-
-	// Get the Sequence with the data for every shader that will be used in the scene
+	assert(YAML::DoesMapHaveSequence(full_scene, "shaders"));
+	// Get the sequence of shaders (YAML::Sequence is similar to a std::vector)
 	YAML::Node shaders = full_scene["shaders"];
 	for (size_t i = 0; i < shaders.size(); ++i) {
 		std::string shader_name = YAML::GetMapVal<std::string>(shaders[i], "name");
@@ -75,17 +69,12 @@ void Scene::LoadSceneFile(const std::string filename) {
 		shaderMap[shader_name] = allObjects.size() - 1;
 	}
 
-	/* ----- Load Scene Geometry ----- */
-	// Check that the scene file contains a list of objects
-	if (!full_scene["mesh_objects"]) {
-		std::cerr << "ERROR: No mesh objects listed in the scene file \"" << filename;
-		std::cerr << "\"!" << std::endl;
-	}
-
 	// Keep a (temporary) mapping from object names to their pointers, for setting
 	//   parent-child relationships when loading SceneObjects
 	std::unordered_map<std::string, std::shared_ptr<SceneObject> > object_name_map;
 
+	/* ----- Load Scene Geometry ----- */
+	assert(YAML::DoesMapHaveSequence(full_scene, "mesh_objects"));
 	YAML::Node meshes = full_scene["mesh_objects"];
 	// Read every mesh from the sequence
 	for (size_t i = 0; i < meshes.size(); ++i) {

@@ -98,4 +98,26 @@ T GetMapVal(const YAML::Node& map, const std::string& field_name) {
 
 	return map[field_name].as<T>();
 }
+
+// Check if a given node has a map field with a given name, and that this field is a sequence
+bool DoesMapHaveSequence(const YAML::Node& map_node, const std::string& sequence_name) {
+	// TODO: test this thoroughly
+	if (!map_node.IsMap()) {
+		std::cerr << "ERROR: Attempted to get a sequence from a map, but the provided";
+		std::cerr << " node is not a map!" << std::endl;
+		return false;
+	}
+	else if (!map_node[sequence_name]) {
+		std::cerr << "ERROR: YAML map has no \"" << sequence_name << "\" field!" << std::endl;
+		return false;
+	}
+	else if (!map_node[sequence_name].IsSequence()) {
+		std::cerr << "ERROR: Attempted to read " << sequence_name << " node from YAML map,";
+		std::cerr << "but the " << sequence_name << " node is not a YAML::Sequence!" << std::endl;
+		return false;
+	}
+	else {
+		return true;
+	}
+}
 }
