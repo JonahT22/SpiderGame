@@ -21,7 +21,7 @@ mesh_objects:
         # shader, relative_transform, and parent are inherited from SceneObject
         shader: "unlit"
         relative_transform:
-            location: [0.0, 0.0, 0.0]
+            location: [1.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         # If parent_object is blank, this object is oriented to the world origin
@@ -53,24 +53,25 @@ mesh_objects:
         texture: "resources/textures/awesomeface.png"
         shader: "unlit"
         relative_transform:
-            location: [-2.0, 0.0, 0.0]
+            location: [-1.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         # If parent_object is blank, this object is oriented to the world origin
         parent: ""
 
 camera_objects:
+    # By default, the gameengine will choose the 1st camera as the main camera
     -   name: "default_camera"
         fov_y: 45.0
         arm_length: 5.0
         arm_angle: [30.0, 90.0]
-        
         # Ideally, there should be a built-in minimal shader that cameras can use
         shader: "unlit"
-        
-        relative_location: [0.0, 0.0, 0.0]
-        relative_rotation: [0.0, 0.0, 0.0]
-        relative_scale: [1.0, 1.0, 1.0]
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "camera_cube"
 
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
