@@ -21,7 +21,7 @@ ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(programID);
 }
 
-GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) {
+GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) const {
 	// Check that this shader is active in the opengl context
 	GLint current_program;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
@@ -44,10 +44,14 @@ GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) {
 	return location;
 }
 
-bool ShaderProgram::IsShaderActive() {
+bool ShaderProgram::IsShaderActive() const {
 	GLint current_program;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
 	return (current_program == programID);
+}
+
+const std::string ShaderProgram::GetShaderName() const {
+	return shaderName;
 }
 
 void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value,

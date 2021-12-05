@@ -31,15 +31,15 @@ void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
 	rootTransform.loc = loc;
 }
 
-void SceneObject::SetRelativeRotation(glm::quat rot) {
+void SceneObject::SetRelativeRotation(const glm::quat rot) {
 	rootTransform.rot = rot; 
 }
 
-void SceneObject::SetRelativeRotationDegrees(glm::vec3 euler_rot) {
+void SceneObject::SetRelativeRotationDegrees(const glm::vec3 euler_rot) {
 	rootTransform.rot = Transform::EulerToQuat(glm::radians(euler_rot));
 }
 
-void SceneObject::SetRelativeScale(glm::vec3 scale) {
+void SceneObject::SetRelativeScale(const glm::vec3 scale) {
 	rootTransform.scale = scale;
 }
 

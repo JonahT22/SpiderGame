@@ -23,10 +23,10 @@ public:
 	// TODO: GetParent
 
 	/* ----- Setters ----- */
-	void SetRelativeLocation(glm::vec3 loc);
-	void SetRelativeRotation(glm::quat rot);
-	void SetRelativeRotationDegrees(glm::vec3 euler_rot);
-	void SetRelativeScale(glm::vec3 scale);
+	void SetRelativeLocation(const glm::vec3 loc);
+	void SetRelativeRotation(const glm::quat rot);
+	void SetRelativeRotationDegrees(const glm::vec3 euler_rot);
+	void SetRelativeScale(const glm::vec3 scale);
 
 	/* ----- Other Functions ----- */
 	void AddChildObject(std::shared_ptr<SceneObject> new_object);

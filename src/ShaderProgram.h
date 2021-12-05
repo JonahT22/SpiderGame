@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -10,12 +12,14 @@
 class ShaderProgram {
 public:
 	ShaderProgram();
+	ShaderProgram(const std::string& name);
 	~ShaderProgram();
 	
 	/* ----- Getters ----- */
 	// Return index of uniform if it exists, -1 if it doesn't
-	GLint GetUniform(const GLchar* name, bool verbose = false);
-	bool IsShaderActive();
+	GLint GetUniform(const GLchar* name, bool verbose = false) const;
+	bool IsShaderActive() const;
+	const std::string GetShaderName() const;
 
 	/* ----- Setters ----- */
 	void SetIntUniform(const GLchar* name, const GLint value, bool verbose = false);
