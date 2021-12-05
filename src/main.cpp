@@ -27,7 +27,8 @@ int main() {
 	// TODO: the skybox shader should probably be its own thing in the scene,
 	//   not the gameengine. But keep it separate from the other shaders
 	auto skybox_shader = std::make_shared<ShaderProgram>();
-	skybox_shader->Compile("resources/skybox_vert.glsl", "resources/skybox_frag.glsl");
+	skybox_shader->Compile("resources/shaders/skybox_vert.glsl",
+	                       "resources/shaders/skybox_frag.glsl");
 
 	/* ----- Create the camera ----- */
 	auto main_camera = std::make_shared<Camera>(spider_game);

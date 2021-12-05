@@ -20,7 +20,8 @@ void Scene::UpdateScenePhysics() {
 }
 
 void Scene::RenderScene() {
-	for (auto& shader_to_object : allObjects) {
+	for (ShaderToObjectList& shader_to_object : allObjects) {
+		// Iterate through every shader, and draw the objects associated with it
 		std::shared_ptr<ShaderProgram> shader = shader_to_object.first;
 		shader->Activate();
 		// Try to set uniform variables in the shader, ignore them if they don't exist
@@ -29,7 +30,9 @@ void Scene::RenderScene() {
 			shader->SetMat4Uniform("P", main_camera->GetProjectionMtx());
 		}
 		// TODO: more uniforms, i.e. time
-		for (auto& object : shader_to_object.second) {
+
+		// Render every object associated with this shader
+		for (std::shared_ptr<SceneObject>& object : shader_to_object.second) {
 			object->Render(shader_to_object.first);
 		}
 	}
@@ -41,18 +44,18 @@ void Scene::LoadHardcodedScene() {
 								GL_LINEAR, GL_RGB, GL_RGBA };
 	auto cube1 = std::make_shared<Mesh>(engineRef);
 	cube1->GenerateCubeMesh();
-	cube1->LoadTexture("resources/awesomeface.png", tex_options);
+	cube1->LoadTexture("resources/textures/awesomeface.png", tex_options);
 	cube1->SetRelativeLocation(glm::vec3(0.0f));
 
 	auto cube2 = std::make_shared<Mesh>(engineRef);
 	cube2->GenerateCubeMesh();
-	cube2->LoadTexture("resources/awesomeface.png", tex_options);
+	cube2->LoadTexture("resources/textures/awesomeface.png", tex_options);
 	cube2->SetRelativeLocation(glm::vec3(1.0f, 0.0f, 0.0f));
 	cube2->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 	auto cube3 = std::make_shared<Mesh>(engineRef);
 	cube3->GenerateCubeMesh();
-	cube3->LoadTexture("resources/awesomeface.png", tex_options);
+	cube3->LoadTexture("resources/textures/awesomeface.png", tex_options);
 	cube3->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 1.0f));
 	cube3->SetRelativeScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -63,7 +66,7 @@ void Scene::LoadHardcodedScene() {
 	auto cameraCube = std::make_shared<Mesh>(engineRef);
 	cameraCube->GenerateCubeMesh();
 	tex_options.externalFormat = GL_RGB;
-	cameraCube->LoadTexture("resources/wall.jpg", tex_options);
+	cameraCube->LoadTexture("resources/textures/wall.jpg", tex_options);
 	cameraCube->SetRelativeLocation(glm::vec3(-2.0f, 0.0f, 0.0f));
 	cameraCube->AddChildObject(engineRef.lock()->GetMainCamera());
 	cameraCube->PhysicsUpdate(glm::mat4(1.0f));
@@ -81,11 +84,13 @@ void Scene::LoadShaders(const std::string filename) {
 
 	ShaderToObjectList unlit_list;
 	unlit_list.first = std::make_shared<ShaderProgram>();
-	unlit_list.first->Compile("resources/unlit_vert.glsl", "resources/unlit_frag.glsl");
+	unlit_list.first->Compile("resources/shaders/unlit_vert.glsl",
+	                          "resources/shaders/unlit_frag.glsl");
 
 	ShaderToObjectList normal_list;
 	normal_list.first = std::make_shared<ShaderProgram>();
-	normal_list.first->Compile("resources/normal_vert.glsl", "resources/normal_frag.glsl");
+	normal_list.first->Compile("resources/shaders/normal_vert.glsl",
+	                           "resources/shaders/normal_frag.glsl");
 
 	allObjects.at(0) = unlit_list;
 	shaderMap["unlit"] = 0;
