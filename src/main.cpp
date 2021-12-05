@@ -31,7 +31,7 @@ int main() {
 	                       "resources/shaders/skybox_frag.glsl");
 
 	/* ----- Create the camera ----- */
-	auto main_camera = std::make_shared<Camera>(spider_game);
+	auto main_camera = std::make_shared<Camera>(spider_game, "main_camera");
 	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
 	main_camera->SetArmLength(5.0f);
 	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));

@@ -6,8 +6,9 @@
 #include "GameEngine.h"
 #include "Camera.h"
 
-SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine) :
-	engineRef(engine)
+SceneObject::SceneObject(std::weak_ptr<const GameEngine> engine, const std::string& name) :
+	engineRef(engine),
+	objectName(name)
 {}
 
 glm::vec3 SceneObject::GetRelativeLocation() const {
@@ -22,7 +23,11 @@ glm::vec3 SceneObject::GetRelativeScale() const {
 	return rootTransform.scale;
 }
 
-void SceneObject::SetRelativeLocation(glm::vec3 loc) {
+std::string SceneObject::GetName() const {
+	return objectName;
+}
+
+void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
 	rootTransform.loc = loc;
 }
 

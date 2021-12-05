@@ -13,7 +13,7 @@ class ShaderProgram;
 ///
 class SceneObject {
 public:
-	SceneObject(std::weak_ptr<const GameEngine> engine);
+	SceneObject(std::weak_ptr<const GameEngine> engine, const std::string& name);
 	~SceneObject() = default;
 
 	/* ----- Getters ----- */
@@ -37,12 +37,14 @@ public:
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader);
 
 protected:
+	// Name of this object, for debugging and parenting on construction
+	const std::string objectName;
 	// Reference to the gameengine that created this object
 	std::weak_ptr<const GameEngine> engineRef;
 	// Transform relative to this object's parent
 	Transform rootTransform;
 	// Model matrix for this object (i.e. object-to-WORLD) transformation
 	glm::mat4 modelMtx = glm::mat4(1.0f);
-	// List of SceneObjects that are attached to this object
+	// List of other SceneObjects that are attached to this object
 	std::vector<std::weak_ptr<SceneObject> > childObjects;
 };

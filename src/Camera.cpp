@@ -6,8 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_access.hpp>
 
-Camera::Camera(std::weak_ptr<const GameEngine> engine) :
-	SceneObject(engine),
+Camera::Camera(std::weak_ptr<const GameEngine> engine, const std::string& name) :
+	SceneObject(engine, name),
 	fovY(glm::radians(45.0)),
 	clipNear(0.1f),
 	clipFar(100.0f),

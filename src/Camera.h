@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -12,7 +14,7 @@
 ///
 class Camera : public SceneObject {
 public:
-	Camera(std::weak_ptr<const GameEngine> engine);
+	Camera(std::weak_ptr<const GameEngine> engine, const std::string& name);
 	~Camera() = default;
 
 	// Override functions from SceneObject class
