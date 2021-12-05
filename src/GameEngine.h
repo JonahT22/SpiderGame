@@ -44,16 +44,12 @@ public:
 	// Other Functions
 	void SetupScene(const std::string& filename);
 	void RenderScene();
-	// TODO: this should eventually be combined with RenderScene, but can only be called
-	//   after all scene geometry is finished rendering
-	void RenderSkybox(std::shared_ptr<ShaderProgram> shader);
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */
 	// TODO: do these need to be unique_ptrs, or can they just exist on the stack?
 	std::unique_ptr<Window> mainWindow;
 	std::unique_ptr<Scene> scene;
-	std::unique_ptr<Skybox> skybox;
 
 	/* ----- Objects that the GameEngine references, but have lifetimes controlled by
 	other objects ----- */

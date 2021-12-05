@@ -6,8 +6,9 @@
 
 // TODO: is a full gameengine include necessary?
 #include "GameEngine.h"
-#include "ShaderProgram.h"
 #include "SceneObject.h"
+#include "Skybox.h"
+#include "ShaderProgram.h"
 #include "Texture.h"
 #include "Mesh.h"
 #include "Camera.h"
@@ -31,13 +32,18 @@ void Scene::UpdateScenePhysics() {
 }
 
 void Scene::RenderScene() {
+	auto main_camera = engineRef.lock()->GetMainCamera();
+	if (!main_camera) {
+		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
+		return;
+	}
+	/* ----- Draw every SceneObject ----- */
 	for (ShaderToObjectList& shader_to_object : allObjects) {
 		// Iterate through every shader, and draw the objects associated with it
 		std::shared_ptr<ShaderProgram> shader = shader_to_object.first;
 		shader->Activate();
 		// Try to set uniform variables in the shader, ignore them if they don't exist
 		if (shader->GetUniform("P") != -1) {
-			std::shared_ptr<Camera> main_camera = engineRef.lock()->GetMainCamera();
 			shader->SetMat4Uniform("P", main_camera->GetProjectionMtx());
 		}
 		// TODO: more uniforms, i.e. time
@@ -47,17 +53,28 @@ void Scene::RenderScene() {
 			object->Render(shader_to_object.first);
 		}
 	}
+
+	/* ----- Draw the skybox ----- */
+	// Send camera matrices to the shader
+	skyboxShader->Activate();
+	// Remove the translation factors from the view matrix by casting to a mat3
+	// This works because the mat3->mat4 conversion places a 1 into unfilled
+	//   diagonals, essentially setting the last column to (0, 0, 0, 1)T
+	glm::mat4 view = glm::mat4(glm::mat3(main_camera->GetViewMtx()));
+	skyboxShader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view, true);
+	// Note: the skybox must be rendered AFTER all of the SceneObjects
+	skybox->Render();
 }
 
-void Scene::LoadSceneFile(const std::string filename) {
-	// yaml-cpp will silently crash if the file doesn't exist, so check for it first
+void Scene::LoadSceneFile(const std::string& filename) {
+	/* ----- Verify Scene File ----- */
+	// (yaml-cpp will silently crash if the file doesn't exist)
 	std::ifstream file(filename);
 	if (!file) {
 		std::cerr << "ERROR: Scene file \"" << filename << "\" not found!" << std::endl;
 		assert(0);
 	}
 	file.close();
-
 	YAML::Node full_scene = YAML::LoadFile(filename);
 
 	/* ----- Load Shaders ----- */
@@ -79,11 +96,12 @@ void Scene::LoadSceneFile(const std::string filename) {
 		shaderMap[shader_name] = allObjects.size() - 1;
 	}
 
+	/* ----- Load SceneObjects ----- */
 	// Keep a (temporary) mapping from object names to their pointers, for setting
 	//   parent-child relationships when loading SceneObjects
 	std::unordered_map<std::string, std::shared_ptr<SceneObject> > object_name_map;
 
-	/* ----- Load Scene Geometry ----- */
+	// Load Meshes
 	assert(YAML::DoesMapHaveSequence(full_scene, "mesh_objects"));
 	YAML::Node meshes = full_scene["mesh_objects"];
 	// Read every mesh from the sequence
@@ -104,6 +122,26 @@ void Scene::LoadSceneFile(const std::string filename) {
 		LoadSceneObject(meshes[i], new_mesh, object_name_map);
 	}
 
+	/* ----- Load the Skybox ----- */
+	// Load the skybox shader
+	YAML::Node skybox_node = full_scene["skybox"];
+	// TODO: test if this crashes when skybox node is missing
+	if (!skybox_node || !skybox_node.IsMap()) {
+		std::cerr << "ERROR: No YAML Map with skybox properties found in scene file!";
+		std::cerr << std::endl;
+	}
+	skyboxShader = std::make_unique<ShaderProgram>("skybox");
+	skyboxShader->Compile(YAML::GetMapVal<std::string>(skybox_node, "vert"),
+	                      YAML::GetMapVal<std::string>(skybox_node, "frag"));
+	// Load the skybox images
+	std::string cube_map_image_paths[6];
+	const std::string side_names[6] = { "right", "left", "top", "bottom", "front", "back" };
+	for (size_t i = 0; i < 6; ++i) {
+		cube_map_image_paths[i] = YAML::GetMapVal<std::string>(skybox_node, side_names[i]);
+	}
+	skybox = std::make_unique<Skybox>(cube_map_image_paths);
+
+	/* ----- Propagate parent-child transforms through the object hierarchy ----- */
 	UpdateScenePhysics();
 }
 

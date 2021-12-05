@@ -23,13 +23,6 @@ int main() {
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	auto spider_game = std::make_shared<GameEngine>(game_options);
 
-	/* ----- Create the skybox shader ----- */
-	// TODO: the skybox shader should probably be its own thing in the scene,
-	//   not the gameengine. But keep it separate from the other shaders
-	auto skybox_shader = std::make_shared<ShaderProgram>();
-	skybox_shader->Compile("resources/shaders/skybox_vert.glsl",
-	                       "resources/shaders/skybox_frag.glsl");
-
 	/* ----- Create the camera ----- */
 	auto main_camera = std::make_shared<Camera>(spider_game, "main_camera");
 	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
@@ -50,11 +43,8 @@ int main() {
 
 		GLfloat time = glfwGetTime();
 		
-		// Render the boxes
+		// Render the entire scene
 		spider_game->RenderScene();
-
-		// Temporary: after everything is finished, render the skybox
-		spider_game->RenderSkybox(skybox_shader);
 
 		// check and call events, swap buffers
 		glfwSwapBuffers(spider_game->GetWindow()); // swap the color buffers

@@ -7,8 +7,9 @@
 
 #include <yaml-cpp/yaml.h>
 
-class SceneObject;
 class ShaderProgram;
+class Skybox;
+class SceneObject;
 class GameEngine;
 class Mesh;
 
@@ -27,7 +28,7 @@ public:
 
 	/* ----- Setters ----- */
 	// Instantiate every shader that will be used in this game
-	void LoadSceneFile(const std::string filename);
+	void LoadSceneFile(const std::string& filename);
 	// Add a SceneObject to the Scene, to be drawn by the given shader
 	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
 	                      const std::string shader_name);
@@ -59,4 +60,8 @@ private:
 
 	// List of every physics object in the scene (for raycasting)
 	// TODO
+
+	// Skybox and its shader. The scene has exclusive control over the skybox
+	std::unique_ptr<Skybox> skybox;
+	std::unique_ptr<ShaderProgram> skyboxShader;
 };

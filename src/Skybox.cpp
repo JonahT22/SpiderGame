@@ -13,6 +13,7 @@ Skybox::Skybox(const std::string filenames[6]) {
 	// Set this texture as the current cubemap texture
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapID);
 
+	// TODO: detect image file type, choose RGB or RGBA
 	// Load the texture data from the image files
 	stbi_set_flip_vertically_on_load(false);
 	int width, height, num_channels;

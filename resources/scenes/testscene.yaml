@@ -69,6 +69,12 @@ camera_objects:
         relative_rotation: [0.0, 0.0, 0.0]
         relative_scale: [1.0, 1.0, 1.0]
 
-
-
 skybox:
+    vert: "resources/shaders/skybox_vert.glsl"
+    frag: "resources/shaders/skybox_frag.glsl"
+    right: "resources/textures/skybox1/right.jpg"
+    left: "resources/textures/skybox1/left.jpg"
+    top: "resources/textures/skybox1/top.jpg"
+    bottom: "resources/textures/skybox1/bottom.jpg"
+    front: "resources/textures/skybox1/front.jpg"
+    back: "resources/textures/skybox1/back.jpg"

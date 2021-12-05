@@ -97,44 +97,12 @@ void GameEngine::SetupScene(const std::string& filename) {
 
 	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
 	scene->LoadSceneFile("resources/scenes/testscene.yaml");
-
-	// TODO: load the cubemap image paths from the scene file
-	// TODO: detect image file type, choose RGB or RGBA in texture loader
-	const std::string cube_map_image_paths[6] = {
-		"resources/textures/skybox1/right.jpg",
-		"resources/textures/skybox1/left.jpg",
-		"resources/textures/skybox1/top.jpg",
-		"resources/textures/skybox1/bottom.jpg",
-		"resources/textures/skybox1/front.jpg",
-		"resources/textures/skybox1/back.jpg",
-	};
-	skybox = std::make_unique<Skybox>(cube_map_image_paths);
 }
 
+// TODO: eventually, this should hold all of the rendering commands
 void GameEngine::RenderScene() {
 	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
 	//   timestep
 	scene->UpdateScenePhysics();
-	// TODO: eventually, this should hold all of the rendering commands
 	scene->RenderScene();
-}
-
-void GameEngine::RenderSkybox(std::shared_ptr<ShaderProgram> shader) {
-	// TODO: skybox should be rendered by the scene
-	auto main_camera = GetMainCamera();
-	// Render the skybox
-	if (main_camera) {
-		// Send camera matrices to the shader
-		shader->Activate();
-		// Remove the translation factors from the view matrix by casting to a mat3
-		// This works because the mat3->mat4 conversion places a 1 into unfilled
-		//   diagonals, essentially setting the last column to (0, 0, 0, 1)
-		glm::mat4 view = glm::mat4(glm::mat3(main_camera->GetViewMtx()));
-		shader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view, true);
-	}
-	else {
-		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
-	}
-	// Note: the skybox MUST be drawn last
-	skybox->Render();
 }
