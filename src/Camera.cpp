@@ -34,11 +34,11 @@ void Camera::Render(const std::shared_ptr<ShaderProgram> shader) {
 	//   camera if it's the main camera being referenced by the GameEngine
 }
 
-const glm::mat4 Camera::GetProjectionMtx() const {
+const glm::mat4& Camera::GetProjectionMtx() const {
 	return projectionMtx;
 }
 
-const glm::mat4 Camera::GetViewMtx() const {
+const glm::mat4& Camera::GetViewMtx() const {
 	return viewMtx;
 }
 

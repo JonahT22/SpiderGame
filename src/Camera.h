@@ -22,8 +22,8 @@ public:
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 
 	// Getters
-	const glm::mat4 GetProjectionMtx() const;
-	const glm::mat4 GetViewMtx() const;
+	const glm::mat4& GetProjectionMtx() const;
+	const glm::mat4& GetViewMtx() const;
 
 	// Setters
 	void SetFovDegrees(const float new_fov);
