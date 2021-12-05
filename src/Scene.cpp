@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include <iostream>
+#include <yaml-cpp/yaml.h>
 
 // TODO: is a full gameengine include necessary?
 #include "GameEngine.h"
@@ -9,6 +10,7 @@
 #include "Texture.h"
 #include "Mesh.h"
 #include "Camera.h"
+#include "YAMLHelper.h"
 
 Scene::Scene(std::weak_ptr<const GameEngine> engine) :
 	engineRef(engine) {}

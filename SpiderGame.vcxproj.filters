@@ -92,6 +92,9 @@
     <ClInclude Include="src\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\YAMLHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\normal_frag.glsl">
@@ -117,6 +120,9 @@
     </None>
     <None Include="resources\shaders\unlit_vert.glsl">
       <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\scenes\testscene.yaml">
+      <Filter>Resource Files\Scenes</Filter>
     </None>
   </ItemGroup>
 </Project>
