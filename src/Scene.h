@@ -25,7 +25,7 @@ public:
 
 	/* ----- Setters ----- */
 	// Instantiate every shader that will be used in this game
-	void LoadShaders(const std::string filename);
+	void LoadSceneFile(const std::string filename);
 	// Add a SceneObject to the Scene, to be drawn by the given shader
 	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
 	                      const std::string shader_name);

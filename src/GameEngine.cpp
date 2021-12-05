@@ -66,7 +66,8 @@ std::shared_ptr<Camera> GameEngine::GetMainCamera() const {
 		std::cerr << "ERROR: Tried to get current camera, but there is no camera set in";
 		std::cerr << " the game engine!" << std::endl;
 		// Construct an empty camera object
-		return std::make_shared<Camera>(enable_shared_from_this::weak_from_this());
+		return std::make_shared<Camera>(enable_shared_from_this::weak_from_this(),
+		                                "null_camera");
 	}
 }
 
@@ -86,7 +87,7 @@ void GameEngine::UpdateCameraAspect(const float new_aspect) const {
 	}
 }
 
-void GameEngine::SetupScene(const char* filename) {
+void GameEngine::SetupScene(const std::string& filename) {
 	// Load the scene geometry from the file, which should also create the character
 	//   and place it at the start location. Then, get a ref to the player's camera
 	//   from the scene and hook up the window's input events to the character
@@ -100,7 +101,7 @@ void GameEngine::SetupScene(const char* filename) {
 
 	// TODO: load the cubemap image paths from the scene file
 	// TODO: detect image file type, choose RGB or RGBA in texture loader
-	const char* cube_map_image_paths[6] = {
+	const std::string cube_map_image_paths[6] = {
 		"resources/textures/skybox1/right.jpg",
 		"resources/textures/skybox1/left.jpg",
 		"resources/textures/skybox1/top.jpg",

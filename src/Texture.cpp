@@ -8,7 +8,7 @@ Texture::Texture() :
 	textureID(0) 
 {}
 
-void Texture::LoadFromFile(const char* filename, const TextureOptions& options) {
+void Texture::LoadFromFile(const std::string& filename, const TextureOptions& options) {
 	// Create the texture object
 	glGenTextures(1, &textureID);
 	// Set this texture as the current texture, to be modified by further opengl calls
@@ -24,7 +24,7 @@ void Texture::LoadFromFile(const char* filename, const TextureOptions& options) 
 	// Load the texture data from the file
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, num_channels;
-	unsigned char* data = stbi_load(filename, &width, &height, &num_channels, 0);
+	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &num_channels, 0);
 	if (data) {
 		// Create the texture object
 		// Arguments:

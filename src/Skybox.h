@@ -17,7 +17,7 @@ class Skybox {
 public:
 	// Supply exactly 6 texture files, given in the following order:
 	//   Right, Left, Top, Bottom, Front, Back
-	Skybox(const char* filenames[6]);
+	Skybox(const std::string filenames[6]);
 	~Skybox();
 
 	void Render();

@@ -24,13 +24,14 @@ public:
 
 	/* ----- Other Functions ----- */
 	// Compile & link the shader program
-	void Compile(const char* vert_path, const char* frag_path);
+	void Compile(const std::string& vert_path, const std::string& frag_path);
 	void Activate();
 	// Note: deactivating shaders is optional
 	//   (See https://stackoverflow.com/questions/13546461/what-does-gluseprogram0-do)
 	void Deactivate();
 
 private:
+	const std::string shaderName;
 	GLuint programID;
 };
 

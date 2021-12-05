@@ -7,7 +7,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram() :
-	programID(0)
+	programID(0),
+	shaderName("unnamed_shader")
+{}
+
+ShaderProgram::ShaderProgram(const std::string& name) :
+	programID(0),
+	shaderName(name)
 {}
 
 ShaderProgram::~ShaderProgram() {
@@ -62,7 +68,7 @@ void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix,
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void ShaderProgram::Compile(const char* vert_path, const char* frag_path) {
+void ShaderProgram::Compile(const std::string& vert_path, const std::string& frag_path) {
 	/* ----- Get the shader source code ----- */
 	// Open the shader files
 	std::ifstream vert_file(vert_path);

@@ -23,7 +23,7 @@ public:
 	Texture();
 	~Texture() = default;
 
-	void LoadFromFile(const char* filename, const TextureOptions& options);
+	void LoadFromFile(const std::string& filename, const TextureOptions& options);
 	// Binds this texture to the provided texture unit (default = 0)
 	void Bind(GLuint texture_unit = 0) const;
 

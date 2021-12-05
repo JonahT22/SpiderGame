@@ -4,8 +4,8 @@
 
 #include "ShaderProgram.h"
 
-Mesh::Mesh(std::weak_ptr<const GameEngine> engine) :
-	SceneObject(engine),
+Mesh::Mesh(std::weak_ptr<const GameEngine> engine, const std::string& name) :
+	SceneObject(engine, name),
 	vertexArrayID(0),
 	vertexBufferID(0),
 	elementBufferID(0),
@@ -21,7 +21,7 @@ Mesh::~Mesh() {
 	glDeleteBuffers(1, &elementBufferID);
 }
 
-void Mesh::LoadMesh(const char* filename, const bool use_EBO) {
+void Mesh::LoadMesh(const std::string& filename, const bool use_EBO) {
 	std::cerr << "ERROR: Mesh::LoadMesh() is not yet implemented!" << std::endl;
 	abort();
 
@@ -100,7 +100,7 @@ void Mesh::GenerateCubeMesh() {
 	SetupVertexArray();
 }
 
-void Mesh::LoadTexture(const char* filename, const TextureOptions& options) {
+void Mesh::LoadTexture(const std::string& filename, const TextureOptions& options) {
 	texture.LoadFromFile(filename, options);
 }
 

@@ -12,15 +12,15 @@
 ///
 class Mesh : public SceneObject {
 public:
-	Mesh(std::weak_ptr<const GameEngine> engine);
+	Mesh(std::weak_ptr<const GameEngine> engine, const std::string& name);
 	~Mesh();
 
 	// Load mesh data into buffer vectors
-	void LoadMesh(const char* filename, const bool use_EBO = false);
+	void LoadMesh(const std::string& filename, const bool use_EBO = false);
 	// Create a hardcoded cube for testing
 	void GenerateCubeMesh();
 	// Create the texture object that this mesh will use
-	void LoadTexture(const char* filename, const TextureOptions& options);
+	void LoadTexture(const std::string& filename, const TextureOptions& options);
 	// Draw this mesh onto the screen
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
 

@@ -6,7 +6,7 @@
 
 #include "ShaderProgram.h"
 
-Skybox::Skybox(const char* filenames[6]) {
+Skybox::Skybox(const std::string filenames[6]) {
 	/* ----- Load the Cubemap from the texture files ----- */
 	// Create the texture object
 	glGenTextures(1, &cubeMapID);
@@ -17,7 +17,7 @@ Skybox::Skybox(const char* filenames[6]) {
 	stbi_set_flip_vertically_on_load(false);
 	int width, height, num_channels;
 	for (size_t i = 0; i < 6; ++i) {
-		unsigned char* data = stbi_load(filenames[i], &width, &height, &num_channels, 0);
+		unsigned char* data = stbi_load(filenames[i].c_str(), &width, &height, &num_channels, 0);
 		if (data) {
 			// If data was loaded properly, create the texture object. GLenums for the
 			//   different sides of the cubemap are defined sequentially in the following
