@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -41,7 +42,7 @@ public:
 	void UpdateCameraAspect(const float new_aspect) const;
 
 	// Other Functions
-	void SetupScene(const char* filename);
+	void SetupScene(const std::string& filename);
 	void RenderScene();
 	// TODO: this should eventually be combined with RenderScene, but can only be called
 	//   after all scene geometry is finished rendering
