@@ -18,11 +18,13 @@ class Mesh;
 ///
 class Scene {
 public:
-	Scene(std::weak_ptr<const GameEngine> engine);
+	Scene(std::weak_ptr<GameEngine> engine);
 	~Scene() = default;
 
+	// Iterate through the scene hierarchy, updating each object's modelview matrices
 	void UpdateScenePhysics();
-	void RenderScene();
+	// Iterate over each shader, rendering the objects that are drawn by it
+	void RenderScene() const;
 
 	/* ----- Getters ----- */
 

@@ -43,7 +43,7 @@ public:
 
 	// Other Functions
 	void SetupScene(const std::string& filename);
-	void RenderScene();
+	void RenderScene() const;
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */

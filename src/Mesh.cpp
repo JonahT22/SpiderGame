@@ -104,7 +104,7 @@ void Mesh::LoadTexture(const std::string& filename) {
 	texture.LoadFromFile(filename);
 }
 
-void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) {
+void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// Call the parent's render function, which checks if the shader is bound and sends
 	//   the model/invT matrices
 	SceneObject::Render(shader);

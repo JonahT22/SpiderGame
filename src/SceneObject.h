@@ -38,7 +38,7 @@ public:
 	// Find this object's (world) model mtx and iterate recursively to update child matrices
 	virtual void PhysicsUpdate();
 	// Draw this object, and ONLY this object. Do not draw children
-	virtual void Render(const std::shared_ptr<ShaderProgram> shader);
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
 
 protected:
 	// Name of this object, for debugging and parenting on construction

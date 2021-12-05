@@ -29,7 +29,7 @@ public:
 
 	/* ----- Getters ----- */
 	// Has this texture been assigned an image file?
-	bool IsLoaded();
+	bool IsLoaded() const;
 
 private:
 	GLuint textureID;

@@ -31,14 +31,14 @@ void Scene::UpdateScenePhysics() {
 	}
 }
 
-void Scene::RenderScene() {
+void Scene::RenderScene() const {
 	auto main_camera = engineRef.lock()->GetMainCamera();
 	if (!main_camera) {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
 		return;
 	}
 	/* ----- Draw every SceneObject ----- */
-	for (ShaderToObjectList& shader_to_object : allObjects) {
+	for (const ShaderToObjectList& shader_to_object : allObjects) {
 		// Iterate through every shader, and draw the objects associated with it
 		std::shared_ptr<ShaderProgram> shader = shader_to_object.first;
 		shader->Activate();
@@ -49,7 +49,7 @@ void Scene::RenderScene() {
 		// TODO: more uniforms, i.e. time
 
 		// Render every object associated with this shader
-		for (std::shared_ptr<SceneObject>& object : shader_to_object.second) {
+		for (const std::shared_ptr<SceneObject>& object : shader_to_object.second) {
 			object->Render(shader_to_object.first);
 		}
 	}

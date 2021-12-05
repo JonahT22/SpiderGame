@@ -23,7 +23,7 @@ public:
 	// Create the texture object that this mesh will use
 	void LoadTexture(const std::string& filename);
 	// Draw this mesh onto the screen
-	virtual void Render(const std::shared_ptr<ShaderProgram> shader) override;
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
 private:
 	void SetupVertexArray();
