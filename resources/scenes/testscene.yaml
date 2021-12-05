@@ -1,0 +1,19 @@
+# Note: tabs are not allowed in yaml files, use spaces instead
+# All filepaths are given relative to the resources folder
+# Use !!int or !!str to declare a value as specific type
+# Use --- to separate multiple documents in the same file
+
+# List of every shader that will be used in the lifetime of the game
+shaders:
+    - unlit:
+        name: "unlit"
+        vert: "shaders/unlit_vert.glsl"
+        frag: "shaders/unlit_frag.glsl"
+    - normal:
+        name: "normal"
+        vert: "shaders/normal_vert.glsl"
+        frag: "shaders/normal_frag.glsl"
+
+#objects:
+#    - Cube1:
+#        name: 

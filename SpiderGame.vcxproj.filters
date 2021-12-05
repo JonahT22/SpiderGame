@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{afef993f-67d7-4283-90b0-cb361e98bcc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Scenes">
+      <UniqueIdentifier>{39d193f9-b9f4-4251-950b-0b52b3882396}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glad.c">
@@ -88,29 +94,29 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\skybox_frag.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\normal_frag.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\skybox_vert.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\normal_vert.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\normal_frag.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\silhouette_frag.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\normal_vert.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\silhouette_vert.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\unlit_frag.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\skybox_frag.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\unlit_vert.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\skybox_vert.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\silhouette_frag.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\unlit_frag.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\silhouette_vert.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="resources\shaders\unlit_vert.glsl">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -46,14 +46,14 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\normal_frag.glsl" />
-    <None Include="resources\normal_vert.glsl" />
-    <None Include="resources\silhouette_frag.glsl" />
-    <None Include="resources\silhouette_vert.glsl" />
-    <None Include="resources\skybox_frag.glsl" />
-    <None Include="resources\unlit_frag.glsl" />
-    <None Include="resources\skybox_vert.glsl" />
-    <None Include="resources\unlit_vert.glsl" />
+    <None Include="resources\shaders\normal_frag.glsl" />
+    <None Include="resources\shaders\normal_vert.glsl" />
+    <None Include="resources\shaders\silhouette_frag.glsl" />
+    <None Include="resources\shaders\silhouette_vert.glsl" />
+    <None Include="resources\shaders\skybox_frag.glsl" />
+    <None Include="resources\shaders\skybox_vert.glsl" />
+    <None Include="resources\shaders\unlit_frag.glsl" />
+    <None Include="resources\shaders\unlit_vert.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
