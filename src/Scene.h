@@ -5,9 +5,12 @@
 #include <unordered_map>
 #include <utility>
 
+#include <yaml-cpp/yaml.h>
+
 class SceneObject;
 class ShaderProgram;
 class GameEngine;
+class Mesh;
 
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level
@@ -27,9 +30,16 @@ public:
 	void LoadSceneFile(const std::string filename);
 	// Add a SceneObject to the Scene, to be drawn by the given shader
 	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-	                      const std::string shader_name, const bool is_root);
+	                      const std::weak_ptr<SceneObject>& parent,
+	                      const std::string shader_name);
 
 private:
+	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
+	//   handles object parenting and adds the object to the scene
+	void LoadSceneObject(const YAML::Node object_node,
+	                     const std::shared_ptr<SceneObject>& new_object,
+	                     std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map);
+
 	// Weak reference to the GameEngine that manages this scene
 	std::weak_ptr<const GameEngine> engineRef;
 	// Hash map from shader names to their indices in allObjects

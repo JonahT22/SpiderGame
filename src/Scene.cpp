@@ -2,8 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-
-#include <yaml-cpp/yaml.h>
+#include <cassert>
 
 // TODO: is a full gameengine include necessary?
 #include "GameEngine.h"
@@ -45,7 +44,7 @@ void Scene::LoadSceneFile(const std::string filename) {
 	std::ifstream file(filename);
 	if (!file) {
 		std::cerr << "ERROR: Scene file \"" << filename << "\" not found!" << std::endl;
-		abort();
+		assert(0);
 	}
 	file.close();
 
@@ -61,14 +60,16 @@ void Scene::LoadSceneFile(const std::string filename) {
 
 	// Get the Sequence with the data for every shader that will be used in the scene
 	YAML::Node shaders = full_scene["shaders"];
-	// Read every shader from the sequence
 	for (size_t i = 0; i < shaders.size(); ++i) {
 		std::string shader_name = YAML::GetMapVal<std::string>(shaders[i], "name");
-		// ShaderToObjectList is typedef'd as a pair of a shader and a vector of object ptrs
+		// ShaderToObjectList is typedef'd as a std::pair with a shader and
+		//    a vector of object ptrs
 		ShaderToObjectList new_shader_list;
 		new_shader_list.first = std::make_shared<ShaderProgram>(shader_name);
+		// Load and compile the shader program from the filepaths provided in the YAML file
 		new_shader_list.first->Compile(YAML::GetMapVal<std::string>(shaders[i], "vert"),
-		                               YAML::GetMapVal<std::string>(shaders[i], "frag"));
+										YAML::GetMapVal<std::string>(shaders[i], "frag"));
+		// Store this shader list, with a blank vector of object ptrs to be populated later
 		allObjects.push_back(new_shader_list);
 		// Keep a mapping between each shader's name and its index in the allObjects list
 		shaderMap[shader_name] = allObjects.size() - 1;
@@ -81,18 +82,14 @@ void Scene::LoadSceneFile(const std::string filename) {
 		std::cerr << "\"!" << std::endl;
 	}
 
-	// Default texture options that each mesh will use
-	TextureOptions tex_options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
-	                            GL_LINEAR, GL_RGB, GL_RGBA };
+	// Keep a (temporary) mapping from object names to their pointers, for setting
+	//   parent-child relationships when loading SceneObjects
+	std::unordered_map<std::string, std::shared_ptr<SceneObject> > object_name_map;
 
 	YAML::Node meshes = full_scene["mesh_objects"];
-	// Keep a (temporary) mapping from object names to their pointers, for setting
-	//   parent-child relationships
-	std::unordered_map<std::string, std::shared_ptr<SceneObject> > mesh_name_map;
 	// Read every mesh from the sequence
 	for (size_t i = 0; i < meshes.size(); ++i) {
 		std::string mesh_name = YAML::GetMapVal<std::string>(meshes[i], "name");
-		// Construct the mesh object, to be populated by the YAML file's parameters
 		auto new_mesh = std::make_shared<Mesh>(engineRef, mesh_name);
 		// Load the mesh file, or make the default cube if none is provided
 		std::string mesh_filename = YAML::GetMapVal<std::string>(meshes[i], "meshfile");
@@ -102,57 +99,37 @@ void Scene::LoadSceneFile(const std::string filename) {
 		else {
 			new_mesh->LoadMesh(mesh_filename);
 		}
-		// Load the mesh's texture
-		// TODO: add support for 3-channel (i.e. jpg) textures
-		new_mesh->LoadTexture(YAML::GetMapVal<std::string>(meshes[i], "texture"),
-		                      tex_options);
-		// Load the transform as a single map object
-		new_mesh->SetRelativeTransform(YAML::GetMapVal<Transform>(meshes[i],
-		                               "relative_transform"));
-		// Set the mesh's parent object, if it has been created
-		// TODO: this should probably be its own function
-		std::string parent_name = YAML::GetMapVal<std::string>(meshes[i], "parent");
-		bool is_root = (parent_name == "");
-		if (is_root) {
-			// TODO: add this object to the list of root objects
-			std::cout << "found a root object: " << mesh_name << std::endl;
-			if (mesh_name == "camera_cube") {
-				// TODO: temporary hardcoding for camera
-				new_mesh->AddChildObject(engineRef.lock()->GetMainCamera());
-			}
-		}
-		else {
-			if (mesh_name_map.count(parent_name) > 0) {
-				std::shared_ptr<SceneObject> parent = mesh_name_map[parent_name];
-				parent->AddChildObject(new_mesh);
-			}
-			else {
-				std::cerr << "ERROR: SceneObject \"" << mesh_name << "\" attempted to";
-				std::cerr << " parent itself under SceneObject \"" << parent_name;
-				std::cerr <<  "\", but \"" << parent_name << "\" has not been read from";
-				std::cerr << "the scene file!" << std::endl;
-			}
-		}
+		new_mesh->LoadTexture(YAML::GetMapVal<std::string>(meshes[i], "texture"));
 
-
-		// Add this mesh to its shader's list of meshes to draw each frame
-		std::string shader_name = YAML::GetMapVal<std::string>(meshes[i], "shader");
-		AddObjectToScene(new_mesh, shader_name, is_root);
-
-		// Add this mesh to the mapping of mesh names
-		mesh_name_map[mesh_name] = new_mesh;
+		// Once the mesh-specific stuff is loaded, load the rest of the SceneObject properties
+		LoadSceneObject(meshes[i], new_mesh, object_name_map);
 	}
 
 	// TODO: for now, manually update all of the root meshes (to propagate parent
 	//   transforms to children)
-	mesh_name_map["cube_center"]->PhysicsUpdate(glm::mat4(1.0f));
-	mesh_name_map["camera_cube"]->PhysicsUpdate(glm::mat4(1.0f));
+	object_name_map["cube_center"]->PhysicsUpdate(glm::mat4(1.0f));
+	object_name_map["camera_cube"]->PhysicsUpdate(glm::mat4(1.0f));
+	// TODO later, do this instead
+	//UpdateScenePhysics();
 }
 
 void Scene::AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-                             const std::string shader_name, const bool is_root) {
-	// TODO: handle root objects
-	
+                             const std::weak_ptr<SceneObject>& parent,
+                             const std::string shader_name) {
+	// TODO: I shouldn't need to pass in the parent here, just query it from the object
+	// TODO: temporary debugging stuff
+	std::string object_name = object->GetName();
+	if (parent.expired()) {
+		std::cout << "found a root object: " << object_name << std::endl;
+		// TODO: temporary hardcoding for camera
+		if (object_name == "camera_cube") {
+			object->AddChildObject(engineRef.lock()->GetMainCamera());
+		}
+	}
+	else {
+		parent.lock()->AddChildObject(object);
+	}
+
 	if (shaderMap.count(shader_name) > 0) {
 		allObjects.at(shaderMap[shader_name]).second.push_back(object);
 	}
@@ -160,4 +137,39 @@ void Scene::AddObjectToScene(const std::shared_ptr<SceneObject>& object,
 		std::cerr << "ERROR: Drawing object in scene, but no shader with name ";
 		std::cerr << shader_name << " was loaded in the scene!" << std::endl;
 	}
+}
+
+void Scene::LoadSceneObject(const YAML::Node object_node,
+                            const std::shared_ptr<SceneObject>& new_object,
+                            std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map) {
+	// Load the transform as a single map object
+	new_object->SetRelativeTransform(YAML::GetMapVal<Transform>(object_node,
+		                            "relative_transform"));
+	
+	// Set the parent object, if it has been created
+	const std::string object_name = new_object->GetName();
+	const std::string parent_name = YAML::GetMapVal<std::string>(object_node, "parent");
+	// By default, the parent ref is null. If the object's 'parent' field matches another
+	//   object that has already been loaded, then change the parent ref to that object
+	std::weak_ptr<SceneObject> parent_object;
+	if (parent_name != "") {
+		if (object_name_map.count(parent_name) > 0) {
+			parent_object = object_name_map[parent_name];
+		}
+		else {
+			std::cerr << "ERROR: SceneObject \"" << object_name << "\" attempted to";
+			std::cerr << " parent itself under SceneObject \"" << parent_name;
+			std::cerr <<  "\", but \"" << parent_name << "\" has not been read from";
+			std::cerr << "the scene file!" << std::endl;
+		}
+	}
+
+	// Every object must be drawn by a shader, so get the shader's name
+	std::string shader_name = YAML::GetMapVal<std::string>(object_node, "shader");
+
+	// Add the object to the shader's list, and set its parent-child relationships
+	AddObjectToScene(new_object, parent_object, shader_name);
+
+	// Add this mesh to the mapping of object names
+	object_name_map[object_name] = new_object;
 }
