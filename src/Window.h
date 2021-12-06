@@ -36,7 +36,9 @@ public:
 private:
 	GLFWwindow* glfwWindow = nullptr;
 	// Reference to the game manager that created this window
-	// TODO: weak ptr
+	// Note: this raw pointer is safe because the GameEngine should control the lifetime
+	//   of this window object (i.e. 'owningGame' will never reference an invalid object,
+	//   because the GameEngine will destroy this window before the engine goes out of scope)
 	const GameEngine* owningGame = nullptr;
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;
