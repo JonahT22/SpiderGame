@@ -55,8 +55,8 @@ GameEngine::~GameEngine() {
 	glfwTerminate();
 }
 
-GLFWwindow* GameEngine::GetWindow() const {
-	return mainWindow->GetWindow();
+const std::unique_ptr<Window>& GameEngine::GetWindow() const {
+	return mainWindow;
 }
 
 std::shared_ptr<Camera> GameEngine::GetMainCamera() {

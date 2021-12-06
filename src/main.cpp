@@ -17,6 +17,8 @@
 #include "Texture.h"
 // TODO: this shouldn't be necessary
 #include "Camera.h"
+// TODO: remove
+#include "Window.h"
 
 int main() {
 	/* ----- Create the game instance & main rendering window ----- */
@@ -35,7 +37,8 @@ int main() {
 
 	/* ----- Render Loop ----- */
 	// has GLFW been told to close?
-	while (!glfwWindowShouldClose(spider_game->GetWindow())) {
+	// TODO: badly worded
+	while (!glfwWindowShouldClose(spider_game->GetWindow()->GetWindow())) {
 		// Set the void color to dark green-blue (STATE-SETTING function)
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		// Clear the color & depth buffers (STATE-USING function)
@@ -47,7 +50,7 @@ int main() {
 		spider_game->RenderScene();
 
 		// check and call events, swap buffers
-		glfwSwapBuffers(spider_game->GetWindow()); // swap the color buffers
+		glfwSwapBuffers(spider_game->GetWindow()->GetWindow()); // swap the color buffers
 		glfwPollEvents(); // have any events been triggered (i.e. input?)
 	}
 	return 0;

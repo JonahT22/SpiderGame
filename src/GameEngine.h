@@ -31,8 +31,8 @@ public:
 	~GameEngine();
 	
 	// Getters
-	GLFWwindow* GetWindow() const;
-	std::shared_ptr<Camera> GetMainCamera() const;
+	const std::unique_ptr<Window>& GetWindow() const;
+	std::shared_ptr<Camera> GetMainCamera();
 
 	// Setters
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
