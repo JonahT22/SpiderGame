@@ -168,30 +168,6 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	UpdateScenePhysics();
 }
 
-void Scene::AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-                             const std::string shader_name) {
-	// Attach this object to its parent, or mark it as a root object if it has no parent
-	std::weak_ptr<SceneObject> parent = object->GetParent();
-	std::string object_name = object->GetName();
-	if (parent.expired()) {
-		rootObjects.emplace_back(object);
-		if (object_name == "camera_cube") {
-			object->AddChildObject(engineRef.lock()->GetMainCamera());
-		}
-	}
-	else {
-		parent.lock()->AddChildObject(object);
-	}
-
-	if (shaderMap.count(shader_name) > 0) {
-		allObjects.at(shaderMap[shader_name]).second.push_back(object);
-	}
-	else {
-		std::cerr << "ERROR: Drawing object in scene, but no shader with name ";
-		std::cerr << shader_name << " was loaded in the scene!" << std::endl;
-	}
-}
-
 void Scene::LoadSceneObject(const YAML::Node object_node,
                             const std::shared_ptr<SceneObject>& new_object,
                             std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map) {
@@ -202,12 +178,12 @@ void Scene::LoadSceneObject(const YAML::Node object_node,
 	// Set the parent object, if it has been created
 	const std::string object_name = new_object->GetName();
 	const std::string parent_name = YAML::GetMapVal<std::string>(object_node, "parent");
-	// By default, the parent ref is null. If the object's 'parent' field matches another
-	//   object that has already been loaded, then change the parent ref to that object
-	std::weak_ptr<SceneObject> parent_object;
 	if (parent_name != "") {
 		if (object_name_map.count(parent_name) > 0) {
-			parent_object = object_name_map[parent_name];
+			// Attach this object to the parent with the given name
+			std::weak_ptr<SceneObject> parent_object = object_name_map[parent_name];
+			assert(!parent_object.expired());
+			parent_object.lock()->AddChildObject(new_object);
 		}
 		else {
 			std::cerr << "ERROR: SceneObject \"" << object_name << "\" attempted to";
@@ -216,13 +192,24 @@ void Scene::LoadSceneObject(const YAML::Node object_node,
 			std::cerr << "the scene file!" << std::endl;
 		}
 	}
+	else {
+		// If no parent is provided, this object is a root object (a.k.a. it's parented
+		//   to the world origin)
+		rootObjects.emplace_back(new_object);
+	}
 
 	// Every object must be drawn by a shader, so get the shader's name
 	std::string shader_name = YAML::GetMapVal<std::string>(object_node, "shader");
+	// Add the object to the shader's list
+	if (shaderMap.count(shader_name) > 0) {
+		allObjects.at(shaderMap[shader_name]).second.push_back(new_object);
+	}
+	else {
+		std::cerr << "ERROR: Drawing object in scene, but no shader with name ";
+		std::cerr << shader_name << " was loaded in the scene!" << std::endl;
+	}
 
-	// Add the object to the shader's list, and set its parent-child relationships
-	AddObjectToScene(new_object, shader_name);
-
-	// Add this mesh to the mapping of object names
+	// Add this object to the mapping of object names, in case any other objects are
+	//   parented to it
 	object_name_map[object_name] = new_object;
 }

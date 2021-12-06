@@ -25,15 +25,8 @@ public:
 	void UpdateScenePhysics();
 	// Iterate over each shader, rendering the objects that are drawn by it
 	void RenderScene() const;
-
-	/* ----- Getters ----- */
-
-	/* ----- Setters ----- */
-	// Instantiate every shader that will be used in this game
+	// Instantiate every shader & SceneObject that will be used in this game
 	void LoadSceneFile(const std::string& filename);
-	// Add a SceneObject to the Scene, to be drawn by the given shader
-	void AddObjectToScene(const std::shared_ptr<SceneObject>& object,
-	                      const std::string shader_name);
 
 private:
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
@@ -58,6 +51,7 @@ private:
 	std::vector<ShaderToObjectList> allObjects;
 
 	// List of every root object in the scene (for calling physics updates)
+	// Root objects are SceneObjects that are parented to the world origin
 	std::vector<std::weak_ptr<SceneObject> > rootObjects;
 
 	// List of every physics object in the scene (for raycasting)
