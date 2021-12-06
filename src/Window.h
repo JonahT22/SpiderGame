@@ -30,7 +30,7 @@ public:
 	// Called when the user focuses/unfocuses on this window
 	void FocusEvent(int focused);
 
-	GLFWwindow* GetWindow() const { return glfwWindow; }
+	GLFWwindow* GetGLFWWindow() const;
 	float GetAspect() const;
 
 private:

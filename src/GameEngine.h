@@ -16,6 +16,7 @@ struct GameOptions {
 	const int windowWidth = 256;
 	const int windowHeight = 256;
 	const char* windowName = "New Game Window";
+	const glm::vec3 clearColor = glm::vec3(0.1f, 0.1f, 0.1f);
 };
 
 ///
@@ -33,6 +34,7 @@ public:
 	// Getters
 	const std::unique_ptr<Window>& GetWindow() const;
 	std::shared_ptr<Camera> GetMainCamera();
+	bool IsWindowOpen() const;
 
 	// Setters
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
@@ -43,7 +45,7 @@ public:
 
 	// Other Functions
 	void SetupScene(const std::string& filename);
-	void RenderScene() const;
+	void RenderScene(float delta_time) const;
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */

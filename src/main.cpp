@@ -26,25 +26,18 @@ int main() {
 	auto spider_game = std::make_shared<GameEngine>(game_options);
 
 	/* ----- Load the Scene Geometry ----- */
-	spider_game->SetupScene("asdf");
+	spider_game->SetupScene("resources/scenes/testscene.yaml");
 
 	/* ----- Render Loop ----- */
-	// has GLFW been told to close?
-	// TODO: badly worded
-	while (!glfwWindowShouldClose(spider_game->GetWindow()->GetWindow())) {
-		// Set the void color to dark green-blue (STATE-SETTING function)
-		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-		// Clear the color & depth buffers (STATE-USING function)
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		GLfloat time = glfwGetTime();
+	float prev_time = glfwGetTime();
+	float current_time, delta_time;
+	while (spider_game->IsWindowOpen()) {
+		current_time = glfwGetTime();
+		delta_time = current_time - prev_time;
+		prev_time = current_time;
 		
 		// Render the entire scene
-		spider_game->RenderScene();
-
-		// check and call events, swap buffers
-		glfwSwapBuffers(spider_game->GetWindow()->GetWindow()); // swap the color buffers
-		glfwPollEvents(); // have any events been triggered (i.e. input?)
+		spider_game->RenderScene(delta_time);
 	}
 	return 0;
 }

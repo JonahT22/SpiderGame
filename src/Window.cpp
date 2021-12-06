@@ -102,6 +102,10 @@ void Window::FocusEvent(int focused) {
 	}
 }
 
+GLFWwindow* Window::GetGLFWWindow() const {
+	return glfwWindow;
+}
+
 float Window::GetAspect() const {
 	int width, height;
 	glfwGetWindowSize(glfwWindow, &width, &height);

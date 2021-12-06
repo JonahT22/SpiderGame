@@ -48,6 +48,9 @@ GameEngine::GameEngine(const GameOptions options) {
 	// Change the depth check from < to <=, so that skyboxes (which always have a depth
 	//   of 1) can still pass depth tests
 	glDepthFunc(GL_LEQUAL);
+
+	// Set the void color
+	glClearColor(options.clearColor.r, options.clearColor.g, options.clearColor.b, 1.0f);
 }
 
 GameEngine::~GameEngine() {
@@ -71,6 +74,10 @@ std::shared_ptr<Camera> GameEngine::GetMainCamera() {
 		return std::make_shared<Camera>(enable_shared_from_this::weak_from_this(),
 		                                "null_camera");
 	}
+}
+
+bool GameEngine::IsWindowOpen() const {
+	return !glfwWindowShouldClose(mainWindow->GetGLFWWindow());
 }
 
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
@@ -98,13 +105,20 @@ void GameEngine::SetupScene(const std::string& filename) {
 	//   character reference for their functions
 
 	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
-	scene->LoadSceneFile("resources/scenes/testscene.yaml");
+	scene->LoadSceneFile(filename);
 }
 
-// TODO: eventually, this should hold all of the rendering commands
-void GameEngine::RenderScene() const {
+void GameEngine::RenderScene(float delta_time) const {
+	// Clear the color & depth buffers 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
 	//   timestep
 	scene->UpdateScenePhysics();
 	scene->RenderScene();
+
+	// Swap OpenGL buffers
+	glfwSwapBuffers(mainWindow->GetGLFWWindow()); // swap the color buffers
+	// Check if any events been triggered
+	glfwPollEvents();
 }
