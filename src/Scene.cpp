@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "YAMLHelper.h"
+#include "Window.h"
 
 Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}
@@ -116,6 +117,27 @@ void Scene::LoadSceneFile(const std::string& filename) {
 
 		// Once the mesh-specific stuff is loaded, load the rest of the SceneObject properties
 		LoadSceneObject(meshes[i], new_mesh, object_name_map);
+	}
+
+	// Load Cameras
+	assert(YAML::DoesMapHaveSequence(full_scene, "camera_objects"));
+	YAML::Node cameras = full_scene["camera_objects"];
+	// Read every camera from the sequence
+	for (size_t i = 0; i < cameras.size(); ++i) {
+		std::string camera_name = YAML::GetMapVal<std::string>(cameras[i], "name");
+		auto new_camera = std::make_shared<Camera>(engineRef, camera_name);
+		new_camera->SetAspectRatio(engineRef.lock()->GetWindow()->GetAspect());
+		new_camera->SetFovDegrees(YAML::GetMapVal<float>(cameras[i], "fov_y"));
+		new_camera->SetArmLength(YAML::GetMapVal<float>(cameras[i], "arm_length"));
+		new_camera->SetArmAngleDegrees(YAML::GetMapVal<glm::vec2>(cameras[i], "arm_angle"));
+
+		if (i == 0) {
+			// By default, the GameEngine selects the first-listed camera as the main camera
+			engineRef.lock()->SetCurrentCamera(new_camera);
+		}
+
+		// Once the camera-specific stuff is loaded, load the rest of the SceneObject properties
+		LoadSceneObject(cameras[i], new_camera, object_name_map);
 	}
 
 	/* ----- Load the Skybox ----- */

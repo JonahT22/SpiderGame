@@ -25,13 +25,6 @@ int main() {
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	auto spider_game = std::make_shared<GameEngine>(game_options);
 
-	/* ----- Create the camera ----- */
-	auto main_camera = std::make_shared<Camera>(spider_game, "main_camera");
-	main_camera->SetAspectRatio(game_options.windowWidth / (float)game_options.windowHeight);
-	main_camera->SetArmLength(5.0f);
-	main_camera->SetArmAngleDegrees(glm::vec2(30.0f, 90.0f));
-	spider_game->SetCurrentCamera(main_camera);
-
 	/* ----- Load the Scene Geometry ----- */
 	spider_game->SetupScene("asdf");
 

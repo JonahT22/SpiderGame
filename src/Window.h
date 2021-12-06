@@ -31,10 +31,12 @@ public:
 	void FocusEvent(int focused);
 
 	GLFWwindow* GetWindow() const { return glfwWindow; }
+	float GetAspect() const;
 
 private:
 	GLFWwindow* glfwWindow = nullptr;
 	// Reference to the game manager that created this window
+	// TODO: weak ptr
 	const GameEngine* owningGame = nullptr;
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;

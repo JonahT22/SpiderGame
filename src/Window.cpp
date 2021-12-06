@@ -101,3 +101,10 @@ void Window::FocusEvent(int focused) {
 		cursorCaptured = false;
 	}
 }
+
+float Window::GetAspect() const {
+	int width, height;
+	glfwGetWindowSize(glfwWindow, &width, &height);
+	float aspect = width / (float)height;
+	return aspect;
+}
