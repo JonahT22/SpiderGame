@@ -1,24 +1,11 @@
 #include <memory>
 #include <iostream>
-#include <string>
 
-// TODO: I shouldn't need to include glad and glfw here, should be abstracted
-// behind helper classes
-// Always include glad before glfw
-#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
-#include "ShaderProgram.h"
 #include "GameEngine.h"
-#include "Mesh.h"
-// TODO: this shouldn't be necessary
-#include "Texture.h"
-// TODO: this shouldn't be necessary
-#include "Camera.h"
-// TODO: remove
-#include "Window.h"
 
 int main() {
 	/* ----- Create the game instance & main rendering window ----- */

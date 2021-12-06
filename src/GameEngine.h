@@ -3,6 +3,9 @@
 #include <memory>
 #include <string>
 
+// Always include glad before glfw
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 class Window;

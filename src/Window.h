@@ -1,5 +1,9 @@
 #pragma once
 
+#include <iostream>
+
+// Whenever GLFW is included without GLAD preceding it, it should have this defined
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 

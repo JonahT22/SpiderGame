@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-// Always include glad before glfw
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
@@ -32,8 +29,6 @@ GameEngine::GameEngine(const GameOptions options) {
 	/* ----- Create the game window ----- */
 	mainWindow = std::make_unique<Window>(options.windowWidth, options.windowHeight,
 	                                      options.windowName, this);
-	// Call the window's resizing function to initialize the OpenGL window size
-	mainWindow->ResizeEvent(options.windowWidth, options.windowHeight);
 
 	// Initialize GLAD so that OpenGL has the right function pointers.
 	// Pass GLAD the function (from glfw) that loads the OpenGL function pointers
@@ -42,6 +37,15 @@ GameEngine::GameEngine(const GameOptions options) {
 		std::cerr << "Error: Failed to initialize GLAD!" << std::endl;
 		abort();
 	}
+
+	// Once GLAD function pointers are loaded into the new context, set up the OpenGL viewport
+
+	// Print OpenGL version. Don't need to print GLSL version since GLSL versions match
+	//   with OpenGL for all versions after OpenGL 3.3
+	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+
+	// Call the window's resizing function to initialize the OpenGL window size
+	mainWindow->ResizeEvent(options.windowWidth, options.windowHeight);
 	
 	// Enable Z-buffer checking
 	glEnable(GL_DEPTH_TEST);

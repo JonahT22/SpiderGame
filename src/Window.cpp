@@ -1,13 +1,13 @@
 #include "Window.h"
 
-#include <iostream>
+#include <glad/glad.h>
 
 #include "GameEngine.h"
 
 Window::Window(const int width, const int height, const char* title,
                const GameEngine* owner) : owningGame(owner) {
-	// Make sure GLFW has been initialized
-	glfwInit();
+	// Note: GLFW should be initialized at this point, and do NOT call any OpenGL functions
+	//   in this constructor since the GameEngine hasn't yet initialized GLAD
 
 	// Create a window object
 	glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -19,10 +19,6 @@ Window::Window(const int width, const int height, const char* title,
 		abort();
 	}
 	glfwMakeContextCurrent(glfwWindow);
-
-	// Print OpenGL version. Don't need to print GLSL version since GLSL versions match
-	//   with OpenGL for all versions after OpenGL 3.3
-	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	/* ----- Bind any input callbacks here ----- */
 	// Associate this 'Window' instance with the glfwWindow that was created using
