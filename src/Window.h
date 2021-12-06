@@ -80,5 +80,8 @@ private:
 		Window* custom_window = static_cast<Window*>(glfwGetWindowUserPointer(window));
 		custom_window->FocusEvent(focused);
 	}
+	inline static void ErrorCallback(int code, const char* msg) {
+		std::cerr << "GLFW ERROR " << code << ": " << msg << std::endl;
+	}
 };
 

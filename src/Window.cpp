@@ -32,6 +32,7 @@ Window::Window(const int width, const int height, const char* title,
 	glfwSetCursorPosCallback(glfwWindow, CursorPosCallback);
 	glfwSetMouseButtonCallback(glfwWindow, MouseButtonCallback);
 	glfwSetWindowFocusCallback(glfwWindow, FocusCallback);
+	glfwSetErrorCallback(ErrorCallback);
 }
 
 void Window::ResizeEvent(int width, int height) {
