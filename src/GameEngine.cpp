@@ -9,7 +9,10 @@
 #include "Skybox.h"
 #include "ShaderProgram.h"
 
-GameEngine::GameEngine(const GameOptions options) {
+GameEngine::GameEngine(const GameOptions options) :
+	physicsTimeStep(options.physicsTimeStep),
+	frameDelayMs(options.frameDelayMs),
+	showFramerate(options.showFramerate) {
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {
 		std::cerr << "Error during GLFW Initialization!" << std::endl;
@@ -73,19 +76,27 @@ void GameEngine::SetupScene(const std::string& filename) {
 	scene->LoadSceneFile(filename);
 }
 
-void GameEngine::RenderScene(double delta_time) const {
+void GameEngine::RenderScene(double delta_time) {
 	// Clear the color & depth buffers 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
-	//   timestep
-	scene->UpdateScenePhysics();
-	scene->RenderScene();
+	int run_this_frame = 0;
+	while (physicsTimer > physicsTimeStep) {
+		scene->UpdateScenePhysics();
+		run_this_frame++;
+		physicsTimer -= physicsTimeStep;
+	}
+	physicsTimer += delta_time;
+	
+	scene->RenderScene(frameDelayMs);
 
 	// Swap OpenGL buffers
 	glfwSwapBuffers(mainWindow->GetGLFWWindow()); // swap the color buffers
 	// Check if any events been triggered
 	glfwPollEvents();
+
+	if (showFramerate) {
+		std::cout << "Framerate: " << 1.0f / delta_time << std::endl;
+	}
 }
 
 void GameEngine::InputMoveCamera(glm::vec2 motion) const {

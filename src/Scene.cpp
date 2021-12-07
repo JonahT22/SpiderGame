@@ -3,6 +3,9 @@
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
+// Used for lag simulation
+#include <thread>
+#include <chrono>
 
 #include "Camera.h"
 #include "GameEngine.h"
@@ -27,7 +30,7 @@ void Scene::UpdateScenePhysics() {
 	}
 }
 
-void Scene::RenderScene() const {
+void Scene::RenderScene(const unsigned int frame_delay_ms) const {
 	auto main_camera = engineRef.lock()->GetMainCamera();
 	if (!main_camera) {
 		std::cerr << "ERROR: No camera set in the game instance!" << std::endl;
@@ -63,6 +66,11 @@ void Scene::RenderScene() const {
 	skyboxShader->SetMat4Uniform("Vp", main_camera->GetProjectionMtx() * view, true);
 	// Note: the skybox must be rendered AFTER all of the SceneObjects
 	skybox->Render();
+
+	// If desired, sleep the main rendering thread to simulate lag
+	if (frame_delay_ms != 0) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(frame_delay_ms));
+	}
 }
 
 void Scene::LoadSceneFile(const std::string& filename) {

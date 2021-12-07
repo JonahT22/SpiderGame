@@ -14,7 +14,6 @@ SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& na
 void SceneObject::PhysicsUpdate() {
 	// Only recalculate model matrix if this object's physics are dirty
 	if (physicsDirty) {
-		std::cout << "Updating physics on " << objectName << std::endl;
 		// Find this object's local -> world transform using the parent's transform
 		if (!parent.expired()) {
 			modelMtx = parent.lock()->GetWorldTransformMtx() * rootTransform.GetMatrix();

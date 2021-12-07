@@ -15,7 +15,8 @@ int main(int argc, char** argv) {
 	char* scene_file = argv[1];
 
 	/* ----- Create the game instance & main rendering window ----- */
-	GameOptions game_options{ 800, 600, "Spider Game" };
+	// Use default options
+	GameOptions game_options;
 	auto spider_game = std::make_shared<GameEngine>(game_options);
 
 	/* ----- Load the Scene Geometry ----- */

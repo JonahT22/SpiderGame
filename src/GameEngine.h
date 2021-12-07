@@ -12,11 +12,13 @@
 class Camera;
 
 struct GameOptions {
-	const int windowWidth = 256;
-	const int windowHeight = 256;
-	const char* windowName = "New Game Window";
+	const int windowWidth = 800;
+	const int windowHeight = 600;
+	const char* windowName = "Spider Game";
 	const glm::vec3 clearColor = glm::vec3(0.1f, 0.1f, 0.1f);
 	const float physicsTimeStep = 1.0f / 60.0f;
+	const unsigned int frameDelayMs = 0;
+	const bool showFramerate = true;
 };
 
 ///
@@ -32,7 +34,7 @@ public:
 	~GameEngine();
 
 	void SetupScene(const std::string& filename);
-	void RenderScene(double delta_time) const;
+	void RenderScene(double delta_time);
 
 	/* ----- Input events (from the mainWindow) ----- */
 	void InputMoveCamera(glm::vec2 motion) const;
@@ -55,5 +57,14 @@ private:
 	/* ----- Objects that the GameEngine references, but have lifetimes controlled by
 	other objects ----- */
 	std::weak_ptr<Camera> cameraRef;
+
+	/* ----- Framerate and display settings ----- */
+	// Desired period for the physics updates, and a running timer for the next physics step
+	const float physicsTimeStep = 0.1f;
+	float physicsTimer = 0.0f;
+	// Artificial delay on each rendering frame, for testing physics behavior
+	const unsigned int  frameDelayMs = 0;
+	// Should the framerate be printed to the log?
+	const bool showFramerate = false;
 };
 

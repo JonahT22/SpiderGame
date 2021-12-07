@@ -25,7 +25,7 @@ public:
 	// Update the model matrices of every 'dirty' object in the scene
 	void UpdateScenePhysics();
 	// Iterate over each shader, rendering the objects that are drawn by it
-	void RenderScene() const;
+	void RenderScene(const unsigned int frameDelayMs) const;
 	// Instantiate every shader & SceneObject that will be used in this game
 	void LoadSceneFile(const std::string& filename);
 
