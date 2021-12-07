@@ -7,6 +7,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+class Camera;
 class GameEngine;
 class Mesh;
 class SceneObject;
@@ -29,9 +30,14 @@ public:
 	void LoadSceneFile(const std::string& filename);
 
 private:
+	// Creates a mesh object and loads any mesh-specific parameters
+	inline std::shared_ptr<Mesh> LoadMesh(const YAML::Node& mesh_node);
+	// Creates a camera object and loads any camera-specific parameters
+	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
+	                                          bool is_first = false);
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
 	//   handles object parenting and adds the object to the scene
-	void LoadSceneObject(const YAML::Node object_node,
+	void LoadSceneObject(const YAML::Node& object_node,
 	                     const std::shared_ptr<SceneObject>& new_object,
 	                     std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map);
 

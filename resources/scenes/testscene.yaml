@@ -13,11 +13,12 @@ shaders:
         vert: "resources/shaders/normal_vert.glsl"
         frag: "resources/shaders/normal_frag.glsl"
 
-mesh_objects:
-    -   name: "cube_center"
+scene_objects:
+    -   type: "mesh"
+        name: "cube_center"
         # If no meshfile is given, a simple cube will be loaded for the object
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
+        texture: "resources/textures/wall.jpg"
         # shader, relative_transform, and parent are inherited from SceneObject
         shader: "unlit"
         relative_transform:
@@ -27,7 +28,8 @@ mesh_objects:
         # If parent_object is blank, this object is oriented to the world origin
         parent: ""
 
-    -   name: "cube_x"
+    -   type: "mesh"
+        name: "cube_x"
         meshfile: ""
         texture: "resources/textures/awesomeface.png"
         shader: "normal"
@@ -37,7 +39,8 @@ mesh_objects:
             scale: [0.5, 0.5, 0.5]
         parent: "cube_center"
 
-    -   name: "cube_z"
+    -   type: "mesh"
+        name: "cube_z"
         meshfile: ""
         shader: "normal"
         texture: "resources/textures/awesomeface.png"
@@ -47,7 +50,8 @@ mesh_objects:
             scale: [0.5, 0.5, 0.5]
         parent: "cube_center"
 
-    -   name: "camera_cube"
+    -   type: "mesh"
+        name: "camera_cube"
         meshfile: ""
         # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
         texture: "resources/textures/awesomeface.png"
@@ -59,9 +63,9 @@ mesh_objects:
         # If parent_object is blank, this object is oriented to the world origin
         parent: ""
 
-camera_objects:
-    # By default, the gameengine will choose the 1st camera as the main camera
-    -   name: "default_camera"
+    # By default, the gameengine will choose the 1st-listed camera as the main camera
+    -   type: "camera"
+        name: "default_camera"
         fov_y: 45.0
         arm_length: 5.0
         arm_angle: [30.0, 90.0]

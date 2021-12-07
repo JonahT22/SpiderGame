@@ -1,5 +1,6 @@
 #include "Mesh.h"
 
+#include <cassert>
 #include <iostream>
 
 #include "ShaderProgram.h"
@@ -18,7 +19,7 @@ Mesh::~Mesh() {
 
 void Mesh::LoadMesh(const std::string& filename, const bool use_EBO) {
 	std::cerr << "ERROR: Mesh::LoadMesh() is not yet implemented!" << std::endl;
-	abort();
+	assert(0);
 
 	/* ----- Load vertex data from file ----- */
 

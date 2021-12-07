@@ -96,47 +96,30 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	// Keep a (temporary) mapping from object names to their pointers, for setting
 	//   parent-child relationships when loading SceneObjects
 	std::unordered_map<std::string, std::shared_ptr<SceneObject> > object_name_map;
-
-	// Load Meshes
-	assert(YAML::DoesMapHaveSequence(full_scene, "mesh_objects"));
-	YAML::Node meshes = full_scene["mesh_objects"];
-	// Read every mesh from the sequence
-	for (size_t i = 0; i < meshes.size(); ++i) {
-		std::string mesh_name = YAML::GetMapVal<std::string>(meshes[i], "name");
-		auto new_mesh = std::make_shared<Mesh>(engineRef, mesh_name);
-		// Load the mesh file, or make the default cube if none is provided
-		std::string mesh_filename = YAML::GetMapVal<std::string>(meshes[i], "meshfile");
-		if (mesh_filename == "") {
-			new_mesh->GenerateCubeMesh();
+	assert(YAML::DoesMapHaveSequence(full_scene, "scene_objects"));
+	YAML::Node objects = full_scene["scene_objects"];
+	// Keep track of which camera is the first to be loaded (set as the main cam by default)
+	bool first_camera = true;
+	// Read every SceneObject from the sequence
+	for (size_t i = 0; i < objects.size(); ++i) {
+		std::shared_ptr<SceneObject> new_object;
+		std::string object_type = YAML::GetMapVal<std::string>(objects[i], "type");
+		if (object_type == "mesh") {
+			new_object = LoadMesh(objects[i]);
+		}
+		else if (object_type == "camera") {
+			new_object = LoadCamera(objects[i], first_camera);
+			first_camera = false;
 		}
 		else {
-			new_mesh->LoadMesh(mesh_filename);
+			std::cerr << "ERROR: Unhandled SceneObject type found while reading scene: ";
+			std::cerr << object_type << std::endl;
+			// TODO: test this
+			new_object = std::make_shared<SceneObject>(engineRef,
+				YAML::GetMapVal<std::string>(objects[i], "name"));
 		}
-		new_mesh->LoadTexture(YAML::GetMapVal<std::string>(meshes[i], "texture"));
-
 		// Once the mesh-specific stuff is loaded, load the rest of the SceneObject properties
-		LoadSceneObject(meshes[i], new_mesh, object_name_map);
-	}
-
-	// Load Cameras
-	assert(YAML::DoesMapHaveSequence(full_scene, "camera_objects"));
-	YAML::Node cameras = full_scene["camera_objects"];
-	// Read every camera from the sequence
-	for (size_t i = 0; i < cameras.size(); ++i) {
-		std::string camera_name = YAML::GetMapVal<std::string>(cameras[i], "name");
-		auto new_camera = std::make_shared<Camera>(engineRef, camera_name);
-		new_camera->SetAspectRatio(engineRef.lock()->GetWindow()->GetAspect());
-		new_camera->SetFovDegrees(YAML::GetMapVal<float>(cameras[i], "fov_y"));
-		new_camera->SetArmLength(YAML::GetMapVal<float>(cameras[i], "arm_length"));
-		new_camera->SetArmAngleDegrees(YAML::GetMapVal<glm::vec2>(cameras[i], "arm_angle"));
-
-		if (i == 0) {
-			// By default, the GameEngine selects the first-listed camera as the main camera
-			engineRef.lock()->SetCurrentCamera(new_camera);
-		}
-
-		// Once the camera-specific stuff is loaded, load the rest of the SceneObject properties
-		LoadSceneObject(cameras[i], new_camera, object_name_map);
+		LoadSceneObject(objects[i], new_object, object_name_map);
 	}
 
 	/* ----- Load the Skybox ----- */
@@ -160,14 +143,44 @@ void Scene::LoadSceneFile(const std::string& filename) {
 
 	} // End try block
 	catch (std::exception& e) {
-		std::cerr << "ERROR::YAML parsing exception: " << e.what() << std::endl;
+		std::cerr << "ERROR - YAML parsing exception: " << e.what() << std::endl;
 	}
 
 	/* ----- Propagate parent-child transforms through the object hierarchy ----- */
 	UpdateScenePhysics();
 }
 
-void Scene::LoadSceneObject(const YAML::Node object_node,
+inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
+	std::string mesh_name = YAML::GetMapVal<std::string>(mesh_node, "name");
+	auto mesh_object = std::make_shared<Mesh>(engineRef, mesh_name);
+	// Load the mesh file, or make the default cube if none is provided
+	std::string mesh_filename = YAML::GetMapVal<std::string>(mesh_node, "meshfile");
+	if (mesh_filename == "") {
+		mesh_object->GenerateCubeMesh();
+	}
+	else {
+		mesh_object->LoadMesh(mesh_filename);
+	}
+	mesh_object->LoadTexture(YAML::GetMapVal<std::string>(mesh_node, "texture"));
+	return mesh_object;
+}
+
+inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, bool is_first) {
+	std::string camera_name = YAML::GetMapVal<std::string>(camera_node, "name");
+	auto new_camera = std::make_shared<Camera>(engineRef, camera_name);
+	new_camera->SetAspectRatio(engineRef.lock()->GetWindow()->GetAspect());
+	new_camera->SetFovDegrees(YAML::GetMapVal<float>(camera_node, "fov_y"));
+	new_camera->SetArmLength(YAML::GetMapVal<float>(camera_node, "arm_length"));
+	new_camera->SetArmAngleDegrees(YAML::GetMapVal<glm::vec2>(camera_node, "arm_angle"));
+
+	if (is_first) {
+		// By default, the GameEngine selects the first-listed camera as the main camera
+		engineRef.lock()->SetCurrentCamera(new_camera);
+	}
+	return new_camera;
+}
+
+void Scene::LoadSceneObject(const YAML::Node& object_node,
                             const std::shared_ptr<SceneObject>& new_object,
                             std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map) {
 	// Load the transform as a single map object
