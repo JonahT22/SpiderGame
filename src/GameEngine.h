@@ -30,22 +30,21 @@ class GameEngine : public std::enable_shared_from_this<GameEngine> {
 public:
 	GameEngine(const GameOptions options);
 	~GameEngine();
-	
-	// Getters
+
+	void SetupScene(const std::string& filename);
+	void RenderScene(GLfloat delta_time) const;
+
+	/* ----- Input events (from the mainWindow) ----- */
+	void InputMoveCamera(glm::vec2 motion) const;
+	void UpdateCameraAspect(const float new_aspect) const;
+
+	/* ----- Getters ----- */
 	const std::unique_ptr<Window>& GetWindow() const;
 	std::shared_ptr<Camera> GetMainCamera();
 	bool IsWindowOpen() const;
 
-	// Setters
+	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
-
-	// Input events (from the mainWindow)
-	void InputMoveCamera(glm::vec2 motion) const;
-	void UpdateCameraAspect(const float new_aspect) const;
-
-	// Other Functions
-	void SetupScene(const std::string& filename);
-	void RenderScene(GLfloat delta_time) const;
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */

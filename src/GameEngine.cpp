@@ -60,6 +60,45 @@ GameEngine::~GameEngine() {
 	glfwTerminate();
 }
 
+void GameEngine::SetupScene(const std::string& filename) {
+	// Load the scene geometry from the file, which should also create the character
+	//   and place it at the start location. Then, get a ref to the player's camera
+	//   from the scene and hook up the window's input events to the character
+	// TODO: might be useful to have a "playercontroller" class that has a
+	//   "control rotation" and "control velocity" inputs that the camera & 
+	//   character reference for their functions
+
+	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
+	scene->LoadSceneFile(filename);
+}
+
+void GameEngine::RenderScene(GLfloat delta_time) const {
+	// Clear the color & depth buffers 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
+	//   timestep
+	scene->UpdateScenePhysics();
+	scene->RenderScene();
+
+	// Swap OpenGL buffers
+	glfwSwapBuffers(mainWindow->GetGLFWWindow()); // swap the color buffers
+	// Check if any events been triggered
+	glfwPollEvents();
+}
+
+void GameEngine::InputMoveCamera(glm::vec2 motion) const {
+	if (!cameraRef.expired()) {
+		cameraRef.lock()->ApplyRotationInput(motion);
+	}
+}
+
+void GameEngine::UpdateCameraAspect(const float new_aspect) const {
+	if (!cameraRef.expired()) {
+		cameraRef.lock()->SetAspectRatio(new_aspect);
+	}
+}
+
 const std::unique_ptr<Window>& GameEngine::GetWindow() const {
 	return mainWindow;
 }
@@ -84,43 +123,4 @@ bool GameEngine::IsWindowOpen() const {
 
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
-}
-
-void GameEngine::InputMoveCamera(glm::vec2 motion) const {
-	if (!cameraRef.expired()) {
-		cameraRef.lock()->ApplyRotationInput(motion);
-	}
-}
-
-void GameEngine::UpdateCameraAspect(const float new_aspect) const {
-	if (!cameraRef.expired()) {
-		cameraRef.lock()->SetAspectRatio(new_aspect);
-	}
-}
-
-void GameEngine::SetupScene(const std::string& filename) {
-	// Load the scene geometry from the file, which should also create the character
-	//   and place it at the start location. Then, get a ref to the player's camera
-	//   from the scene and hook up the window's input events to the character
-	// TODO: might be useful to have a "playercontroller" class that has a
-	//   "control rotation" and "control velocity" inputs that the camera & 
-	//   character reference for their functions
-
-	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
-	scene->LoadSceneFile(filename);
-}
-
-void GameEngine::RenderScene(float delta_time) const {
-	// Clear the color & depth buffers 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// TODO: UpdateScenePhysics should behave as a fixedUpdate, running on a consistent
-	//   timestep
-	scene->UpdateScenePhysics();
-	scene->RenderScene();
-
-	// Swap OpenGL buffers
-	glfwSwapBuffers(mainWindow->GetGLFWWindow()); // swap the color buffers
-	// Check if any events been triggered
-	glfwPollEvents();
 }

@@ -19,6 +19,7 @@ public:
 	       const GameEngine* owner);
 	~Window() = default;
 
+	/* ----- User Input Events ----- */
 	// Called when the user changes the window size
 	void ResizeEvent(int width, int height);
 	// Called when any keyboard input is recieved. Use this for inputs from physical
@@ -34,6 +35,7 @@ public:
 	// Called when the user focuses/unfocuses on this window
 	void FocusEvent(int focused);
 
+	/* ----- Getters ----- */
 	GLFWwindow* GetGLFWWindow() const;
 	float GetAspect() const;
 

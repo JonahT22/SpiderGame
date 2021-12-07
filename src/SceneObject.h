@@ -17,6 +17,11 @@ public:
 	SceneObject(std::weak_ptr<GameEngine> engine, const std::string& name);
 	~SceneObject() = default;
 
+	// Find this object's (world) model mtx and iterate recursively to update child matrices
+	virtual void PhysicsUpdate();
+	// Draw this object, and ONLY this object. Do not draw children
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
+
 	/* ----- Getters ----- */
 	const glm::mat4& GetWorldTransformMtx() const;
 	const glm::vec3& GetRelativeLocation() const;
@@ -33,12 +38,6 @@ public:
 	void SetRelativeRotationDegrees(const glm::vec3 euler_rot);
 	void SetRelativeScale(const glm::vec3 scale);
 	void SetRelativeTransform(const Transform& transform);
-
-	/* ----- Other Functions ----- */
-	// Find this object's (world) model mtx and iterate recursively to update child matrices
-	virtual void PhysicsUpdate();
-	// Draw this object, and ONLY this object. Do not draw children
-	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
 
 protected:
 	// Name of this object, for debugging and parenting on construction

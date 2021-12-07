@@ -20,20 +20,20 @@ public:
 	virtual void PhysicsUpdate() override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
-	// Getters
+	/* ----- Player Inputs ----- */
+	void ApplyRotationInput(const glm::vec2& input);
+
+	/* ----- Getters ----- */
 	const glm::mat4& GetProjectionMtx() const;
 	const glm::mat4& GetViewMtx() const;
 
-	// Setters
+	/* ----- Setters ----- */
 	void SetFovDegrees(const float new_fov);
 	void SetFovRadians(const float new_fov);
 	void SetAspectRatio(const float new_aspect);
 	void SetArmLength(const float new_length);
 	void SetArmAngleDegrees(const glm::vec2 new_angle);
 	void SetArmAngleRadians(const glm::vec2 new_angle);
-
-	// Player Inputs
-	void ApplyRotationInput(const glm::vec2& input);
 
 private:
 	// Vertical FOV of the camera in radians

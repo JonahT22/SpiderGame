@@ -11,60 +11,6 @@ SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& na
 	objectName(name)
 {}
 
-const glm::mat4& SceneObject::GetWorldTransformMtx() const {
-	return modelMtx;
-}
-
-const glm::vec3& SceneObject::GetRelativeLocation() const {
-	return rootTransform.loc;
-}
-
-const glm::quat& SceneObject::GetRelativeRotation() const {
-	return rootTransform.rot;
-}
-
-const glm::vec3& SceneObject::GetRelativeScale() const {
-	return rootTransform.scale;
-}
-
-const std::string& SceneObject::GetName() const {
-	return objectName;
-}
-
-const std::weak_ptr<SceneObject>& SceneObject::GetParent() const {
-	return parent;
-}
-
-void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
-	childObjects.emplace_back(new_object);
-	// Pass a weak reference to the new child
-	new_object.lock()->SetParent(enable_shared_from_this::weak_from_this());
-}
-
-void SceneObject::SetParent(std::weak_ptr<SceneObject> new_parent) {
-	parent = new_parent;
-}
-
-void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
-	rootTransform.loc = loc;
-}
-
-void SceneObject::SetRelativeRotation(const glm::quat rot) {
-	rootTransform.rot = rot; 
-}
-
-void SceneObject::SetRelativeRotationDegrees(const glm::vec3 euler_rot) {
-	rootTransform.rot = Transform::EulerToQuat(glm::radians(euler_rot));
-}
-
-void SceneObject::SetRelativeScale(const glm::vec3 scale) {
-	rootTransform.scale = scale;
-}
-
-void SceneObject::SetRelativeTransform(const Transform& transform) {
-	rootTransform = transform;
-}
-
 void SceneObject::PhysicsUpdate() {
 	// Find this object's local -> world transform using the parent's transform
 	if (!parent.expired()) {
@@ -123,4 +69,58 @@ void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	else {
 		std::cerr << "ERROR: Invalid engineRef access in SceneObject!" << std::endl;
 	}
+}
+
+const glm::mat4& SceneObject::GetWorldTransformMtx() const {
+	return modelMtx;
+}
+
+const glm::vec3& SceneObject::GetRelativeLocation() const {
+	return rootTransform.loc;
+}
+
+const glm::quat& SceneObject::GetRelativeRotation() const {
+	return rootTransform.rot;
+}
+
+const glm::vec3& SceneObject::GetRelativeScale() const {
+	return rootTransform.scale;
+}
+
+const std::string& SceneObject::GetName() const {
+	return objectName;
+}
+
+const std::weak_ptr<SceneObject>& SceneObject::GetParent() const {
+	return parent;
+}
+
+void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
+	childObjects.emplace_back(new_object);
+	// Pass a weak reference to the new child
+	new_object.lock()->SetParent(enable_shared_from_this::weak_from_this());
+}
+
+void SceneObject::SetParent(std::weak_ptr<SceneObject> new_parent) {
+	parent = new_parent;
+}
+
+void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
+	rootTransform.loc = loc;
+}
+
+void SceneObject::SetRelativeRotation(const glm::quat rot) {
+	rootTransform.rot = rot; 
+}
+
+void SceneObject::SetRelativeRotationDegrees(const glm::vec3 euler_rot) {
+	rootTransform.rot = Transform::EulerToQuat(glm::radians(euler_rot));
+}
+
+void SceneObject::SetRelativeScale(const glm::vec3 scale) {
+	rootTransform.scale = scale;
+}
+
+void SceneObject::SetRelativeTransform(const Transform& transform) {
+	rootTransform = transform;
 }

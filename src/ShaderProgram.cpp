@@ -15,57 +15,6 @@ ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(programID);
 }
 
-GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) const {
-	// Check that this shader is active in the opengl context
-	GLint current_program;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
-	if (programID != (GLuint)current_program) {
-		std::cerr << "ERROR: Attempted to get a uniform from a non-activated shader!";
-		std::cerr << std::endl;
-		return -1;
-	}
-
-	// Check that the uniform's name exists on the shader
-	GLint location = glGetUniformLocation(programID, name);
-	if (location < 0) {
-		if (verbose) {
-			std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
-			std::cerr << std::endl;
-		}
-		return -1;
-	}
-
-	return location;
-}
-
-bool ShaderProgram::IsShaderActive() const {
-	GLint current_program;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
-	return (current_program == programID);
-}
-
-const std::string ShaderProgram::GetShaderName() const {
-	return shaderName;
-}
-
-void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value,
-                                  bool verbose) {
-	GLint location = GetUniform(name, verbose);
-	glUniform1i(location, value);
-}
-
-void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value,
-                                    bool verbose) {
-	GLint location = GetUniform(name, verbose);
-	glUniform1f(location, value);
-}
-
-void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix,
-                                   bool verbose) {
-	GLint location = GetUniform(name, verbose);
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-}
-
 void ShaderProgram::Compile(const std::string& vert_path, const std::string& frag_path) {
 	/* ----- Get the shader source code ----- */
 	// Open the shader files
@@ -136,4 +85,55 @@ void ShaderProgram::Activate() {
 
 void ShaderProgram::Deactivate() {
 	glUseProgram(0);
+}
+
+GLint ShaderProgram::GetUniform(const GLchar* name, bool verbose) const {
+	// Check that this shader is active in the opengl context
+	GLint current_program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
+	if (programID != (GLuint)current_program) {
+		std::cerr << "ERROR: Attempted to get a uniform from a non-activated shader!";
+		std::cerr << std::endl;
+		return -1;
+	}
+
+	// Check that the uniform's name exists on the shader
+	GLint location = glGetUniformLocation(programID, name);
+	if (location < 0) {
+		if (verbose) {
+			std::cerr << "ERROR: Uniform \"" << name << "\" does not exist in shader!";
+			std::cerr << std::endl;
+		}
+		return -1;
+	}
+
+	return location;
+}
+
+bool ShaderProgram::IsShaderActive() const {
+	GLint current_program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
+	return (current_program == programID);
+}
+
+const std::string ShaderProgram::GetShaderName() const {
+	return shaderName;
+}
+
+void ShaderProgram::SetIntUniform(const GLchar* name, const GLint value,
+                                  bool verbose) {
+	GLint location = GetUniform(name, verbose);
+	glUniform1i(location, value);
+}
+
+void ShaderProgram::SetFloatUniform(const GLchar* name, const GLfloat value,
+                                    bool verbose) {
+	GLint location = GetUniform(name, verbose);
+	glUniform1f(location, value);
+}
+
+void ShaderProgram::SetMat4Uniform(const GLchar* name, const glm::mat4& matrix,
+                                   bool verbose) {
+	GLint location = GetUniform(name, verbose);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

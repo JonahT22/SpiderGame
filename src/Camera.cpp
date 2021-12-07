@@ -25,6 +25,25 @@ void Camera::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	//   camera if it's the main camera being referenced by the GameEngine
 }
 
+void Camera::ApplyRotationInput(const glm::vec2& input) {
+	// Note: inputs are provided in screen-space
+	//   So, x-inputs should rotate around the y (vertical) axis, and
+	//   y-inputs should rotate around the x (horizontal) axis
+	// Also, subtract the inputs so that positive mouse inputs result in
+	//   CCW (negative) rotations
+	armAngle.y -= input.x * rotSpeed;
+	armAngle.x -= input.y * rotSpeed;
+
+	// Clamp vertical rotations
+	if (armAngle.x >= maxVerticalAngle) {
+		armAngle.x = maxVerticalAngle;
+	}
+	else if (armAngle.x <= -1.0f * maxVerticalAngle) {
+		armAngle.x = -1.0f * maxVerticalAngle;
+	}
+	UpdateViewMtx();
+}
+
 const glm::mat4& Camera::GetProjectionMtx() const {
 	return projectionMtx;
 }
@@ -61,25 +80,6 @@ void Camera::SetArmAngleDegrees(const glm::vec2 new_angle) {
 
 void Camera::SetArmAngleRadians(const glm::vec2 new_angle) {
 	armAngle = new_angle;
-	UpdateViewMtx();
-}
-
-void Camera::ApplyRotationInput(const glm::vec2& input) {
-	// Note: inputs are provided in screen-space
-	//   So, x-inputs should rotate around the y (vertical) axis, and
-	//   y-inputs should rotate around the x (horizontal) axis
-	// Also, subtract the inputs so that positive mouse inputs result in
-	//   CCW (negative) rotations
-	armAngle.y -= input.x * rotSpeed;
-	armAngle.x -= input.y * rotSpeed;
-
-	// Clamp vertical rotations
-	if (armAngle.x >= maxVerticalAngle) {
-		armAngle.x = maxVerticalAngle;
-	}
-	else if (armAngle.x <= -1.0f * maxVerticalAngle) {
-		armAngle.x = -1.0f * maxVerticalAngle;
-	}
 	UpdateViewMtx();
 }
 
