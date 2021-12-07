@@ -7,13 +7,19 @@
 #include "GameEngine.h"
 
 
-int main() {
+int main(int argc, char** argv) {
+	if (argc != 2) {
+		std::cerr << "Usage: <SCENE_FILE>" << std::endl;
+		return 1;
+	}
+	char* scene_file = argv[1];
+
 	/* ----- Create the game instance & main rendering window ----- */
 	GameOptions game_options{ 800, 600, "Spider Game" };
 	auto spider_game = std::make_shared<GameEngine>(game_options);
 
 	/* ----- Load the Scene Geometry ----- */
-	spider_game->SetupScene("resources/scenes/testscene.yaml");
+	spider_game->SetupScene(scene_file);
 
 	/* ----- Render Loop ----- */
 	GLfloat prev_time = glfwGetTime();
