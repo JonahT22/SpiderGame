@@ -4,10 +4,6 @@
 
 #include "stb_image.h"
 
-Texture::Texture() :
-	textureID(0) 
-{}
-
 void Texture::LoadFromFile(const std::string& filename) {
 	// TODO: eventually, this should be read from the scene configuration file. For now,
 	//   just hardcode the texture options

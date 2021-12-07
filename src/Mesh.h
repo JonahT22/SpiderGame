@@ -29,19 +29,19 @@ private:
 	void SetupVertexArray();
 
 	// Vertex Array Object - holds the mappings between buffers and attributes
-	GLuint vertexArrayID;
+	GLuint vertexArrayID = 0;
 
 	// Vertex Buffer Objects - Stores raw vertex data
 	// Note: all vertex data is currently stored in a single VBO. This is good when
 	//   vertex data doesn't change, but if position data changes often (i.e. cloth sim),
 	//   then keep position/normal & other data in separate VBOs
 	std::vector<GLfloat> vertexBuffer;
-	GLuint vertexBufferID;
+	GLuint vertexBufferID = 0;
 
 	// Element Buffer Object (optional) - Specifies which vertices to use for each triangle
-	bool useEBO;
+	bool useEBO = false;
 	std::vector<GLuint> elementBuffer;
-	GLuint elementBufferID;
+	GLuint elementBufferID = 0;
 
 	// Texture associated with this mesh
 	// Note: for now, every object can have only 1 Texture, and textures cannot be

@@ -37,24 +37,24 @@ public:
 
 private:
 	// Vertical FOV of the camera in radians
-	float fovY;
+	float fovY = glm::radians(45.0);
 	// Closest/Farthest distance that this camera will render
-	float clipNear;
-	float clipFar;
+	float clipNear = 0.1f;
+	float clipFar = 100.0f;
 	// Aspect ratio of the window that is rendering this camera's view (width/height)
-	float aspectRatio;
+	float aspectRatio = 1.0f;
 	// Multiplier applied to mouse inputs
-	float rotSpeed;
+	float rotSpeed = 0.005f;
 	// How far should the camera be from its parent as it rotates?
-	float armLength;
+	float armLength = 5.0f;
 	// Rotation of the camera's arm, relative to the camera's parent
 	//   X = rotation around the camera's parent's RIGHT axis
 	//   Y = rotation around the camera's parent's UP axis
 	// Point the rotation axis away from you, angle+ is CW rotation on the resulting plane
 	//   ex: armAngle.y = pi/4 means it's rotated halfway between +X axis and +Z axis
-	glm::vec2 armAngle;
+	glm::vec2 armAngle = glm::vec2(0.0f);
 	// Maximum value of armAngle.x (must be LESS than pi/2)
-	const float maxVerticalAngle;
+	const float maxVerticalAngle = (glm::pi<float>() / 2.0f) - 0.5f;
 
 	// Store the projection and view matrices on this camera object
 	glm::mat4 projectionMtx;

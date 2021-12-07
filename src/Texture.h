@@ -20,7 +20,7 @@ struct TextureOptions {
 /// 
 class Texture {
 public:
-	Texture();
+	Texture() = default;
 	~Texture() = default;
 
 	void LoadFromFile(const std::string& filename);
@@ -32,6 +32,6 @@ public:
 	bool IsLoaded() const;
 
 private:
-	GLuint textureID;
+	GLuint textureID = 0;
 };
 

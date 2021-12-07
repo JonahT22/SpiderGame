@@ -11,7 +11,7 @@
 /// 
 class ShaderProgram {
 public:
-	ShaderProgram();
+	ShaderProgram() = default;
 	ShaderProgram(const std::string& name);
 	~ShaderProgram();
 	
@@ -35,7 +35,7 @@ public:
 	void Deactivate();
 
 private:
-	const std::string shaderName;
-	GLuint programID;
+	const std::string shaderName = "unnamed_shader";
+	GLuint programID = 0;
 };
 

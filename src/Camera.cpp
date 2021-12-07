@@ -7,16 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Camera::Camera(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name),
-	fovY(glm::radians(45.0)),
-	clipNear(0.1f),
-	clipFar(100.0f),
-	aspectRatio(1.0f),
-	rotSpeed(0.005),
-	armLength(5.0f),
-	armAngle(glm::vec2(0.0f)),
-	maxVerticalAngle((glm::pi<float>() / 2.0) - 0.05)
-{
+	SceneObject(engine, name) {
 	UpdateProjectionMtx();
 	UpdateViewMtx();
 }

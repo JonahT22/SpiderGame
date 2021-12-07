@@ -42,7 +42,7 @@ public:
 
 protected:
 	// Name of this object, for debugging and parenting on construction
-	const std::string objectName;
+	const std::string objectName = "unnamed_object";
 	// Reference to the gameengine that created this object
 	std::weak_ptr<GameEngine> engineRef;
 	// Transform relative to this object's parent

@@ -5,12 +5,7 @@
 #include "ShaderProgram.h"
 
 Mesh::Mesh(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name),
-	vertexArrayID(0),
-	vertexBufferID(0),
-	elementBufferID(0),
-	useEBO(false)
-{
+	SceneObject(engine, name) {
 
 }
 

@@ -6,13 +6,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-ShaderProgram::ShaderProgram() :
-	programID(0),
-	shaderName("unnamed_shader")
-{}
-
 ShaderProgram::ShaderProgram(const std::string& name) :
-	programID(0),
 	shaderName(name)
 {}
 
