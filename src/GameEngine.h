@@ -3,8 +3,7 @@
 #include <memory>
 #include <string>
 
-// Always include glad before glfw
-#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -17,6 +16,7 @@ struct GameOptions {
 	const int windowHeight = 256;
 	const char* windowName = "New Game Window";
 	const glm::vec3 clearColor = glm::vec3(0.1f, 0.1f, 0.1f);
+	const float physicsTimeStep = 1.0f / 60.0f;
 };
 
 ///
@@ -32,7 +32,7 @@ public:
 	~GameEngine();
 
 	void SetupScene(const std::string& filename);
-	void RenderScene(GLfloat delta_time) const;
+	void RenderScene(double delta_time) const;
 
 	/* ----- Input events (from the mainWindow) ----- */
 	void InputMoveCamera(glm::vec2 motion) const;

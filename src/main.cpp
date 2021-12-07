@@ -1,7 +1,7 @@
 // Include order: std library, external libraries, project headers
 #include <memory>
 
-#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include "GameEngine.h"
@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
 	spider_game->SetupScene(scene_file);
 
 	/* ----- Render Loop ----- */
-	GLfloat prev_time = glfwGetTime();
-	GLfloat current_time, delta_time;
+	double prev_time = glfwGetTime();
+	double current_time, delta_time;
 	while (spider_game->IsWindowOpen()) {
 		current_time = glfwGetTime();
 		delta_time = current_time - prev_time;

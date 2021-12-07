@@ -2,8 +2,9 @@
 
 #include <iostream>
 
-#include "Camera.h"
+#include <glad/glad.h>
 
+#include "Camera.h"
 // TODO: I shouldn't need to include these, but for some reason I do
 #include "Skybox.h"
 #include "ShaderProgram.h"
@@ -72,7 +73,7 @@ void GameEngine::SetupScene(const std::string& filename) {
 	scene->LoadSceneFile(filename);
 }
 
-void GameEngine::RenderScene(GLfloat delta_time) const {
+void GameEngine::RenderScene(double delta_time) const {
 	// Clear the color & depth buffers 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
