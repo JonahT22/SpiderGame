@@ -18,15 +18,11 @@ Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}
 
 void Scene::UpdateScenePhysics() {
-	for (auto& object_ref : rootObjects) {
-		if (!object_ref.expired()) {
-			object_ref.lock()->PhysicsUpdate();
-		}
-		else {
-			// Eventually, the rootObjects list should updated whenever SceneObjects are
-			//   removed from the scene. For now, just print an error message
-			std::cerr << "ERROR: null reference to a SceneObject in rootObjects list";
-			std::cerr << "while updating scene physics!" << std::endl;
+	// Iterate over every object in the scene, but disregard the shaders that they
+	//   are attached to
+	for (const ShaderToObjectList& shader_to_object : allObjects) {
+		for (const std::shared_ptr<SceneObject>& object : shader_to_object.second) {
+			object->PhysicsUpdate();
 		}
 	}
 }
@@ -203,11 +199,6 @@ void Scene::LoadSceneObject(const YAML::Node& object_node,
 			std::cerr <<  "\", but \"" << parent_name << "\" has not been read from";
 			std::cerr << "the scene file!" << std::endl;
 		}
-	}
-	else {
-		// If no parent is provided, this object is a root object (a.k.a. it's parented
-		//   to the world origin)
-		rootObjects.emplace_back(new_object);
 	}
 
 	// Every object must be drawn by a shader, so get the shader's name
