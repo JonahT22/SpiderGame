@@ -26,6 +26,19 @@ void Texture::LoadFromFile(const std::string& filename) {
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, num_channels;
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &num_channels, 0);
+	GLenum external_format;
+	switch (num_channels) {
+	case 3:
+		external_format = GL_RGB;
+		break;
+	case 4:
+		external_format = GL_RGBA;
+		break;
+	default:
+		std::cerr << "ERROR: Unhandled number of channels in loaded texture \"" << filename;
+		std::cerr << "\": " << num_channels << std::endl;
+		external_format = GL_RED;
+	}
 	if (data) {
 		// Create the texture object
 		// Arguments:
@@ -42,7 +55,7 @@ void Texture::LoadFromFile(const std::string& filename) {
 		// TODO: external format is currently hardcoded, but should be read from the number
 		//   of channels in the image
 		glTexImage2D(GL_TEXTURE_2D, 0, options.internalFormat, width, height, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, data);
+			external_format, GL_UNSIGNED_BYTE, data);
 		// Let OpenGL create the other mipmaps automatically, instead of calling glTexImage2D for them
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}

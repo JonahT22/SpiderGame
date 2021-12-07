@@ -19,12 +19,25 @@ Skybox::Skybox(const std::string filenames[6]) {
 	int width, height, num_channels;
 	for (size_t i = 0; i < 6; ++i) {
 		unsigned char* data = stbi_load(filenames[i].c_str(), &width, &height, &num_channels, 0);
+		GLenum external_format;
+		switch (num_channels) {
+		case 3:
+			external_format = GL_RGB;
+			break;
+		case 4:
+			external_format = GL_RGBA;
+			break;
+		default:
+			std::cerr << "ERROR: Unhandled number of channels in loaded texture \"";
+			std::cerr << filenames[i] << "\": " << num_channels << std::endl;
+			external_format = GL_RED;
+		}
 		if (data) {
 			// If data was loaded properly, create the texture object. GLenums for the
 			//   different sides of the cubemap are defined sequentially in the following
 			//   order: Right, Left, Top, Bottom, Front, Back
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0,
-						 GL_RGB, GL_UNSIGNED_BYTE, data);
+						 external_format, GL_UNSIGNED_BYTE, data);
 		}
 		else {
 			std::cerr << "ERROR: Failed to load cubemap texture \"" << filenames[i];
