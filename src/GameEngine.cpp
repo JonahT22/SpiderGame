@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Camera.h"
 
 // TODO: I shouldn't need to include these, but for some reason I do

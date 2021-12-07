@@ -1,12 +1,11 @@
 // Include order: std library, external libraries, project headers
 #include <memory>
-#include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 
 #include "GameEngine.h"
+
 
 int main() {
 	/* ----- Create the game instance & main rendering window ----- */
