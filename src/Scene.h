@@ -1,17 +1,17 @@
 #pragma once
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include <yaml-cpp/yaml.h>
 
-class ShaderProgram;
-class Skybox;
-class SceneObject;
 class GameEngine;
 class Mesh;
+class SceneObject;
+class ShaderProgram;
+class Skybox;
 
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level

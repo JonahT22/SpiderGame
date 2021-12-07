@@ -1,11 +1,9 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <glad/glad.h>
-
-class ShaderProgram;
 
 /// 
 /// Stores the cubemap texture and mesh data for a skybox

@@ -1,19 +1,18 @@
 #include "Scene.h"
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <stdexcept>
 
-// TODO: is a full gameengine include necessary?
-#include "GameEngine.h"
-#include "SceneObject.h"
-#include "Skybox.h"
-#include "ShaderProgram.h"
-#include "Texture.h"
-#include "Mesh.h"
 #include "Camera.h"
-#include "YAMLHelper.h"
+#include "GameEngine.h"
+#include "Mesh.h"
+#include "SceneObject.h"
+#include "ShaderProgram.h"
+#include "Skybox.h"
+#include "Texture.h"
 #include "Window.h"
+#include "YAMLHelper.h"
 
 Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}

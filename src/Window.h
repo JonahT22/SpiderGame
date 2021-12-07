@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-// Whenever GLFW is included without GLAD preceding it, it should have this defined
+// Whenever GLFW is included without GLAD preceding it, define GLFW_INCLUDE_NONE first
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>

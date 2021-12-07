@@ -8,12 +8,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-class Window;
+#include "Window.h"
+#include "Scene.h"
 class Camera;
-class ShaderProgram;
-class Skybox;
-struct GLFWwindow;
-class Scene;
 
 struct GameOptions {
 	const int windowWidth = 256;
@@ -48,7 +45,7 @@ public:
 
 	// Other Functions
 	void SetupScene(const std::string& filename);
-	void RenderScene(float delta_time) const;
+	void RenderScene(GLfloat delta_time) const;
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */
