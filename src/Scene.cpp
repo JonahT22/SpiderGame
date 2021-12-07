@@ -42,7 +42,10 @@ void Scene::RenderScene() const {
 		if (shader->GetUniform("P") != -1) {
 			shader->SetMat4Uniform("P", main_camera->GetProjectionMtx());
 		}
-		// TODO: more uniforms, i.e. time
+		float time = glfwGetTime();
+		if (shader->GetUniform("time") != -1) {
+			shader->SetFloatUniform("time", time);
+		}
 
 		// Render every object associated with this shader
 		for (const std::shared_ptr<SceneObject>& object : shader_to_object.second) {
