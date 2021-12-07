@@ -38,8 +38,11 @@ public:
 	void SetRelativeRotationDegrees(const glm::vec3 euler_rot);
 	void SetRelativeScale(const glm::vec3 scale);
 	void SetRelativeTransform(const Transform& transform);
+	void MarkPhysicsDirty();
 
 protected:
+	// Does this object need to update its model matrix on the next physics tick?
+	bool physicsDirty = true;
 	// Name of this object, for debugging and parenting on construction
 	const std::string objectName = "unnamed_object";
 	// Reference to the gameengine that created this object

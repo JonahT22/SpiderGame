@@ -12,25 +12,20 @@ SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& na
 {}
 
 void SceneObject::PhysicsUpdate() {
-	// Find this object's local -> world transform using the parent's transform
-	if (!parent.expired()) {
-		modelMtx = parent.lock()->GetWorldTransformMtx() * rootTransform.GetMatrix();
-	}
-	else {
-		// If this object has no parent, then its relative transform is the same as its
-		//   world transform
-		modelMtx = rootTransform.GetMatrix();
-	}
-
-	// Propagate this object's transformation matrix to its children
-	for (auto& child : childObjects) {
-		if (!child.expired()) {
-			child.lock()->PhysicsUpdate();
+	// Only recalculate model matrix if this object's physics are dirty
+	if (physicsDirty) {
+		std::cout << "Updating physics on " << objectName << std::endl;
+		// Find this object's local -> world transform using the parent's transform
+		if (!parent.expired()) {
+			modelMtx = parent.lock()->GetWorldTransformMtx() * rootTransform.GetMatrix();
 		}
 		else {
-			std::cerr << "ERROR: Attempted to update physics on an invalid child object!";
-			std::cerr << std::endl;
+			// If this object has no parent, then its relative transform is the same as its
+			//   world transform
+			modelMtx = rootTransform.GetMatrix();
 		}
+		// Now that the physics have been updated, this object is no longer dirty
+		physicsDirty = false;
 	}
 }
 
@@ -99,28 +94,50 @@ void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
 	childObjects.emplace_back(new_object);
 	// Pass a weak reference to the new child
 	new_object.lock()->SetParent(enable_shared_from_this::weak_from_this());
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetParent(std::weak_ptr<SceneObject> new_parent) {
 	parent = new_parent;
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetRelativeLocation(const glm::vec3 loc) {
 	rootTransform.loc = loc;
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetRelativeRotation(const glm::quat rot) {
-	rootTransform.rot = rot; 
+	rootTransform.rot = rot;
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetRelativeRotationDegrees(const glm::vec3 euler_rot) {
 	rootTransform.rot = Transform::EulerToQuat(glm::radians(euler_rot));
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetRelativeScale(const glm::vec3 scale) {
 	rootTransform.scale = scale;
+	MarkPhysicsDirty();
 }
 
 void SceneObject::SetRelativeTransform(const Transform& transform) {
 	rootTransform = transform;
+	MarkPhysicsDirty();
+}
+
+void SceneObject::MarkPhysicsDirty() {
+	physicsDirty = true;
+	// If this object is dirty, all of its children are dirty too
+	for (auto& child : childObjects) {
+		if (!child.expired()) {
+			// If this object's physics are dirty, then so are its children's
+			child.lock()->MarkPhysicsDirty();
+		}
+		else {
+			std::cerr << "ERROR: Attempted to mark physics dirty on an invalid child object!";
+			std::cerr << std::endl;
+		}
+	}
 }
