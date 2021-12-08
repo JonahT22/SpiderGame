@@ -34,12 +34,27 @@ public:
 	glm::quat rot;
 	glm::vec3 scale;
 
-	glm::mat4 GetMatrix() {
+	glm::mat4 GetMatrix() const {
 		glm::mat4 M(1.0f);
 		M = glm::translate(M, loc);
 		M *= glm::mat4_cast(rot);
 		M = glm::scale(M, scale);
 		return M;
+	}
+
+	glm::vec3 GetRightVector() const {
+		// Right vector is stored in the 1st column of the rotation matrix
+		return glm::mat4_cast(rot)[0];
+	}
+
+	glm::vec3 GetUpVector() const {
+		// Up vector is stored in the 2nd column of the rotation matrix
+		return glm::mat4_cast(rot)[1];
+	}
+
+	glm::vec3 GetForwardVector() const {
+		// Forward vector is stored in the 3rd column of the rotation matrix
+		return glm::mat4_cast(rot)[2];
 	}
 
 	void AddRotationOffset(const float angle, const glm::vec3& axis) {

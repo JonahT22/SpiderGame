@@ -55,7 +55,7 @@ scene_objects:
         name: "spider_camera"
         fov_y: 45.0
         arm_length: 5.0
-        arm_angle: [30.0, 90.0]
+        arm_angle: [30.0, -90.0]
         # Ideally, there should be a built-in minimal shader that cameras can use
         shader: "unlit"
         relative_transform:
@@ -81,7 +81,7 @@ scene_objects:
         texture: "resources/textures/awesomeface.png"
         shader: "unlit"
         relative_transform:
-            location: [0.2, 0.2, -0.45]
+            location: [0.2, 0.2, 0.45]
             rotation: [0.0, 0.0, 0.0]
             scale: [0.25, 0.25, 0.25]
         parent: "spider"
@@ -92,7 +92,7 @@ scene_objects:
         texture: "resources/textures/awesomeface.png"
         shader: "unlit"
         relative_transform:
-            location: [-0.2, 0.2, -0.45]
+            location: [-0.2, 0.2, 0.45]
             rotation: [0.0, 0.0, 0.0]
             scale: [0.25, 0.25, 0.25]
         parent: "spider"
