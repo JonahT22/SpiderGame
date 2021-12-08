@@ -29,6 +29,11 @@ public:
 		loc(in_loc), rot(EulerToQuat(in_rot)), scale(in_scale) {}
 	~Transform() = default;
 
+	// loc, rot, and scale w.r.t a parent object
+	glm::vec3 loc;
+	glm::quat rot;
+	glm::vec3 scale;
+
 	glm::mat4 GetMatrix() {
 		glm::mat4 M(1.0f);
 		M = glm::translate(M, loc);
@@ -37,10 +42,9 @@ public:
 		return M;
 	}
 
-	// loc, rot, and scale w.r.t a parent object
-	glm::vec3 loc;
-	glm::quat rot;
-	glm::vec3 scale;
+	void AddRotationOffset(const float angle, const glm::vec3& axis) {
+		rot = glm::rotate(rot, angle, axis);
+	}
 
 	friend std::ostream& operator<<(std::ostream& os, const Transform& t);
 private:
