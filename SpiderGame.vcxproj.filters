@@ -63,7 +63,7 @@
     <ClCompile Include="src\SpiderCharacter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LegTarget.cpp">
+    <ClCompile Include="src\IK\LegTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClInclude Include="src\SpiderCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\LegTarget.h">
+    <ClInclude Include="src\IK\LegTarget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

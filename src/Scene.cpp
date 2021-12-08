@@ -9,7 +9,7 @@
 
 #include "Camera.h"
 #include "GameEngine.h"
-#include "LegTarget.h"
+#include "IK/LegTarget.h"
 #include "Mesh.h"
 #include "SceneObject.h"
 #include "ShaderProgram.h"

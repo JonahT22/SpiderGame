@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-#include "GameEngine.h"
+#include "../GameEngine.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name), physicsTimeStep(engine.lock()->GetPhysicsTimeStep()) {}

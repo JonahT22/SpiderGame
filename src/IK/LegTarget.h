@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "SceneObject.h"
+#include "../SceneObject.h"
 class ShaderProgram;
 class GameEngine;
 
