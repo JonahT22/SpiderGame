@@ -1,0 +1,88 @@
+# Note: tabs are not allowed in yaml files, use spaces instead
+# All filepaths are given relative to the root SpiderGame folder
+# Use !!int or !!str to declare a value as specific type
+# Use --- to separate multiple documents in the same file
+
+# List of every shader that will be used in the lifetime of the game
+shaders:
+    -   name: "unlit"
+        vert: "resources/shaders/unlit_vert.glsl"
+        frag: "resources/shaders/unlit_frag.glsl"
+
+    -   name: "normal"
+        vert: "resources/shaders/normal_vert.glsl"
+        frag: "resources/shaders/normal_frag.glsl"
+
+scene_objects:
+    -   type: "mesh"
+        name: "cube_center"
+        # If no meshfile is given, a simple cube will be loaded for the object
+        meshfile: ""
+        texture: "resources/textures/wall.jpg"
+        # shader, relative_transform, and parent are inherited from SceneObject
+        shader: "unlit"
+        relative_transform:
+            location: [1.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        # If parent_object is blank, this object is oriented to the world origin
+        parent: ""
+
+    -   type: "mesh"
+        name: "cube_x"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        shader: "normal"
+        relative_transform:
+            location: [1.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.5, 0.5, 0.5]
+        parent: "cube_center"
+
+    -   type: "mesh"
+        name: "cube_z"
+        meshfile: ""
+        shader: "normal"
+        texture: "resources/textures/awesomeface.png"
+        relative_transform:
+            location: [0.0, 0.0, 1.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.5, 0.5, 0.5]
+        parent: "cube_center"
+
+    -   type: "mesh"
+        name: "camera_cube"
+        meshfile: ""
+        # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
+        texture: "resources/textures/awesomeface.png"
+        shader: "unlit"
+        relative_transform:
+            location: [-1.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        # If parent_object is blank, this object is oriented to the world origin
+        parent: ""
+
+    # By default, the gameengine will choose the 1st-listed camera as the main camera
+    -   type: "camera"
+        name: "default_camera"
+        fov_y: 45.0
+        arm_length: 5.0
+        arm_angle: [30.0, 90.0]
+        # Ideally, there should be a built-in minimal shader that cameras can use
+        shader: "unlit"
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "camera_cube"
+
+skybox:
+    vert: "resources/shaders/skybox_vert.glsl"
+    frag: "resources/shaders/skybox_frag.glsl"
+    right: "resources/textures/skybox2/right.png"
+    left: "resources/textures/skybox2/left.png"
+    top: "resources/textures/skybox2/top.png"
+    bottom: "resources/textures/skybox2/bottom.png"
+    front: "resources/textures/skybox2/front.png"
+    back: "resources/textures/skybox2/back.png"
