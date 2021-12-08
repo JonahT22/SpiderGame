@@ -127,16 +127,18 @@ void SceneObject::SetRelativeTransform(const Transform& transform) {
 }
 
 void SceneObject::MarkPhysicsDirty() {
-	physicsDirty = true;
-	// If this object is dirty, all of its children are dirty too
-	for (auto& child : childObjects) {
-		if (!child.expired()) {
-			// If this object's physics are dirty, then so are its children's
-			child.lock()->MarkPhysicsDirty();
-		}
-		else {
-			std::cerr << "ERROR: Attempted to mark physics dirty on an invalid child object!";
-			std::cerr << std::endl;
+	// If this object is already marked as dirty, there's no need to re-mark it
+	if (!physicsDirty) {
+		physicsDirty = true;
+		// If this object is dirty, all of its children are dirty too
+		for (auto& child : childObjects) {
+			if (!child.expired()) {
+				child.lock()->MarkPhysicsDirty();
+			}
+			else {
+				std::cerr << "ERROR: Attempted to mark physics dirty on an invalid ";
+				std::cerr << "child object!" << std::endl;
+			}
 		}
 	}
 }
