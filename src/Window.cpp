@@ -5,7 +5,7 @@
 #include "GameEngine.h"
 
 Window::Window(const int width, const int height, const char* title,
-               const GameEngine* owner) : owningGame(owner) {
+               const GameEngine* owner) : engineRef(engine) {
 	// Note: GLFW should be initialized at this point, and do NOT call any OpenGL functions
 	//   in this constructor since the GameEngine hasn't yet initialized GLAD
 
@@ -38,8 +38,8 @@ Window::Window(const int width, const int height, const char* title,
 void Window::ResizeEvent(int width, int height) {
 	// First params set the location of the lower left corner, next 2 set the width/height
 	glViewport(0, 0, width, height);
-	if (owningGame != nullptr) {
-		owningGame->UpdateCameraAspect(width / (float)height);
+	if (engineRef != nullptr) {
+		engineRef->UpdateCameraAspect(width / (float)height);
 	}
 	else {
 		std::cerr << "ERROR: Invalid GameEngine ref on window object!";
@@ -62,9 +62,9 @@ void Window::CursorPosEvent(double x_pos, double y_pos) {
 	// Note: This cursor position event will still be called even if the window isn't
 	//   in focus, so check whether the cursor is captured first
 	if (cursorCaptured) {
-		if (owningGame != nullptr) {
+		if (engineRef != nullptr) {
 			glm::vec2 new_pos(x_pos, y_pos);
-			owningGame->InputMoveCamera(new_pos - mousePos);
+			engineRef->InputMoveCamera(new_pos - mousePos);
 			mousePos = new_pos;
 		}
 		else {
