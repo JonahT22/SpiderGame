@@ -26,6 +26,18 @@ void SceneObject::PhysicsUpdate() {
 		// Now that the physics have been updated, this object is no longer dirty
 		physicsDirty = false;
 	}
+
+	// Update the physics of children - this lets any new physics changes to parents be
+	//   immediately propagated to children
+	for (auto& child : childObjects) {
+		if (!child.expired()) {
+			child.lock()->PhysicsUpdate();
+		}
+		else {
+			std::cerr << "ERROR: Attempted to update physics on an invalid ";
+			std::cerr << "child object!" << std::endl;
+		}
+	}
 }
 
 void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
