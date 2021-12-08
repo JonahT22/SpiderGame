@@ -75,6 +75,28 @@ scene_objects:
             scale: [0.5, 0.5, 1.0]
         parent: "spider"
 
+    -   type: "mesh"
+        name: "spider_eye_right"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        shader: "unlit"
+        relative_transform:
+            location: [0.2, 0.2, -0.45]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.25, 0.25, 0.25]
+        parent: "spider"
+
+    -   type: "mesh"
+        name: "spider_eye_left"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        shader: "unlit"
+        relative_transform:
+            location: [-0.2, 0.2, -0.45]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.25, 0.25, 0.25]
+        parent: "spider"
+
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
     frag: "resources/shaders/skybox_frag.glsl"
