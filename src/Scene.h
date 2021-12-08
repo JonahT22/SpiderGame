@@ -13,6 +13,7 @@ class Mesh;
 class SceneObject;
 class ShaderProgram;
 class Skybox;
+class SpiderCharacter;
 
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level
@@ -35,6 +36,8 @@ private:
 	// Creates a camera object and loads any camera-specific parameters
 	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
 	                                          bool is_first = false);
+	// Creates a spider object and loads any spider-specific parameters
+	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
 	//   handles object parenting and adds the object to the scene
 	void LoadSceneObject(const YAML::Node& object_node,

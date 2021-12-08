@@ -13,6 +13,7 @@
 #include "SceneObject.h"
 #include "ShaderProgram.h"
 #include "Skybox.h"
+#include "SpiderCharacter.h"
 #include "Texture.h"
 #include "Window.h"
 #include "YAMLHelper.h"
@@ -122,6 +123,9 @@ void Scene::LoadSceneFile(const std::string& filename) {
 			new_object = LoadCamera(objects[i], first_camera);
 			first_camera = false;
 		}
+		else if (object_type == "spider") {
+			new_object = LoadSpider(objects[i]);
+		}
 		else {
 			std::cerr << "ERROR: Unhandled SceneObject type found while reading scene: ";
 			std::cerr << object_type << std::endl;
@@ -189,6 +193,13 @@ inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, 
 		engineRef.lock()->SetCurrentCamera(new_camera);
 	}
 	return new_camera;
+}
+
+inline std::shared_ptr<SpiderCharacter> Scene::LoadSpider(const YAML::Node& spider_node) {
+	// TODO: add more parameters for the spider
+	std::string spider_name = YAML::GetMapVal<std::string>(spider_node, "name");
+	auto new_spider = std::make_shared<SpiderCharacter>(engineRef, spider_name);
+	return new_spider;
 }
 
 void Scene::LoadSceneObject(const YAML::Node& object_node,
