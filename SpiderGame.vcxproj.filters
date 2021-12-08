@@ -133,5 +133,8 @@
     <None Include="resources\scenes\testscene.yaml">
       <Filter>Resource Files\Scenes</Filter>
     </None>
+    <None Include="resources\scenes\demoscene.yaml">
+      <Filter>Resource Files\Scenes</Filter>
+    </None>
   </ItemGroup>
 </Project>
