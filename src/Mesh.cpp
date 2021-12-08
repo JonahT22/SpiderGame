@@ -17,6 +17,8 @@ Mesh::~Mesh() {
 	glDeleteBuffers(1, &elementBufferID);
 }
 
+void Mesh::BeginPlay() {}
+
 void Mesh::LoadMesh(const std::string& filename, const bool use_EBO) {
 	std::cerr << "ERROR: Mesh::LoadMesh() is not yet implemented!" << std::endl;
 	assert(0);

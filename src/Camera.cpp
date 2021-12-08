@@ -12,6 +12,8 @@ Camera::Camera(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	UpdateViewMtx();
 }
 
+void Camera::BeginPlay() {}
+
 void Camera::PhysicsUpdate() {
 	// Do the same as the SceneObject physicsupdate, but also update the view
 	//   matrix afterward to get any updates to this camera's transform

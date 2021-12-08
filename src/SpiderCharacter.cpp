@@ -9,8 +9,10 @@
 #include "Transform.h"
 
 SpiderCharacter::SpiderCharacter(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name) {
+	SceneObject(engine, name) {}
 
+void SpiderCharacter::BeginPlay() {
+	// TODO: Get references to relevant child objects
 }
 
 void SpiderCharacter::PhysicsUpdate() {

@@ -129,9 +129,7 @@ void Scene::LoadSceneFile(const std::string& filename) {
 		else {
 			std::cerr << "ERROR: Unhandled SceneObject type found while reading scene: ";
 			std::cerr << object_type << std::endl;
-			// TODO: test this
-			new_object = std::make_shared<SceneObject>(engineRef,
-				YAML::GetMapVal<std::string>(objects[i], "name"));
+			abort();
 		}
 		// Once the mesh-specific stuff is loaded, load the rest of the SceneObject properties
 		LoadSceneObject(objects[i], new_object, object_name_map);
@@ -159,6 +157,13 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	} // End try block
 	catch (std::exception& e) {
 		std::cerr << "ERROR - YAML parsing exception: " << e.what() << std::endl;
+	}
+
+	// Once all of the Scene Objects are created, run BeginPlay on all objects
+	for (const ShaderToObjectList& shader_to_object : allObjects) {
+		for (const std::shared_ptr<SceneObject>& object : shader_to_object.second) {
+			object->BeginPlay();
+		}
 	}
 
 	/* ----- Propagate parent-child transforms through the object hierarchy ----- */

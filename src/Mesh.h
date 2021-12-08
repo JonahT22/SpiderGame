@@ -16,6 +16,9 @@ public:
 	Mesh(std::weak_ptr<GameEngine> engine, const std::string& name);
 	~Mesh();
 
+	// Inherited from SceneObject
+	virtual void BeginPlay() override;
+
 	// Load mesh data into buffer vectors
 	void LoadMesh(const std::string& filename, const bool use_EBO = false);
 	// Create a hardcoded cube for testing

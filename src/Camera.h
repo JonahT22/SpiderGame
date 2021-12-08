@@ -17,6 +17,7 @@ public:
 	~Camera() = default;
 
 	// Override functions from SceneObject class
+	virtual void BeginPlay() override;
 	virtual void PhysicsUpdate() override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
