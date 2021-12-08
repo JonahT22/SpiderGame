@@ -133,6 +133,24 @@ bool GameEngine::IsWindowOpen() const {
 	return !glfwWindowShouldClose(mainWindow->GetGLFWWindow());
 }
 
+bool GameEngine::IsKeyPressed(const int key) const {
+	// Ignore keys outside the range of the key array
+	if (key < 0 || key >= GLFW_KEY_LAST) {
+		std::cerr << "ERROR: IsKeyPressed - Invalid key!" << std::endl;
+		return false;
+	}
+	return keysPressed[key];
+}
+
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
+}
+
+void GameEngine::SetKeyPressed(int key, bool is_pressed) {
+	// Ignore keys outside the range of the key array
+	if (key < 0 || key >= GLFW_KEY_LAST) {
+		std::cerr << "ERROR: SetKeyPressed - Invalid key!" << std::endl;
+		return;
+	}
+	keysPressed[key] = is_pressed;
 }

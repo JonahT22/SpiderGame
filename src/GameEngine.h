@@ -18,7 +18,7 @@ struct GameOptions {
 	const glm::vec3 clearColor = glm::vec3(0.1f, 0.1f, 0.1f);
 	const float physicsTimeStep = 1.0f / 60.0f;
 	const unsigned int frameDelayMs = 0;
-	const bool showFramerate = true;
+	const bool showFramerate = false;
 };
 
 ///
@@ -44,9 +44,11 @@ public:
 	const std::unique_ptr<Window>& GetWindow() const;
 	std::shared_ptr<Camera> GetMainCamera();
 	bool IsWindowOpen() const;
+	bool IsKeyPressed(const int key) const;
 
 	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
+	void SetKeyPressed(int key, bool is_pressed);
 
 private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */
@@ -57,6 +59,10 @@ private:
 	/* ----- Objects that the GameEngine references, but have lifetimes controlled by
 	other objects ----- */
 	std::weak_ptr<Camera> cameraRef;
+
+	/* ----- Keyboard Inputs ----- */
+	// Keep track of which keys are currently being pressed
+	bool keysPressed[GLFW_KEY_LAST] = {false};
 
 	/* ----- Framerate and display settings ----- */
 	// Desired period for the physics updates, and a running timer for the next physics step

@@ -5,7 +5,7 @@
 #include "GameEngine.h"
 
 Window::Window(const int width, const int height, const char* title,
-               const GameEngine* owner) : engineRef(engine) {
+               GameEngine* engine) : engineRef(engine) {
 	// Note: GLFW should be initialized at this point, and do NOT call any OpenGL functions
 	//   in this constructor since the GameEngine hasn't yet initialized GLAD
 
@@ -42,14 +42,22 @@ void Window::ResizeEvent(int width, int height) {
 		engineRef->UpdateCameraAspect(width / (float)height);
 	}
 	else {
-		std::cerr << "ERROR: Invalid GameEngine ref on window object!";
-		std::cerr << std::endl;
+		std::cerr << "ERROR: Invalid GameEngine ref on window object!" << std::endl;
 	}
 }
 
 void Window::KeyEvent(int key, int scancode, int action, int mods) {
 	if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS)) {
 		glfwSetWindowShouldClose(glfwWindow, GL_TRUE);
+	}
+	// Don't send any GLFW_REPEAT events to the gameengine, just press and release
+	else if ((action == GLFW_PRESS) || (action == GLFW_RELEASE)) {
+		if (engineRef != nullptr) {
+			engineRef->SetKeyPressed(key, (action == GLFW_PRESS));
+		}
+		else {
+			std::cerr << "ERROR: Invalid GameEngine ref on window object!" << std::endl;
+		}
 	}
 }
 
@@ -68,8 +76,7 @@ void Window::CursorPosEvent(double x_pos, double y_pos) {
 			mousePos = new_pos;
 		}
 		else {
-			std::cerr << "ERROR: Invalid GameEngine ref on window object!";
-			std::cerr << std::endl;
+			std::cerr << "ERROR: Invalid GameEngine ref on window object!" << std::endl;
 		}
 	}
 }

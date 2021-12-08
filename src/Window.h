@@ -16,7 +16,7 @@ class GameEngine;
 class Window {
 public:
 	Window(const int height, const int width, const char* title,
-	       const GameEngine* engine);
+	       GameEngine* engine);
 	~Window() = default;
 
 	/* ----- User Input Events ----- */
@@ -45,7 +45,7 @@ private:
 	// Note: this raw pointer is safe because the GameEngine should control the lifetime
 	//   of this window object (i.e. 'engineRef' will never reference an invalid object,
 	//   because the GameEngine will destroy this window before the engine goes out of scope)
-	const GameEngine* engineRef = nullptr;
+	GameEngine* engineRef = nullptr;
 	// Keep track of the mouse's position
 	bool cursorCaptured = false;
 	glm::vec2 mousePos = glm::vec2(0.0f);
