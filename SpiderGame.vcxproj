@@ -28,6 +28,7 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\SceneObject.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\SpiderCharacter.cpp" />
     <ClCompile Include="src\stb_image_instantiate.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\SceneObject.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\SpiderCharacter.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Window.h" />
