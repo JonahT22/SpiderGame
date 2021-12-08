@@ -63,6 +63,9 @@
     <ClCompile Include="src\SpiderCharacter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\LegTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h">
@@ -102,6 +105,9 @@
       <Filter>Resource Files\Library Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SpiderCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LegTarget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

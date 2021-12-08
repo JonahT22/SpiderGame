@@ -97,6 +97,26 @@ scene_objects:
             scale: [0.25, 0.25, 0.25]
         parent: "spider"
 
+    -   type: "leg_target"
+        name: "leg_target"
+        shader: "normal"
+        relative_transform:
+            location: [-1.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "mesh"
+        name: "leg_target_visualizer"
+        meshfile: ""
+        texture: "resources/textures/wall.jpg"
+        shader: "normal"
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.1, 0.1, 0.1]
+        parent: "leg_target"
+
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
     frag: "resources/shaders/skybox_frag.glsl"

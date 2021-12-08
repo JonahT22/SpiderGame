@@ -142,6 +142,10 @@ bool GameEngine::IsKeyPressed(const int key) const {
 	return keysPressed[key];
 }
 
+const float GameEngine::GetPhysicsTimeStep() const {
+	return physicsTimeStep;
+}
+
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
 }

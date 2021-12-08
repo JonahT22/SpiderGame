@@ -45,6 +45,7 @@ public:
 	std::shared_ptr<Camera> GetMainCamera();
 	bool IsWindowOpen() const;
 	bool IsKeyPressed(const int key) const;
+	const float GetPhysicsTimeStep() const;
 
 	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);

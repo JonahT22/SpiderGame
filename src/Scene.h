@@ -14,6 +14,7 @@ class SceneObject;
 class ShaderProgram;
 class Skybox;
 class SpiderCharacter;
+class LegTarget;
 
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level
@@ -31,13 +32,12 @@ public:
 	void LoadSceneFile(const std::string& filename);
 
 private:
-	// Creates a mesh object and loads any mesh-specific parameters
+	// Creates a subclass of a Sceneobject and loads any subclass-specific parameters
 	inline std::shared_ptr<Mesh> LoadMesh(const YAML::Node& mesh_node);
-	// Creates a camera object and loads any camera-specific parameters
 	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
 	                                          bool is_first = false);
-	// Creates a spider object and loads any spider-specific parameters
 	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);
+	inline std::shared_ptr<LegTarget> LoadLegTarget(const YAML::Node& leg_node);
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
 	//   handles object parenting and adds the object to the scene
 	void LoadSceneObject(const YAML::Node& object_node,

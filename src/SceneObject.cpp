@@ -43,9 +43,9 @@ void SceneObject::PhysicsUpdate() {
 void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// The shader should already be bound before drawing this mesh
 	if (!shader->IsShaderActive()) {
-		std::cout << "WARNING: Shader object was not bound before rendering a mesh.";
+		std::cout << "WARNING: Shader object was not bound before rendering a SceneObject.";
 		std::cout << " For best performance, shaders should not be activated/deactivated";
-		std::cout << " on a per-mesh basis. Activating the shader for this mesh...";
+		std::cout << " on a per-object basis. Activating the shader for this object...";
 		std::cout << std::endl;
 		shader->Activate();
 	}
