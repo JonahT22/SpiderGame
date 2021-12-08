@@ -22,7 +22,7 @@ public:
 	Scene(std::weak_ptr<GameEngine> engine);
 	~Scene() = default;
 
-	// Update the model matrices of every 'dirty' object in the scene
+	// Iterate through the scene hierarchy, updating each object's modelview matrices
 	void UpdateScenePhysics();
 	// Iterate over each shader, rendering the objects that are drawn by it
 	void RenderScene(const unsigned int frameDelayMs) const;
@@ -55,6 +55,10 @@ private:
 	                  std::vector<std::shared_ptr<SceneObject> > > ShaderToObjectList;
 	// List of every shader, and the objects that are drawn by them
 	std::vector<ShaderToObjectList> allObjects;
+
+	// List of every root object in the scene (for calling physics updates)
+	// Root objects are SceneObjects that are parented to the world origin
+	std::vector<std::weak_ptr<SceneObject> > rootObjects;
 
 	// List of every physics object in the scene (for raycasting)
 	// TODO
