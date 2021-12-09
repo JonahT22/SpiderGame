@@ -3,15 +3,14 @@
 #define OPTIMIZER_GDLS_H
 
 #include "Optimizer.h"
-
-class LinkObjective;
+#include "LinkObjective.h"
 
 class OptimizerGDLS : public Optimizer
 {
 public:
 	OptimizerGDLS(const int num_links);
-	virtual ~OptimizerGDLS();
-	virtual void optimize(const std::shared_ptr<LinkObjective> objective, Eigen::VectorXd& x);
+	~OptimizerGDLS() = default;
+	virtual void optimize(const LinkObjective& objective, Eigen::VectorXd& x);
 	
 	void setAlphaInit(double alphaInit) { this->alphaInit = alphaInit; }
 	void setGamma(double gamma) { this->gamma = gamma; }

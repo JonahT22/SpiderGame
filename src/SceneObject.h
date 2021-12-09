@@ -31,6 +31,8 @@ public:
 	const glm::vec3& GetRelativeScale() const;
 	const std::string& GetName() const;
 	const std::weak_ptr<SceneObject>& GetParent() const;
+	// Search for a child with a given name from among the DIRECT children of this object
+	std::weak_ptr<SceneObject> GetChildByName(const std::string& name);
 
 	/* ----- Setters ----- */
 	void AddChildObject(std::weak_ptr<SceneObject> new_object);

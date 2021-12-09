@@ -101,6 +101,17 @@ const std::weak_ptr<SceneObject>& SceneObject::GetParent() const {
 	return parent;
 }
 
+std::weak_ptr<SceneObject> SceneObject::GetChildByName(const std::string& name) {
+	for (auto& child : childObjects) {
+		if (child.lock()->GetName() == name) {
+			return child;
+		}
+	}
+	std::cerr << "WARNING: No child with name " << name << " found on parent object ";
+	std::cerr << objectName << "!" << std::endl;
+	return std::weak_ptr<SceneObject>();
+}
+
 void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
 	childObjects.emplace_back(new_object);
 	// Pass a weak reference to the new child

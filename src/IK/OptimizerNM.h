@@ -3,15 +3,14 @@
 #define OPTIMIZER_NM_H
 
 #include "Optimizer.h"
-
-class LinkObjective;
+#include "LinkObjective.h"
 
 class OptimizerNM : public Optimizer
 {
 public:
 	OptimizerNM(const int num_links);
-	virtual ~OptimizerNM();
-	virtual void optimize(const std::shared_ptr<LinkObjective> objective, Eigen::VectorXd& x);
+	~OptimizerNM() = default;
+	virtual void optimize(const LinkObjective& objective, Eigen::VectorXd& x);
 	
 	void setTol(double tol) { this->tol = tol; }
 	void setIterMax(int iterMax) { this->iterMax = iterMax; }

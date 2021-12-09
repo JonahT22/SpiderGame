@@ -6,6 +6,9 @@
 #include <eigen-3.4.0/Eigen/Dense>
 
 #include "../SceneObject.h"
+#include "LinkObjective.h"
+#include "OptimizerGDLS.h"
+#include "OptimizerNM.h"
 class Link;
 class GameEngine;
 class ShaderProgram;
@@ -45,16 +48,22 @@ private:
 
 	// TODO: set this from file
 	size_t numLinks = 3;
-
 	// IKChain has exclusive control over the links attached to it, so make this a vector
 	//   of shared_ptrs instead of weak_ptrs. IKChain manages their lifetime, not the Scene
 	std::vector<std::shared_ptr<Link> > allLinks;
-
+	// Every IKChain must have a target point, but doesn't own/manage it
+	// TODO: figure out how to cast this to a LegTarget
+	std::weak_ptr<SceneObject> target;
 	// Angle of each link in the chain, used to quickly get the chain's current state as
 	//   a starting point for optimization
 	Eigen::MatrixXd J_linkAngles;
 	// Location of the end-effector 'r', in the local space of the final link
 	// Note: 2D coordinate, with w = 1.0
 	Eigen::Vector3d J_endEffectorPos;
+
+	// Objects responsible for solving the IK problem
+	OptimizerGDLS optimizerGDLS;
+	OptimizerNM optimizerNM;
+	LinkObjective objectiveFunc;
 };
 

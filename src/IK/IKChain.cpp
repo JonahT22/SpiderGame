@@ -5,35 +5,50 @@
 #include <vector>
 #include <cassert>
 
+#include <eigen-3.4.0/Eigen/Dense>
+
 #include "Link.h"
+#include "OptimizerGDLS.h"
+#include "OptimizerNM.h"
 
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name) {
+	SceneObject(engine, name), optimizerGDLS(numLinks), optimizerNM(numLinks) {
 	// TODO: endEffectorPos should == the linkLength of the final link in the chain: [len, 0]
 	//   Right now, this is hardcoded to 0.5, so keep the same hardcoding here
 	J_endEffectorPos << 0.5, 0.0, 1.0;
 }
 
-void IKChain::WrapAngles(Eigen::VectorXd& angles)
-{
+// TODO: move this
+void IKChain::WrapAngles(Eigen::VectorXd& angles) {
 	// Wrap each angle from -pi to pi
 	size_t num_angles = angles.rows();
 	double pi = 3.1415926535;
 	for (size_t i = 0; i < num_angles; ++i) {
-		while (angles(i) > pi) {
+		std::cout << angles << std::endl << std::endl;
+		/*while (angles(i) > pi) {
 			angles(i) -= 2.0 * pi;
 		}
 		while (angles(i) < -1.0 * pi) {
 			angles(i) += 2.0 * pi;
-		}
+		}*/
 	}
 }
 
 void IKChain::BeginPlay() {
+	// Find this chain's target point. The target should be attached to the spider
+	//   character, which is the Chain's parent object
+	target = parent.lock()->GetChildByName("leg_target");
+	if (target.expired()) {
+		std::cerr << "ERROR Getting target ref in IKChain!" << std::endl;
+	}
+
+	// Get a shared ptr to self (SceneObject), then cast to IKChain for objectiveFunction
+	objectiveFunc.SetChainRef(std::dynamic_pointer_cast<IKChain>(shared_from_this()));
+	
 	// Create the links in the chain
 	// TODO: remove hardcoding
 	// The first link in the chain should be shorter than the others
-	const float link_offsets[8] = {0.0f, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+	const float link_offsets[8] = { 0.0f, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
 	if (numLinks > 7) {
 		std::cerr << "ERROR: didn't hardcode that many link lengths!" << std::endl;
 		abort();
@@ -70,7 +85,24 @@ void IKChain::BeginPlay() {
 }
 
 void IKChain::PhysicsUpdate() {
-	// TODO: this is where I'll call the optimizer stuff
+	Eigen::Vector2d x(1.0f, 1.0f);
+
+	// Perform GLDS optimization (note: chain angles are updated in the optimizer)
+	Eigen::VectorXd anglesGLDS = GetLinkAngles();
+	optimizerGDLS.optimize(objectiveFunc, anglesGLDS);
+
+	// Perform newton's method from where GLDS left off
+	Eigen::VectorXd anglesNM = anglesGLDS;
+	optimizerNM.optimize(objectiveFunc, anglesNM);
+
+	// Check if newton's method improved the result
+	Eigen::VectorXd angles = (objectiveFunc.evalObjective(anglesNM) < objectiveFunc.evalObjective(anglesGLDS)) ?
+		anglesNM : anglesGLDS;
+
+	// Wrap the angles and update the chain one final time
+	// TODO: just put the function here
+	WrapAngles(angles);
+	SetLinkAngles(angles);
 
 	SceneObject::PhysicsUpdate();
 }
@@ -90,8 +122,7 @@ size_t IKChain::GetNumLinks() const {
 	return allLinks.size();;
 }
 
-const Eigen::Matrix3d& IKChain::GetJMatrix(size_t link_idx, size_t derivative) const
-{
+const Eigen::Matrix3d& IKChain::GetJMatrix(size_t link_idx, size_t derivative) const {
 	assert(derivative <= 2);
 	if (derivative == 0) {
 		return allLinks.at(link_idx)->GetJ();
@@ -116,8 +147,7 @@ void IKChain::SetEndEffector(double x, double y){
 	J_endEffectorPos << x, y, 1.0;
 }
 
-void IKChain::SetLinkAngles(const Eigen::VectorXd& new_angles)
-{
+void IKChain::SetLinkAngles(const Eigen::VectorXd& new_angles) {
 	assert(new_angles.rows() == J_linkAngles.rows());
 	// Copy the new link angles into this class' angle list (for future reference)
 	J_linkAngles = new_angles;

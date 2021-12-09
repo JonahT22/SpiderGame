@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "Chain.h"
+#include "IKChain.h"
 
 using namespace Eigen;
 using namespace std;
@@ -26,7 +26,7 @@ double LinkObjective::evalObjective(const Eigen::VectorXd& theta, Eigen::VectorX
 	// Update the chain with the new angles
 	chain->SetLinkAngles(theta);
 	const size_t num_links = chain->GetNumLinks();
-	const Vector3d r = chain->GetEndEffector();
+	const Vector3d r = chain->GetEndEffectorPos();
 	// Use a temporary var to accumulate the transformation matrices of each link
 	Vector3d pTemp = r;
 

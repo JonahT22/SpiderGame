@@ -1,18 +1,13 @@
 #pragma once
-#ifndef OPTIMIZER_H
-#define OPTIMIZER_H
 
 #include <memory>
-#include <Eigen/Dense>
+#include <eigen-3.4.0/Eigen/Dense>
 
-class LinkObjective;
+#include "LinkObjective.h"
 
-class Optimizer
-{
+class Optimizer {
 public:
 	Optimizer() {};
 	virtual ~Optimizer() {};
-	virtual void optimize(const std::shared_ptr<LinkObjective> objective, Eigen::VectorXd& x) = 0;
+	virtual void optimize(const LinkObjective& objective, Eigen::VectorXd& x) = 0;
 };
-
-#endif
