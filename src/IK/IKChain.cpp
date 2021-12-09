@@ -9,7 +9,9 @@
 
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {
-	J_endEffectorPos << 1.0, 0.0, 1.0;
+	// TODO: endEffectorPos should == the linkLength of the final link in the chain: [len, 0]
+	//   Right now, this is hardcoded to 0.5, so keep the same hardcoding here
+	J_endEffectorPos << 0.5, 0.0, 1.0;
 }
 
 void IKChain::WrapAngles(Eigen::VectorXd& angles)
@@ -59,8 +61,6 @@ void IKChain::BeginPlay() {
 	}
 
 	J_linkAngles = Eigen::VectorXd::Zero(numLinks);
-	// TODO: set J-space position to (was [1, 0] but should probably be the same as the
-	//   loc from the rootTransform)
 	UpdateLinkAngles();
 	
 	// Manually call beginplay on children, since they aren't managed by the scene
