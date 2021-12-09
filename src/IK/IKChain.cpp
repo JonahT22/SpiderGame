@@ -128,6 +128,6 @@ void IKChain::SetLinkAngles(const Eigen::VectorXd& new_angles)
 
 void IKChain::UpdateLinkAngles() {
 	for (size_t i = 0; i < allLinks.size(); ++i) {
-		allLinks.at(i)->SetAngle(J_linkAngles(i));
+		allLinks.at(i)->SetLinkAngle(J_linkAngles(i));
 	}
 }

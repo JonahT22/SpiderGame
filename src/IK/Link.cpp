@@ -37,10 +37,11 @@ void Link::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	linkMesh->Render(shader);
 }
 
-void Link::SetAngle(double a) {	
+void Link::SetLinkAngle(double a) {	
 	// Apply new angle to this link's local transform
 	// TODO: check if a rotation along z is correct
 	rootTransform.rot = Transform::EulerToQuat(glm::vec3(0.0, 0.0, a));
+	MarkPhysicsDirty();
 
 	// Recalculate the J matrices for this link
 	double cosT = cos(a);

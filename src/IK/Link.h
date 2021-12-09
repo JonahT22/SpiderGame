@@ -31,7 +31,7 @@ public:
 	const Eigen::Matrix3d& GetJ2Prime() const { return J2Prime; }
 
 	// Set the angle (in radians) for this link
-	void SetAngle(double a);
+	void SetLinkAngle(double a);
 	
 private:
 	std::shared_ptr<Mesh> linkMesh;
