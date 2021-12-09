@@ -77,7 +77,9 @@ struct convert<Transform> {
 		}
 
 		rhs.loc = node["location"].as<glm::vec3>();
-		rhs.rot = Transform::EulerToQuat(node["rotation"].as<glm::vec3>());
+		glm::vec3 degrees = node["rotation"].as<glm::vec3>();
+		glm::vec3 radians = glm::radians(degrees);
+		rhs.rot = Transform::EulerToQuat(radians);
 		rhs.scale = node["scale"].as<glm::vec3>();
 		return true;
 	}
