@@ -5,6 +5,7 @@
 #include <vector>
 #include <cassert>
 
+#include "LegTarget.h"
 #include "Link.h"
 
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
@@ -62,11 +63,18 @@ void IKChain::BeginPlay() {
 
 	J_linkAngles = Eigen::VectorXd::Zero(numLinks);
 	UpdateLinkAngles();
+
+	// Create the Leg Target
+	legTarget = std::make_shared<LegTarget>(engineRef, objectName + "_target");
+	// TODO: eventually remove hardcoding
+	legTarget->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 0.0f));
+	AddChildObject(legTarget);
 	
 	// Manually call beginplay on children, since they aren't managed by the scene
 	for (auto& link : allLinks) {
 		link->BeginPlay();
 	}
+	legTarget->BeginPlay();
 }
 
 void IKChain::PhysicsUpdate() {
@@ -80,6 +88,7 @@ void IKChain::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	for (auto& link : allLinks) {
 		link->Render(shader);
 	}
+	legTarget->Render(shader);
 }
 
 Eigen::Vector3d IKChain::GetEndEffectorPos() const {

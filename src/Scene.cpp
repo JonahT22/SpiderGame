@@ -128,9 +128,6 @@ void Scene::LoadSceneFile(const std::string& filename) {
 		else if (object_type == "spider") {
 			new_object = LoadSpider(objects[i]);
 		}
-		else if (object_type == "leg_target") {
-			new_object = LoadLegTarget(objects[i]);
-		}
 		else if (object_type == "ik_chain") {
 			new_object = LoadIKChain(objects[i]);
 		}
@@ -213,13 +210,6 @@ inline std::shared_ptr<SpiderCharacter> Scene::LoadSpider(const YAML::Node& spid
 	std::string spider_name = YAML::GetMapVal<std::string>(spider_node, "name");
 	auto new_spider = std::make_shared<SpiderCharacter>(engineRef, spider_name);
 	return new_spider;
-}
-
-inline std::shared_ptr<LegTarget> Scene::LoadLegTarget(const YAML::Node& leg_node) {
-	// TODO: add more parameters for the leg target
-	std::string leg_name = YAML::GetMapVal<std::string>(leg_node, "name");
-	auto new_legtarget = std::make_shared<LegTarget>(engineRef, leg_name);
-	return new_legtarget;
 }
 
 inline std::shared_ptr<IKChain> Scene::LoadIKChain(const YAML::Node& chain_node)

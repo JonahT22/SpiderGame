@@ -8,6 +8,7 @@
 #include "../SceneObject.h"
 class ShaderProgram;
 class GameEngine;
+class Mesh;
 
 ///
 /// Empty SceneObject that lazily updates its model matrix location to match its
@@ -24,7 +25,13 @@ public:
 	virtual void PhysicsUpdate() override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
+	void SetShowMesh(const bool show_mesh);
+
 private:
+	// Mesh for visualization
+	std::shared_ptr<Mesh> vizMesh;
+	bool showMesh = true;
+
 	// TODO: organize the parameters and pass in through file
 	
 	// World-space radius threshold before the lazy location decides to catch up
