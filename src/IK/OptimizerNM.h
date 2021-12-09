@@ -5,8 +5,7 @@
 #include "Optimizer.h"
 #include "LinkObjective.h"
 
-class OptimizerNM : public Optimizer
-{
+class OptimizerNM : public Optimizer {
 public:
 	OptimizerNM(const int num_links);
 	~OptimizerNM() = default;

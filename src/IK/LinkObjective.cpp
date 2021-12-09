@@ -9,16 +9,8 @@ using namespace std;
 
 LinkObjective::LinkObjective() :
 	wTar(1e3),
-	wReg(1e0),
-	pTarget(0.0, 0.0)
-{
-	
-}
-
-LinkObjective::~LinkObjective()
-{
-	
-}
+	wReg(1e1),
+	pTarget(0.0, 0.0) {}
 
 double LinkObjective::evalObjective(const Eigen::VectorXd& theta, Eigen::VectorXd* g, Eigen::MatrixXd* H) const
 {

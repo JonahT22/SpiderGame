@@ -39,7 +39,7 @@ void IKChain::WrapAngles(Eigen::VectorXd& angles) {
 void IKChain::BeginPlay() {
 	// Find this chain's target point. The target should be attached to the spider
 	//   character, which is the Chain's parent object
-	target = parent.lock()->GetChildByName("leg_target");
+	target = parent.lock()->GetChildByName(objectName + "_target");
 	if (target.expired()) {
 		std::cerr << "ERROR Getting target ref in IKChain!" << std::endl;
 	}
@@ -54,7 +54,7 @@ void IKChain::BeginPlay() {
 	// Create the links in the chain
 	// TODO: remove hardcoding
 	// The first link in the chain should be shorter than the others
-	const float link_offsets[8] = { 0.0f, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+	const float link_offsets[8] = { 0.0f, 0.4, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6 };
 	if (numLinks > 7) {
 		std::cerr << "ERROR: didn't hardcode that many link lengths!" << std::endl;
 		abort();
@@ -100,6 +100,7 @@ void IKChain::PhysicsUpdate() {
 	float rot_angle = -1.0f * atan2(target_loc.z, target_loc.x);
 	linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
 
+	// Set up the local-space target for the objective evaluation
 	Eigen::Vector2d x(target_loc.x, target_loc.y);
 	objectiveFunc.SetTarget(x);
 

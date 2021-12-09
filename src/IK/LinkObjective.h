@@ -8,11 +8,10 @@
 
 class IKChain;
 
-class LinkObjective
-{
+class LinkObjective {
 public:
 	LinkObjective();
-	virtual ~LinkObjective();
+	~LinkObjective() = default;
 	// Return the objective function f, with optional args for gradient and Hessian
 	double evalObjective(const Eigen::VectorXd& theta, Eigen::VectorXd* g = nullptr, Eigen::MatrixXd* H = nullptr) const;
 

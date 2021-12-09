@@ -6,8 +6,8 @@ using namespace std;
 using namespace Eigen;
 
 OptimizerNM::OptimizerNM(const int num_links) :
-	tol(1e-6),
-	iterMax(10 * num_links),
+	tol(1e-1),
+	iterMax(5 * num_links),
 	iter(0)
 {
 	

@@ -5,8 +5,7 @@
 #include "Optimizer.h"
 #include "LinkObjective.h"
 
-class OptimizerGDLS : public Optimizer
-{
+class OptimizerGDLS : public Optimizer {
 public:
 	OptimizerGDLS(const int num_links);
 	~OptimizerGDLS() = default;

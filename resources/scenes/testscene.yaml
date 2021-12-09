@@ -72,7 +72,7 @@ scene_objects:
         relative_transform:
             location: [0.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
-            scale: [0.5, 0.5, 1.0]
+            scale: [0.5, 0.2, 0.7]
         parent: "spider"
 
     -   type: "mesh"
@@ -81,9 +81,9 @@ scene_objects:
         texture: "resources/textures/awesomeface.png"
         shader: "unlit"
         relative_transform:
-            location: [0.2, 0.2, 0.45]
+            location: [0.14, 0.1, 0.32]
             rotation: [0.0, 0.0, 0.0]
-            scale: [0.25, 0.25, 0.25]
+            scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
     -   type: "mesh"
@@ -92,50 +92,84 @@ scene_objects:
         texture: "resources/textures/awesomeface.png"
         shader: "unlit"
         relative_transform:
-            location: [-0.2, 0.2, 0.45]
+            location: [-0.14, 0.1, 0.32]
             rotation: [0.0, 0.0, 0.0]
-            scale: [0.25, 0.25, 0.25]
+            scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
     -   type: "leg_target"
-        name: "leg_target"
+        name: "leg_L_1_target"
         shader: "normal"
         relative_transform:
-            location: [-1.0, 0.0, 0.0]
+            location: [0.65, -0.2, 0.5]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         parent: "spider"
 
-    -   type: "mesh"
-        name: "leg_target_visualizer"
-        meshfile: ""
-        texture: "resources/textures/wall.jpg"
-        shader: "normal"
-        relative_transform:
-            location: [0.0, 0.0, 0.0]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [0.1, 0.1, 0.1]
-        parent: "leg_target"
-
     -   type: "ik_chain"
-        name: "testing_chain"
+        name: "leg_L_1"
         shader: "unlit"
         relative_transform:
-            location: [-0.25, 0.25, 0.0]
+            location: [0.25, 0.14, 0.3]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "leg_target"
+        name: "leg_L_2_target"
+        shader: "normal"
+        relative_transform:
+            location: [0.65, -0.2, -0.5]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "ik_chain"
+        name: "leg_L_2"
+        shader: "unlit"
+        relative_transform:
+            location: [0.25, 0.14, -0.3]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "leg_target"
+        name: "leg_R_1_target"
+        shader: "normal"
+        relative_transform:
+            location: [-0.65, -0.2, 0.5]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "ik_chain"
+        name: "leg_R_1"
+        shader: "unlit"
+        relative_transform:
+            location: [-0.25, 0.14, 0.3]
             rotation: [0.0, 180.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         parent: "spider"
 
-    -   type: "mesh"
-        name: "chain_visualizer"
-        meshfile: ""
-        texture: "resources/textures/wall.jpg"
+    -   type: "leg_target"
+        name: "leg_R_2_target"
+        shader: "normal"
+        relative_transform:
+            location: [-0.65, -0.2, -0.5]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "ik_chain"
+        name: "leg_R_2"
         shader: "unlit"
         relative_transform:
-            location: [0.0, 0.0, 0.0]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [0.1, 0.1, 0.1]
-        parent: "testing_chain"
+            location: [-0.25, 0.14, -0.3]
+            rotation: [0.0, 180.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+   
 
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
