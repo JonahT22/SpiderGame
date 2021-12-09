@@ -38,6 +38,7 @@ private:
 	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
 	                                          bool is_first = false);
 	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);
+	inline std::shared_ptr<LegTarget> LoadLegTarget(const YAML::Node& leg_node);
 	inline std::shared_ptr<IKChain> LoadIKChain(const YAML::Node& chain_node);
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
 	//   handles object parenting and adds the object to the scene

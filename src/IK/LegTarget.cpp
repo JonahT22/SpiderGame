@@ -5,7 +5,6 @@
 #include <glad/glad.h>
 
 #include "../GameEngine.h"
-#include "../Mesh.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name), physicsTimeStep(engine.lock()->GetPhysicsTimeStep()) {}
@@ -16,15 +15,6 @@ void LegTarget::BeginPlay() {
 	if (!parent.expired()) {
 		modelMtx = parent.lock()->GetWorldTransformMtx() * rootTransform.GetMatrix();
 	}
-
-	// Create the visualization mesh
-	vizMesh = std::make_shared<Mesh>(engineRef, objectName + "_mesh");
-	vizMesh->GenerateCubeMesh();
-	// TODO remove hardcoding
-	vizMesh->LoadTexture("resources/textures/wall.jpg");
-	vizMesh->SetRelativeScale(glm::vec3(0.1f, 0.1f, 0.1f));
-	AddChildObject(vizMesh);
-	vizMesh->BeginPlay();
 }
 
 void LegTarget::PhysicsUpdate() {
@@ -98,12 +88,5 @@ void LegTarget::PhysicsUpdate() {
 }
 
 void LegTarget::Render(const std::shared_ptr<ShaderProgram> shader) const {
-	// LegTargets have no visual display, use the mesh object to visualize it
-	if (showMesh) {
-		vizMesh->Render(shader);
-	}
-}
-
-void LegTarget::SetShowMesh(const bool show_mesh) {
-	showMesh = show_mesh;
+	// LegTargets have no visual display, attach a mesh object to visualize
 }

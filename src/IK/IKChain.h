@@ -9,7 +9,6 @@
 class Link;
 class GameEngine;
 class ShaderProgram;
-class LegTarget;
 
 /// 
 /// TODO
@@ -50,9 +49,6 @@ private:
 	// IKChain has exclusive control over the links attached to it, so make this a vector
 	//   of shared_ptrs instead of weak_ptrs. IKChain manages their lifetime, not the Scene
 	std::vector<std::shared_ptr<Link> > allLinks;
-
-	// Actor that stores the target point for the IK chain
-	std::shared_ptr<LegTarget> legTarget;
 
 	// Angle of each link in the chain, used to quickly get the chain's current state as
 	//   a starting point for optimization
