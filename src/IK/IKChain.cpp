@@ -24,13 +24,12 @@ void IKChain::WrapAngles(Eigen::VectorXd& angles) {
 	size_t num_angles = angles.rows();
 	double pi = 3.1415926535;
 	for (size_t i = 0; i < num_angles; ++i) {
-		std::cout << angles << std::endl << std::endl;
-		/*while (angles(i) > pi) {
+		while (angles(i) > pi) {
 			angles(i) -= 2.0 * pi;
 		}
 		while (angles(i) < -1.0 * pi) {
 			angles(i) += 2.0 * pi;
-		}*/
+		}
 	}
 }
 
@@ -85,7 +84,9 @@ void IKChain::BeginPlay() {
 }
 
 void IKChain::PhysicsUpdate() {
-	Eigen::Vector2d x(1.0f, 1.0f);
+	glm::vec4 targetLoc = target.lock()->GetWorldTransformMtx()[3];
+	Eigen::Vector2d x(targetLoc.x, targetLoc.y);
+	objectiveFunc.SetTarget(x);
 
 	// Perform GLDS optimization (note: chain angles are updated in the optimizer)
 	Eigen::VectorXd anglesGLDS = GetLinkAngles();
