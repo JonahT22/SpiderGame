@@ -13,7 +13,7 @@ class Mesh;
 /// and y axes - they can only rotate about the z axis.
 /// TODO check on that
 /// 
-class Link : public SceneObject, public std::enable_shared_from_this<Link> {
+class Link : public SceneObject {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	

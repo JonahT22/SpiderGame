@@ -10,26 +10,6 @@
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {
 	J_endEffectorPos << 1.0, 0.0, 1.0;
-	
-	// Create the links in the chain
-	for (size_t i = 0; i < numLinks; ++i) {
-		std::string link_name = name + "_link_" + std::to_string(i);
-		auto new_link = std::make_shared<Link>(engine, link_name);
-		// TODO: set link properties
-		if (allLinks.size() == 0) {
-			// Parent the first link to this object
-			AddChildObject(new_link);
-		}
-		else {
-			// Parent all other links to the most previously-added link
-			allLinks.back()->AddChildObject(new_link);
-		}
-		allLinks.emplace_back(new_link);
-	}
-	J_linkAngles = Eigen::VectorXd::Zero(numLinks);
-	// TODO: set J-space position to (was [1, 0] but should probably be the same as the
-	//   loc from the rootTransform)
-	UpdateLinkAngles();
 }
 
 void IKChain::WrapAngles(Eigen::VectorXd& angles)
@@ -48,10 +28,38 @@ void IKChain::WrapAngles(Eigen::VectorXd& angles)
 }
 
 void IKChain::BeginPlay() {
+	// Create the links in the chain
+	// Note: this must be done in beginplay, since weak_from_this is called in AddChildObject
+	for (size_t i = 0; i < numLinks; ++i) {
+		std::string link_name = objectName + "_link_" + std::to_string(i);
+		auto new_link = std::make_shared<Link>(engineRef, link_name);
+		new_link->SetRelativeLocation(glm::vec3(0.5f, 0.0f, 0.0f));
+		// TODO: set link properties
+		if (allLinks.size() == 0) {
+			// Parent the first link to this object
+			AddChildObject(new_link);
+		}
+		else {
+			// Parent all other links to the most previously-added link
+			allLinks.back()->AddChildObject(new_link);
+		}
+		allLinks.emplace_back(new_link);
+	}
+
+	J_linkAngles = Eigen::VectorXd::Zero(numLinks);
+	// TODO: set J-space position to (was [1, 0] but should probably be the same as the
+	//   loc from the rootTransform)
+	UpdateLinkAngles();
+	
+	// Manually call beginplay on children, since they aren't managed by the scene
+	for (auto& link : allLinks) {
+		link->BeginPlay();
+	}
 }
 
 void IKChain::PhysicsUpdate() {
 	// TODO: this is where I'll call the optimizer stuff
+
 	SceneObject::PhysicsUpdate();
 }
 

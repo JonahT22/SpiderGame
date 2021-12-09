@@ -105,6 +105,12 @@ void SceneObject::AddChildObject(std::weak_ptr<SceneObject> new_object) {
 	childObjects.emplace_back(new_object);
 	// Pass a weak reference to the new child
 	new_object.lock()->SetParent(enable_shared_from_this::weak_from_this());
+	if (enable_shared_from_this::weak_from_this().expired()) {
+		std::cerr << "WARNING: Passing expired weak_from_this pointer from parent object ";
+		std::cerr << objectName << " to child " << new_object.lock()->GetName();
+		std::cerr << ". Check that you aren't trying to call weak_from_this ";
+		std::cerr << "from an object's constructor!" << std::endl;
+	}
 	MarkPhysicsDirty();
 }
 

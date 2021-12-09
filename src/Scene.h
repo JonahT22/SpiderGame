@@ -9,12 +9,13 @@
 
 class Camera;
 class GameEngine;
+class IKChain;
+class LegTarget;
 class Mesh;
 class SceneObject;
 class ShaderProgram;
 class Skybox;
 class SpiderCharacter;
-class LegTarget;
 
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level
@@ -38,6 +39,7 @@ private:
 	                                          bool is_first = false);
 	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);
 	inline std::shared_ptr<LegTarget> LoadLegTarget(const YAML::Node& leg_node);
+	inline std::shared_ptr<IKChain> LoadIKChain(const YAML::Node& chain_node);
 	// Loads parameters that ALL sceneobjects contain (i.e. transform, shader, etc.), then 
 	//   handles object parenting and adds the object to the scene
 	void LoadSceneObject(const YAML::Node& object_node,

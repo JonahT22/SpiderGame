@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <iostream>
+#include <memory>
+#include <string>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -10,19 +12,32 @@ Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {}
 
 void Link::BeginPlay() {
-	// TODO
-	std::cout << objectName << " beginplay" << std::endl;
+	if (SceneObject::enable_shared_from_this::weak_from_this().expired()) {
+		std::cout << "ERROR: link " << objectName << " has expired weak_from_this!" << std::endl;
+	}
+	// Create the mesh that this link will use
+	linkMesh = std::make_shared<Mesh>(engineRef, objectName + "_mesh");
+	linkMesh->GenerateCubeMesh();
+	// TODO: remove hardcoding
+	linkMesh->LoadTexture("resources/textures/awesomeface.png");
+	linkMesh->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 0.0f));
+	linkMesh->SetRelativeScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	AddChildObject(linkMesh);
+	// Manually pass BeginPlay to the mesh that this link controls, since it's not
+	//   managed by the scene
+	linkMesh->BeginPlay();
 }
 
 void Link::PhysicsUpdate() {
-	std::cout << objectName << " physupdate" << std::endl;
 	// Note: the J matrices are NOT updated during physicsupdate. They are the 2D J-space
 	// transforms of the link, not the modelMatrix that will actually be used in rendering
+	
+	SceneObject::PhysicsUpdate();
 }
 
 void Link::Render(const std::shared_ptr<ShaderProgram> shader) const {
-	// render children
-	std::cout << objectName << " render" << std::endl;
+	// Manually render this link's mesh, since it's not controlled by the scene
+	linkMesh->Render(shader);
 }
 
 void Link::SetAngle(double a)

@@ -117,6 +117,26 @@ scene_objects:
             scale: [0.1, 0.1, 0.1]
         parent: "leg_target"
 
+    -   type: "ik_chain"
+        name: "testing_chain"
+        shader: "unlit"
+        relative_transform:
+            location: [-0.5, 0.5, 0.0]
+            rotation: [0.0, 180.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "spider"
+
+    -   type: "mesh"
+        name: "chain_visualizer"
+        meshfile: ""
+        texture: "resources/textures/wall.jpg"
+        shader: "unlit"
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.1, 0.1, 0.1]
+        parent: "testing_chain"
+
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
     frag: "resources/shaders/skybox_frag.glsl"
