@@ -9,7 +9,7 @@ using namespace std;
 
 LinkObjective::LinkObjective() :
 	wTar(1e3),
-	wReg(1e2),
+	wReg(1e0),
 	pTarget(0.0, 0.0)
 {
 	

@@ -18,7 +18,7 @@ public:
 	~SceneObject() = default;
 
 	// Runs after all objects are loaded, before the first frame is drawn
-	virtual void BeginPlay() = 0;
+	virtual void BeginPlay();
 	// Find this object's (world) model mtx and iterate recursively to update child matrices
 	virtual void PhysicsUpdate();
 	// Draw this object, and ONLY this object. Do not draw children

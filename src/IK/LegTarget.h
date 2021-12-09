@@ -29,7 +29,7 @@ private:
 	
 	// World-space radius threshold before the lazy location decides to catch up
 	//   to actual location
-	const float threshold = 0.5f;
+	const float threshold = 1.0f;
 	// Get from GameEngine ref
 	const float physicsTimeStep = 0.1f;
 	// Amount of time to lerp between the 'old' and 'new' target points when the goal

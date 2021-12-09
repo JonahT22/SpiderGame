@@ -121,7 +121,7 @@ scene_objects:
         name: "testing_chain"
         shader: "unlit"
         relative_transform:
-            location: [-0.5, 0.5, 0.0]
+            location: [-0.25, 0.25, 0.0]
             rotation: [0.0, 180.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         parent: "spider"

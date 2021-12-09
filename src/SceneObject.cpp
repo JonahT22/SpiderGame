@@ -11,6 +11,8 @@ SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& na
 	objectName(name)
 {}
 
+void SceneObject::BeginPlay() {}
+
 void SceneObject::PhysicsUpdate() {
 	// Only recalculate model matrix if this object's physics are dirty
 	if (physicsDirty) {

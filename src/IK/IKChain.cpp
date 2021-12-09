@@ -6,10 +6,13 @@
 #include <cassert>
 
 #include <eigen-3.4.0/Eigen/Dense>
+// TODO
+#include <glm/gtx/string_cast.hpp>
 
 #include "Link.h"
 #include "OptimizerGDLS.h"
 #include "OptimizerNM.h"
+#include "../SceneObject.h"
 
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name), optimizerGDLS(numLinks), optimizerNM(numLinks) {
@@ -41,6 +44,10 @@ void IKChain::BeginPlay() {
 		std::cerr << "ERROR Getting target ref in IKChain!" << std::endl;
 	}
 
+	// Create the link root
+	linkRoot = std::make_shared<SceneObject>(engineRef, objectName + "link_root");
+	AddChildObject(linkRoot);
+
 	// Get a shared ptr to self (SceneObject), then cast to IKChain for objectiveFunction
 	objectiveFunc.SetChainRef(std::dynamic_pointer_cast<IKChain>(shared_from_this()));
 	
@@ -64,8 +71,8 @@ void IKChain::BeginPlay() {
 		new_link->SetRelativeLocation(glm::vec3(link_offset, 0.0f, 0.0f));
 
 		if (allLinks.size() == 0) {
-			// Parent the first link to this object
-			AddChildObject(new_link);
+			// Parent the first link to the link root
+			linkRoot->AddChildObject(new_link);
 		}
 		else {
 			// Parent all other links to the most previously-added link
@@ -84,8 +91,17 @@ void IKChain::BeginPlay() {
 }
 
 void IKChain::PhysicsUpdate() {
-	glm::vec4 targetLoc = target.lock()->GetWorldTransformMtx()[3];
-	Eigen::Vector2d x(targetLoc.x, targetLoc.y);
+	// Get the world-space position of the target
+	glm::vec4 world_target = target.lock()->GetWorldTransformMtx()[3];
+	// Get the local-space position of the target
+	glm::vec4 chain_target = glm::inverse(modelMtx) * world_target;
+	// Rotate the Chain to face the target location
+	// TODO: Figure out why this -1.0f is necessary
+	float rot_angle = -1.0f * atan2(chain_target.z, chain_target.x);
+	linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
+
+	glm::vec4 link_root_target = glm::inverse(linkRoot->GetWorldTransformMtx()) * world_target;
+	Eigen::Vector2d x(link_root_target.x, link_root_target.y);
 	objectiveFunc.SetTarget(x);
 
 	// Perform GLDS optimization (note: chain angles are updated in the optimizer)
