@@ -1,46 +1,35 @@
 #include <assert.h>
 #include <iostream>
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Link.h"
-#include "Shape.h"
-#include "MatrixStack.h"
-#include "Program.h"
+#include "../Mesh.h"
 
-using namespace std;
-using namespace Eigen;
+Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name) :
+	SceneObject(engine, name) {}
 
-Link::Link() :
-	parent(NULL),
-	child(NULL),
-	depth(0),
-	position(0.0, 0.0),
-	angle(0.0),
-	meshMat(Matrix4d::Identity())
-{
-	
+void Link::BeginPlay() {
+	// TODO
+	std::cout << objectName << " beginplay" << std::endl;
 }
 
-Link::~Link()
-{
-	
+void Link::PhysicsUpdate() {
+	std::cout << objectName << " physupdate" << std::endl;
+	// Note: the J matrices are NOT updated during physicsupdate. They are the 2D J-space
+	// transforms of the link, not the modelMatrix that will actually be used in rendering
 }
 
-void Link::addChild(shared_ptr<Link> child)
-{
-	child->parent = shared_from_this();
-	child->depth = depth + 1;
-	this->child = child;
+void Link::Render(const std::shared_ptr<ShaderProgram> shader) const {
+	// render children
+	std::cout << objectName << " render" << std::endl;
 }
 
-void Link::setAngle(double a)
-{
-	angle = a;
-	
+void Link::SetAngle(double a)
+{	
+	// Hardcoded link offset
+	glm::vec2 position(1.0f, 0.0f);
+
 	// Recalculate the J matrices for this link
 	double cosT = cos(a);
 	double sinT = sin(a);
@@ -59,36 +48,4 @@ void Link::setAngle(double a)
 		-1.0 * cosT, sinT, 0,
 		-1.0 * sinT, -1.0 * cosT, 0,
 		0, 0, 0;
-}
-
-void Link::draw(const shared_ptr<Program> prog, shared_ptr<MatrixStack> MV, const shared_ptr<Shape> shape) const
-{
-	assert(prog);
-	assert(MV);
-	assert(shape);
-	
-	MV->pushMatrix();
-	
-	// Apply joint frame transformations
-	MV->translate(Eigen::Vector3d(position[0], position[1], 0));
-	MV->rotate(angle, Eigen::Vector3d(0, 0, 1));
-
-	// Apply mesh frame transformations
-	MV->pushMatrix();
-	MV->multMatrix(meshMat);
-
-	// Send matrix stack to GPU and draw the link
-	glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
-	shape->draw();
-
-	// Pop the mesh frame
-	MV->popMatrix();
-
-	// Draw children in the joint frame
-	if (child != nullptr) {
-		child->draw(prog, MV, shape);
-	}
-	
-	// Pop the joint frame
-	MV->popMatrix();
 }

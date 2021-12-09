@@ -1,56 +1,46 @@
 #pragma once
-#ifndef Link_H
-#define Link_H
 
 #include <memory>
 
-#include <Eigen/Dense>
+#include <eigen-3.4.0/Eigen/Dense>
 
-class Shape;
-class MatrixStack;
-class Program;
+#include "../SceneObject.h"
+class Mesh;
 
-// Note: enable_shared_from_this allows creating shared ptrs for other objects to use from
-// within this class while keeping proper reference counts
-class Link : public std::enable_shared_from_this<Link>
-{
+///
+/// Link in an IK chain. MUST be parented under an IKChain. Links location is constrained in
+/// the y and z axes - they can only move on the x axis. Rotation is constrained in the x
+/// and y axes - they can only rotate about the z axis.
+/// TODO check on that
+/// 
+class Link : public SceneObject, public std::enable_shared_from_this<Link> {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	
-	Link();
-	virtual ~Link();
+	Link(std::weak_ptr<GameEngine> engine, const std::string& name);
+	~Link() = default;
 
-	void addChild(std::shared_ptr<Link> child);
-	std::shared_ptr<Link> getChild() const { return child; }
-	std::shared_ptr<Link> getParent() const { return parent; }
-	int getDepth() const { return depth; }
+	// Inherited from SceneObject
+	virtual void BeginPlay();
+	virtual void PhysicsUpdate();
+	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
 
+	// Getters for the transformation matrix & its derivatives
 	const Eigen::Matrix3d& GetJ() const { return J; }
 	const Eigen::Matrix3d& GetJPrime() const { return JPrime; }
 	const Eigen::Matrix3d& GetJ2Prime() const { return J2Prime; }
 
-	void setPosition(Eigen::Vector2d pos) { position = pos; }
-	const Eigen::Vector2d &getPosition() const { return position; }
-
-	void setAngle(double a);
-	double getAngle() const { return angle; }
-
-	void setMeshMatrix(const Eigen::Matrix4d &M) { meshMat = M; }
-
-	void draw(const std::shared_ptr<Program> prog, std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Shape> shape) const;
+	void SetAngle(double a);
 	
 private:
-	std::shared_ptr<Link> parent;
-	std::shared_ptr<Link> child;
-	int depth;
-	Eigen::Vector2d position;
-	double angle;
-	Eigen::Matrix4d meshMat;
+	std::shared_ptr<Mesh> linkMesh;
 
-	// Store the 'J' matrices for this link, which are equal to TR(theta), TR'(theta), and TR"(theta)
+	// Store the joint transformation matrices for this link in LOCAL space,
+	//   which are equal to TR(theta), TR'(theta), and TR"(theta).
+	//  (Note: Scale transforms don't apply to links for this reason)
+	// TODO: check that ^
 	Eigen::Matrix3d J;
 	Eigen::Matrix3d JPrime;
 	Eigen::Matrix3d J2Prime;
 };
 
-#endif

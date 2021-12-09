@@ -22,6 +22,12 @@
     <Filter Include="Resource Files\Library Files">
       <UniqueIdentifier>{3277d289-d23a-454c-9f58-f024e7b4cbdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\IK">
+      <UniqueIdentifier>{b3f0c21a-574e-403c-9ed2-75e636bbb1bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IK">
+      <UniqueIdentifier>{344d9cce-10e0-47b8-b36d-a4be28e2bf0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -64,7 +70,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\IK\LegTarget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IK\IKChain.cpp">
+      <Filter>Source Files\IK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IK\Link.cpp">
+      <Filter>Source Files\IK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +120,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\IK\LegTarget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\IKChain.h">
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\Link.h">
+      <Filter>Header Files\IK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
