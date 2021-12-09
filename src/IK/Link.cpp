@@ -8,20 +8,17 @@
 #include "Link.h"
 #include "../Mesh.h"
 
-Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name) {}
+Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name, const float length) :
+	SceneObject(engine, name), linkLength(length) {}
 
 void Link::BeginPlay() {
-	if (SceneObject::enable_shared_from_this::weak_from_this().expired()) {
-		std::cout << "ERROR: link " << objectName << " has expired weak_from_this!" << std::endl;
-	}
 	// Create the mesh that this link will use
 	linkMesh = std::make_shared<Mesh>(engineRef, objectName + "_mesh");
 	linkMesh->GenerateCubeMesh();
 	// TODO: remove hardcoding
 	linkMesh->LoadTexture("resources/textures/awesomeface.png");
-	linkMesh->SetRelativeLocation(glm::vec3(0.0f, 0.0f, 0.0f));
-	linkMesh->SetRelativeScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	linkMesh->SetRelativeLocation(glm::vec3(linkLength / 2.0f, 0.0f, 0.0f));
+	linkMesh->SetRelativeScale(glm::vec3(linkLength, 0.1f, 0.1f));
 	AddChildObject(linkMesh);
 	// Manually pass BeginPlay to the mesh that this link controls, since it's not
 	//   managed by the scene
@@ -40,17 +37,17 @@ void Link::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	linkMesh->Render(shader);
 }
 
-void Link::SetAngle(double a)
-{	
-	// Hardcoded link offset
-	glm::vec2 position(1.0f, 0.0f);
+void Link::SetAngle(double a) {	
+	// Apply new angle to this link's local transform
+	// TODO: check if a rotation along z is correct
+	rootTransform.rot = Transform::EulerToQuat(glm::vec3(0.0, 0.0, a));
 
 	// Recalculate the J matrices for this link
 	double cosT = cos(a);
 	double sinT = sin(a);
 	J <<
-		cosT, -1.0 * sinT, position[0],
-		sinT, cosT, position[1],
+		cosT, -1.0 * sinT, rootTransform.loc.x,
+		sinT, cosT, rootTransform.loc.y,
 		0, 0, 1;
 	// Note: translation coords are 0 for J' and J", because
 	//   R matrix has homogeneous coord of 0 (which nullifies

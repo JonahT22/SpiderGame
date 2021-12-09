@@ -29,12 +29,24 @@ void IKChain::WrapAngles(Eigen::VectorXd& angles)
 
 void IKChain::BeginPlay() {
 	// Create the links in the chain
+	// TODO: remove hardcoding
+	// The first link in the chain should be shorter than the others
+	const float link_offsets[8] = {0.0f, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+	if (numLinks > 7) {
+		std::cerr << "ERROR: didn't hardcode that many link lengths!" << std::endl;
+		abort();
+	}
+
 	// Note: this must be done in beginplay, since weak_from_this is called in AddChildObject
 	for (size_t i = 0; i < numLinks; ++i) {
 		std::string link_name = objectName + "_link_" + std::to_string(i);
-		auto new_link = std::make_shared<Link>(engineRef, link_name);
-		new_link->SetRelativeLocation(glm::vec3(0.5f, 0.0f, 0.0f));
-		// TODO: set link properties
+		
+		// Set the link lengths and locations
+		float link_offset = link_offsets[i];
+		float link_len = link_offsets[i + 1];
+		auto new_link = std::make_shared<Link>(engineRef, link_name, link_len);
+		new_link->SetRelativeLocation(glm::vec3(link_offset, 0.0f, 0.0f));
+
 		if (allLinks.size() == 0) {
 			// Parent the first link to this object
 			AddChildObject(new_link);

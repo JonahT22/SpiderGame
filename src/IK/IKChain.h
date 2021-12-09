@@ -44,7 +44,7 @@ private:
 	void UpdateLinkAngles();
 
 	// TODO: set this from file
-	size_t numLinks = 2;
+	size_t numLinks = 3;
 
 	// IKChain has exclusive control over the links attached to it, so make this a vector
 	//   of shared_ptrs instead of weak_ptrs. IKChain manages their lifetime, not the Scene

@@ -17,7 +17,7 @@ class Link : public SceneObject {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	
-	Link(std::weak_ptr<GameEngine> engine, const std::string& name);
+	Link(std::weak_ptr<GameEngine> engine, const std::string& name, const float length);
 	~Link() = default;
 
 	// Inherited from SceneObject
@@ -30,10 +30,14 @@ public:
 	const Eigen::Matrix3d& GetJPrime() const { return JPrime; }
 	const Eigen::Matrix3d& GetJ2Prime() const { return J2Prime; }
 
+	// Set the angle (in radians) for this link
 	void SetAngle(double a);
 	
 private:
 	std::shared_ptr<Mesh> linkMesh;
+
+	// Length of this link (distance to the next link's root along the x axis)
+	const float linkLength = 1.0f;
 
 	// Store the joint transformation matrices for this link in LOCAL space,
 	//   which are equal to TR(theta), TR'(theta), and TR"(theta).
