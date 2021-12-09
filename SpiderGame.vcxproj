@@ -24,6 +24,9 @@
     <ClCompile Include="src\IK\IKChain.cpp" />
     <ClCompile Include="src\IK\LegTarget.cpp" />
     <ClCompile Include="src\IK\Link.cpp" />
+    <ClCompile Include="src\IK\LinkObjective.cpp" />
+    <ClCompile Include="src\IK\OptimizerGDLS.cpp" />
+    <ClCompile Include="src\IK\OptimizerNM.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
@@ -42,6 +45,10 @@
     <ClInclude Include="src\IK\IKChain.h" />
     <ClInclude Include="src\IK\LegTarget.h" />
     <ClInclude Include="src\IK\Link.h" />
+    <ClInclude Include="src\IK\LinkObjective.h" />
+    <ClInclude Include="src\IK\Optimizer.h" />
+    <ClInclude Include="src\IK\OptimizerGDLS.h" />
+    <ClInclude Include="src\IK\OptimizerNM.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Skybox.h" />
     <ClInclude Include="src\GameEngine.h" />

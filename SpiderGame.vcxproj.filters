@@ -78,6 +78,15 @@
     <ClCompile Include="src\IK\Link.cpp">
       <Filter>Source Files\IK</Filter>
     </ClCompile>
+    <ClCompile Include="src\IK\LinkObjective.cpp">
+      <Filter>Source Files\IK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IK\OptimizerGDLS.cpp">
+      <Filter>Source Files\IK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IK\OptimizerNM.cpp">
+      <Filter>Source Files\IK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h">
@@ -126,6 +135,18 @@
       <Filter>Header Files\IK</Filter>
     </ClInclude>
     <ClInclude Include="src\IK\Link.h">
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\LinkObjective.h">
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\Optimizer.h">
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\OptimizerGDLS.h">
+      <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\OptimizerNM.h">
       <Filter>Header Files\IK</Filter>
     </ClInclude>
   </ItemGroup>
