@@ -92,16 +92,15 @@ void IKChain::BeginPlay() {
 
 void IKChain::PhysicsUpdate() {
 	// Get the world-space position of the target
-	glm::vec4 world_target = target.lock()->GetWorldTransformMtx()[3];
+	glm::vec4 target_loc = target.lock()->GetWorldTransformMtx()[3];
 	// Get the local-space position of the target
-	glm::vec4 chain_target = glm::inverse(modelMtx) * world_target;
+	target_loc = glm::inverse(modelMtx) * target_loc;
 	// Rotate the Chain to face the target location
 	// TODO: Figure out why this -1.0f is necessary
-	float rot_angle = -1.0f * atan2(chain_target.z, chain_target.x);
+	float rot_angle = -1.0f * atan2(target_loc.z, target_loc.x);
 	linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
 
-	glm::vec4 link_root_target = glm::inverse(linkRoot->GetWorldTransformMtx()) * world_target;
-	Eigen::Vector2d x(link_root_target.x, link_root_target.y);
+	Eigen::Vector2d x(target_loc.x, target_loc.y);
 	objectiveFunc.SetTarget(x);
 
 	// Perform GLDS optimization (note: chain angles are updated in the optimizer)
