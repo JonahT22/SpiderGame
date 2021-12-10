@@ -44,7 +44,7 @@ private:
 	// Keep a list of legs & target that the SpiderObject controls (NOT controlled by the scene)
 	std::vector<std::pair<std::shared_ptr<IKChain>, std::shared_ptr<LegTarget> > > legList;
 	// Distance to cover per physics frame
-	const float moveSpeed = 1.2f;
+	const float moveSpeed = 2.0f;
 	// Amount to rotate about this object's y axis per frame
 	const float turnSpeed = 1.2f;
 };

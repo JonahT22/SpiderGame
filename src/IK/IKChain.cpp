@@ -104,7 +104,7 @@ void IKChain::PhysicsUpdate(const float delta_time) {
 	// Rotate the Chain to face the target location
 	// TODO: Figure out why this -1.0f is necessary
 	float rot_angle = -1.0f * atan2(target_loc.z, target_loc.x);
-	if (abs(rot_angle) < glm::radians(90.0)) {
+	if (abs(rot_angle) < glm::radians(70.0)) {
 		linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
 	}
 

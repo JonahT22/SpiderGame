@@ -8,7 +8,7 @@ using namespace Eigen;
 OptimizerGDLS::OptimizerGDLS(const int num_links) :
 	alphaInit(1.0),
 	gamma(0.25),
-	tol(1e-1),
+	tol(2e-1),
 	iterMax(5 * num_links),
 	iter(0)
 {

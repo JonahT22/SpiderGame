@@ -55,7 +55,7 @@ private:
 	//   ex: armAngle.y = pi/4 means it's rotated halfway between +X axis and +Z axis
 	glm::vec2 armAngle = glm::vec2(0.0f);
 	// Maximum value of armAngle.x (must be LESS than pi/2)
-	const float maxVerticalAngle = (glm::pi<float>() / 2.0f) - 0.5f;
+	const float maxVerticalAngle = (glm::pi<float>() / 2.0f) - 0.2f;
 
 	// Store the projection and view matrices on this camera object
 	glm::mat4 projectionMtx;

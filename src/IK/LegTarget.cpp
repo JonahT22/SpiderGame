@@ -1,11 +1,13 @@
 #include "LegTarget.h"
 
+#include <cassert>
 #include <iostream>
 
 #include <glad/glad.h>
 
 #include "../GameEngine.h"
 #include "../Mesh.h"
+#include "../SpiderCharacter.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {}
@@ -53,7 +55,10 @@ void LegTarget::PhysicsUpdate(const float delta_time) {
 
 			// World-space location of the goal (keep as vec4 with w = 1)
 			glm::vec4 goalLoc = goalMtx[3];
-			// TODO: offset goalLoc by movement speed
+			// Get a reference to the spider that this LegTarget is attached to
+			auto spider_ptr = std::dynamic_pointer_cast<SpiderCharacter>(parent.lock());
+			assert(spider_ptr);
+			goalLoc += glm::vec4(velocityFactor * spider_ptr->GetLinearVelocity(), 0.0f);
 
 			// Always update rotation & scale in the model matrix, no matter what the
 			//   location is. But leave translation (col 3) up to the interpolation code

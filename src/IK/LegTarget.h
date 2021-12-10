@@ -33,7 +33,7 @@ public:
 
 private:
 	// TODO: organize the parameters and pass in through file
-	const bool visualizeMesh = true;
+	const bool visualizeMesh = false;
 	std::shared_ptr<Mesh> vizMesh;
 
 	// Reference to any adjacent LegTargets. This LegTarget should not start moving
@@ -42,7 +42,7 @@ private:
 	
 	// World-space radius threshold before the lazy location decides to catch up
 	//   to actual location
-	const float threshold = 0.2f;
+	const float threshold = 0.6f;
 	// Amount of time to lerp between the 'old' and 'new' target points when the goal
 	//   distance exceed the threshold
 	const float lerpTimeLength = 0.1f;
@@ -57,6 +57,8 @@ private:
 	bool justFinishedMoving = false;
 	// Amount that the leg should lift in the air when moving from point-to-point
 	const float legLiftHeight = 0.2f;
+	// Multiplier to scale the velocity of the spider when offsetting the goal location
+	const float velocityFactor = 0.2f;
 	// Store the value of Pi for easy reference
 	static constexpr float PI = glm::pi<float>();
 };
