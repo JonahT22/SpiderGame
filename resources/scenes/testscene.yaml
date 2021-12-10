@@ -26,7 +26,7 @@ scene_objects:
         # shader, relative_transform, and parent are inherited from SceneObject
         shader: "rainbow"
         relative_transform:
-            location: [1.5, 0.0, 0.0]
+            location: [1.5, 0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         # If parent_object is blank, this object is oriented to the world origin
@@ -35,11 +35,10 @@ scene_objects:
     -   type: "mesh"
         name: "left_cube"
         meshfile: ""
-        # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
         texture: "resources/textures/awesomeface.png"
-        shader: "unlit"
+        shader: "normal"
         relative_transform:
-            location: [-1.5, 0.0, 0.0]
+            location: [-1.5, 0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         # If parent_object is blank, this object is oriented to the world origin
@@ -49,7 +48,7 @@ scene_objects:
         name: "spider"
         shader: "unlit"
         relative_transform:
-            location: [0.0, 0.0, 0.0]
+            location: [0.0, 0.2, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
         parent: ""
@@ -71,8 +70,8 @@ scene_objects:
     -   type: "mesh"
         name: "spider_body"
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
-        shader: "normal"
+        texture: "resources/textures/fabric.jpg"
+        shader: "unlit"
         relative_transform:
             location: [0.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
@@ -82,7 +81,7 @@ scene_objects:
     -   type: "mesh"
         name: "spider_eye_right"
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
+        texture: "resources/textures/eye.png"
         shader: "unlit"
         relative_transform:
             location: [0.14, 0.1, 0.32]
@@ -93,7 +92,7 @@ scene_objects:
     -   type: "mesh"
         name: "spider_eye_left"
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
+        texture: "resources/textures/eye.png"
         shader: "unlit"
         relative_transform:
             location: [-0.14, 0.1, 0.32]
@@ -101,8 +100,29 @@ scene_objects:
             scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
+    -   type: "mesh"
+        name: "spider_eye_cover"
+        meshfile: ""
+        texture: "resources/textures/fabric.jpg"
+        shader: "unlit"
+        relative_transform:
+            location: [0.0, 0.15, 0.25]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.51, 0.11, 0.2]
+        parent: "spider"
 
-
+    -   type: "mesh"
+        name: "floor_cube"
+        meshfile: ""
+        texture: "resources/textures/wall.jpg"
+        tex_scale: [10.0, 10.0]
+        shader: "unlit"
+        relative_transform:
+            location: [0.0, -0.5, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [10.0, 1.0, 10.0]
+        # If parent_object is blank, this object is oriented to the world origin
+        parent: ""
    
 
 skybox:
