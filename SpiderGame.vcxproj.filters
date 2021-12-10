@@ -181,5 +181,11 @@
     <None Include="resources\scenes\demoscene.yaml">
       <Filter>Resource Files\Scenes</Filter>
     </None>
+    <None Include="resources\shaders\rainbow_frag.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\rainbow_vert.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

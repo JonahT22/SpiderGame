@@ -13,6 +13,10 @@ shaders:
         vert: "resources/shaders/normal_vert.glsl"
         frag: "resources/shaders/normal_frag.glsl"
 
+    -   name: "rainbow"
+        vert: "resources/shaders/rainbow_vert.glsl"
+        frag: "resources/shaders/rainbow_frag.glsl"
+
 scene_objects:
     -   type: "mesh"
         name: "right_cube"
@@ -20,7 +24,7 @@ scene_objects:
         meshfile: ""
         texture: "resources/textures/wall.jpg"
         # shader, relative_transform, and parent are inherited from SceneObject
-        shader: "unlit"
+        shader: "rainbow"
         relative_transform:
             location: [1.5, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
