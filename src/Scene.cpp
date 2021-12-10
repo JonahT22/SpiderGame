@@ -23,10 +23,10 @@
 Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}
 
-void Scene::UpdateScenePhysics() {
+void Scene::UpdateScenePhysics(const float delta_time) {
 	for (auto& object_ref : rootObjects) {
 		if (!object_ref.expired()) {
-			object_ref.lock()->PhysicsUpdate();
+			object_ref.lock()->PhysicsUpdate(delta_time);
 		}
 		else {
 			// Eventually, the rootObjects list should updated whenever SceneObjects are
@@ -175,7 +175,7 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	}
 
 	/* ----- Propagate parent-child transforms through the object hierarchy ----- */
-	UpdateScenePhysics();
+	UpdateScenePhysics(engineRef.lock()->GetPhysicsTimeStep());
 }
 
 inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {

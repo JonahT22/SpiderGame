@@ -77,7 +77,7 @@ void SpiderCharacter::BeginPlay() {
 	MarkPhysicsDirty();
 }
 
-void SpiderCharacter::PhysicsUpdate() {
+void SpiderCharacter::PhysicsUpdate(const float delta_time) {
 	auto engine = engineRef.lock();
 	// Rotation input
 	if (engine->IsKeyPressed(GLFW_KEY_RIGHT)) {
@@ -101,7 +101,7 @@ void SpiderCharacter::PhysicsUpdate() {
 		rootTransform.loc -= rootTransform.GetRightVector() * moveSpeed;
 	}
 	MarkPhysicsDirty();
-	SceneObject::PhysicsUpdate();
+	SceneObject::PhysicsUpdate(delta_time);
 }
 
 void SpiderCharacter::Render(const std::shared_ptr<ShaderProgram> shader) const {
@@ -110,6 +110,11 @@ void SpiderCharacter::Render(const std::shared_ptr<ShaderProgram> shader) const 
 	for (auto& child : childObjects) {
 		child.lock()->Render(shader);
 	}
+}
+
+glm::vec3 SpiderCharacter::GetLinearVelocity() const {
+	
+	return glm::vec3();
 }
 
 inline void SpiderCharacter::MakeLegNeighbors(size_t index_1, size_t index_2) {

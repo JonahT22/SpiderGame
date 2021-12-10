@@ -20,8 +20,11 @@ public:
 	~SpiderCharacter() = default;
 
 	virtual void BeginPlay() override;
-	virtual void PhysicsUpdate() override;
+	virtual void PhysicsUpdate(const float delta_time) override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
+
+	// Return the current velocity of this object by getting the current user inputs
+	glm::vec3 GetLinearVelocity() const;
 
 private:
 	// Make 2 LegTargets in the legList neighbors of each other

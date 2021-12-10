@@ -14,10 +14,10 @@ Camera::Camera(std::weak_ptr<GameEngine> engine, const std::string& name) :
 
 void Camera::BeginPlay() {}
 
-void Camera::PhysicsUpdate() {
+void Camera::PhysicsUpdate(const float delta_time) {
 	// Do the same as the SceneObject physicsupdate, but also update the view
 	//   matrix afterward to get any updates to this camera's transform
-	SceneObject::PhysicsUpdate();
+	SceneObject::PhysicsUpdate(delta_time);
 	UpdateViewMtx();
 }
 

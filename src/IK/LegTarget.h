@@ -22,7 +22,7 @@ public:
 	~LegTarget() = default;
 
 	virtual void BeginPlay() override;
-	virtual void PhysicsUpdate() override;
+	virtual void PhysicsUpdate(const float delta_time) override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
 	// Getters
@@ -43,8 +43,6 @@ private:
 	// World-space radius threshold before the lazy location decides to catch up
 	//   to actual location
 	const float threshold = 0.2f;
-	// Get from GameEngine ref
-	const float physicsTimeStep = 0.1f;
 	// Amount of time to lerp between the 'old' and 'new' target points when the goal
 	//   distance exceed the threshold
 	const float lerpTimeLength = 0.1f;

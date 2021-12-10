@@ -29,7 +29,7 @@ public:
 
 	// Inherited from SceneObject
 	virtual void BeginPlay();
-	virtual void PhysicsUpdate();
+	virtual void PhysicsUpdate(const float delta_time);
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
 
 	/* ----- Getters ----- */

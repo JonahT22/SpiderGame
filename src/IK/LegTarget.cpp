@@ -8,7 +8,7 @@
 #include "../Mesh.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name), physicsTimeStep(engine.lock()->GetPhysicsTimeStep()) {}
+	SceneObject(engine, name) {}
 
 void LegTarget::BeginPlay() {
 	// Initialize the modelMtx with the full set of parent transforms, without
@@ -27,7 +27,7 @@ void LegTarget::BeginPlay() {
 	}
 }
 
-void LegTarget::PhysicsUpdate() {
+void LegTarget::PhysicsUpdate(const float delta_time) {
 	// Check if any neighboring LegTargets are moving
 	bool are_neighbors_moving = false;
 	for (auto& neighbor_target : neighbors) {
@@ -53,6 +53,7 @@ void LegTarget::PhysicsUpdate() {
 
 			// World-space location of the goal (keep as vec4 with w = 1)
 			glm::vec4 goalLoc = goalMtx[3];
+			// TODO: offset goalLoc by movement speed
 
 			// Always update rotation & scale in the model matrix, no matter what the
 			//   location is. But leave translation (col 3) up to the interpolation code
@@ -75,7 +76,7 @@ void LegTarget::PhysicsUpdate() {
 					// TODO: offset this in the spidercharacter's up vector, not y
 					interpLoc.y += sin(alpha * PI) * legLiftHeight;
 					modelMtx[3] = interpLoc;
-					lerpTimer += physicsTimeStep;
+					lerpTimer += delta_time;
 					// Each update, re-mark physics dirty to propagate changes to children
 					MarkPhysicsDirty();
 				}
@@ -105,7 +106,7 @@ void LegTarget::PhysicsUpdate() {
 	// Propagate physics to children
 	for (auto& child : childObjects) {
 		if (!child.expired()) {
-			child.lock()->PhysicsUpdate();
+			child.lock()->PhysicsUpdate(delta_time);
 		}
 		else {
 			std::cerr << "ERROR: Attempted to update physics on an invalid ";

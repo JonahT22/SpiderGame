@@ -26,7 +26,7 @@ public:
 	~Scene() = default;
 
 	// Iterate through the scene hierarchy, updating each object's modelview matrices
-	void UpdateScenePhysics();
+	void UpdateScenePhysics(const float delta_time);
 	// Iterate over each shader, rendering the objects that are drawn by it
 	void RenderScene(const unsigned int frameDelayMs) const;
 	// Instantiate every shader & SceneObject that will be used in this game

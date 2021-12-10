@@ -13,7 +13,7 @@ SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& na
 
 void SceneObject::BeginPlay() {}
 
-void SceneObject::PhysicsUpdate() {
+void SceneObject::PhysicsUpdate(const float delta_time) {
 	// Only recalculate model matrix if this object's physics are dirty
 	if (physicsDirty) {
 		// Find this object's local -> world transform using the parent's transform
@@ -33,7 +33,7 @@ void SceneObject::PhysicsUpdate() {
 	//   immediately propagated to children
 	for (auto& child : childObjects) {
 		if (!child.expired()) {
-			child.lock()->PhysicsUpdate();
+			child.lock()->PhysicsUpdate(delta_time);
 		}
 		else {
 			std::cerr << "ERROR: Attempted to update physics on an invalid ";

@@ -20,7 +20,7 @@ public:
 	// Runs after all objects are loaded, before the first frame is drawn
 	virtual void BeginPlay();
 	// Find this object's (world) model mtx and iterate recursively to update child matrices
-	virtual void PhysicsUpdate();
+	virtual void PhysicsUpdate(const float delta_time);
 	// Draw this object, and ONLY this object. Do not draw children
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const;
 

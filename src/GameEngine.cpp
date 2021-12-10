@@ -81,7 +81,7 @@ void GameEngine::RenderScene(double delta_time) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	int run_this_frame = 0;
 	while (physicsTimer > physicsTimeStep) {
-		scene->UpdateScenePhysics();
+		scene->UpdateScenePhysics(physicsTimeStep);
 		run_this_frame++;
 		physicsTimer -= physicsTimeStep;
 	}

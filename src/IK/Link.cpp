@@ -25,11 +25,11 @@ void Link::BeginPlay() {
 	linkMesh->BeginPlay();
 }
 
-void Link::PhysicsUpdate() {
+void Link::PhysicsUpdate(const float delta_time) {
 	// Note: the J matrices are NOT updated during physicsupdate. They are the 2D J-space
 	// transforms of the link, not the modelMatrix that will actually be used in rendering
 	
-	SceneObject::PhysicsUpdate();
+	SceneObject::PhysicsUpdate(delta_time);
 }
 
 void Link::Render(const std::shared_ptr<ShaderProgram> shader) const {

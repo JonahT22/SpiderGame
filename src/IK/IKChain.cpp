@@ -96,7 +96,7 @@ void IKChain::BeginPlay() {
 	}
 }
 
-void IKChain::PhysicsUpdate() {
+void IKChain::PhysicsUpdate(const float delta_time) {
 	// Get the world-space position of the target
 	glm::vec4 target_loc = target.lock()->GetWorldTransformMtx()[3];
 	// Get the local-space position of the target
@@ -129,7 +129,7 @@ void IKChain::PhysicsUpdate() {
 	WrapAngles(angles);
 	SetLinkAngles(angles);
 
-	SceneObject::PhysicsUpdate();
+	SceneObject::PhysicsUpdate(delta_time);
 }
 
 void IKChain::Render(const std::shared_ptr<ShaderProgram> shader) const {
