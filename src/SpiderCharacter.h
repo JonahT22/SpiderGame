@@ -35,8 +35,8 @@ private:
 
 	// TODO: read from file
 	size_t legsPerSide = 3;
-	float legY = 0.14;
-	float legX = 0.25;
+	float legY = 0.1;
+	float legX = 0.23;
 	float maxLegZ = 0.3;
 	float targetX = 0.8;
 	float targetY = -0.2;
