@@ -55,6 +55,7 @@ void IKChain::BeginPlay() {
 	// TODO: remove hardcoding
 	// The first link in the chain should be shorter than the others
 	const float link_offsets[8] = { 0.0f, 0.4, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6 };
+	constexpr float pi = glm::pi<float>();
 	if (numLinks > 7) {
 		std::cerr << "ERROR: didn't hardcode that many link lengths!" << std::endl;
 		abort();
@@ -81,7 +82,12 @@ void IKChain::BeginPlay() {
 		allLinks.emplace_back(new_link);
 	}
 
+	// Initialize the angles with some hardcoded values. Used as a starting point for optimizer
 	J_linkAngles = Eigen::VectorXd::Zero(numLinks);
+	double start_angles[8] = { pi / 4.0, (-7.0 * pi) / 12.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+	for (size_t i = 0; i < numLinks; ++i) {
+		J_linkAngles(i) = start_angles[i];
+	}
 	UpdateLinkAngles();
 	
 	// Manually call beginplay on children, since they aren't managed by the scene

@@ -55,6 +55,10 @@ void SpiderCharacter::BeginPlay() {
 	for (auto& child : childObjects) {
 		child.lock()->BeginPlay();
 	}
+	
+	// Mark physics dirty to trigger the legs to start calculating their positions
+	//   on the first physicsupdate
+	MarkPhysicsDirty();
 }
 
 void SpiderCharacter::PhysicsUpdate() {

@@ -23,6 +23,7 @@ void OptimizerNM::optimize(const LinkObjective& objective, VectorXd& x) {
 		double f = objective.evalObjective(x, &g, &H);
 		VectorXd dx = -1.0 * H.inverse() * g;
 		x += dx;
+
 		if (dx.norm() < tol) {
 			iter = i;
 			break;

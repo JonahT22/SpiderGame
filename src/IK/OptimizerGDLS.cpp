@@ -38,6 +38,7 @@ void OptimizerGDLS::optimize(const LinkObjective& objective, VectorXd& x) {
 		}
 		// Advance x using the chosen step size
 		x += dx;
+
 		if (dx.norm() < tol) {
 			iter = i;
 			break;

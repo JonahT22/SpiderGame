@@ -19,13 +19,18 @@ public:
 	void SetTarget(const Eigen::Vector2d& p) { pTarget = p; }
 
 private:
+	// Custom constraint function. 0 if constraints are satisfied, 1 if they are not
+	double CalcConstraintFactor(const Eigen::VectorXd& theta) const;
+
 	// Keep a reference to the chain that this objective function is evaluating
 	std::shared_ptr<IKChain> chain;
 	// The most recent target position to compare the chain with
 	Eigen::Vector2d pTarget;
 	// Target weight - prioritizes getting to the target location
 	double wTar;
-	// Regulizer weight - prioritizes minimizing the angle weights
+	// Regulizer weight - prioritizes minimizing the angles
 	double wReg;
+	// Constraint weight - prioritizes keeping the angle constraints
+	double wCon;
 };
 
