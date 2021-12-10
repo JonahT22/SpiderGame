@@ -1,0 +1,7 @@
+window_width: 800
+window_height: 600
+window_name: "Spider Game"
+clear_color: [0.1, 0.1, 0.1]
+physics_fps: 60
+frame_delay_ms: 0
+show_frame_rate: false

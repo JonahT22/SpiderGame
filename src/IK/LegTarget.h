@@ -18,7 +18,8 @@ class Mesh;
 ///
 class LegTarget : public SceneObject {
 public:
-	LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name);
+	LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name,
+		const bool viz_mesh, const float threshold, const float lerp_time);
 	~LegTarget() = default;
 
 	virtual void BeginPlay() override;
@@ -46,6 +47,10 @@ private:
 	// Amount of time to lerp between the 'old' and 'new' target points when the goal
 	//   distance exceed the threshold
 	const float lerpTimeLength = 0.1f;
+	// Amount that the leg should lift in the air when moving from point-to-point
+	const float legLiftHeight = 0.2f;
+	// Multiplier to scale the velocity of the spider when offsetting the goal location
+	const float velocityFactor = 0.25f;
 	// Current amount of time that the target point has been lerping to the goal
 	float lerpTimer = 0.0f;
 	// 'Old' location of the target, captured when it begins to move to the goal
@@ -55,10 +60,6 @@ private:
 	// If one LegTarget is always moving, it's neighbors will be starved. Add this lock
 	//   to prevent a LegTarget from moving again immediately after reaching its target
 	bool justFinishedMoving = false;
-	// Amount that the leg should lift in the air when moving from point-to-point
-	const float legLiftHeight = 0.2f;
-	// Multiplier to scale the velocity of the spider when offsetting the goal location
-	const float velocityFactor = 0.2f;
 	// Store the value of Pi for easy reference
 	static constexpr float PI = glm::pi<float>();
 };

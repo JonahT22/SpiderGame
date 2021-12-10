@@ -5,14 +5,19 @@
 #include <glad/glad.h>
 
 #include "Camera.h"
+#include "GameOptions.h"
+#include "Scene.h"
+#include "Window.h"
 // TODO: I shouldn't need to include these, but for some reason I do
 #include "Skybox.h"
 #include "ShaderProgram.h"
 
-GameEngine::GameEngine(const GameOptions options) :
-	physicsTimeStep(options.physicsTimeStep),
-	frameDelayMs(options.frameDelayMs),
-	showFramerate(options.showFramerate) {
+GameEngine::GameEngine(const std::string& options_file) {
+	GameOptions options(options_file);
+	physicsTimeStep = options.physicsTimeStep;
+	frameDelayMs = options.frameDelayMs;
+	showFramerate = options.showFramerate;
+
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {
 		std::cerr << "Error during GLFW Initialization!" << std::endl;

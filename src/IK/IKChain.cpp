@@ -14,8 +14,13 @@
 #include "OptimizerNM.h"
 #include "../SceneObject.h"
 
-IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name), optimizerGDLS(numLinks), optimizerNM(numLinks) {
+IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name,
+	const size_t num_links, const bool render_links) :
+	SceneObject(engine, name),
+	optimizerGDLS(numLinks),
+	optimizerNM(numLinks),
+	numLinks(num_links),
+	renderLinks(render_links) {
 	// TODO: endEffectorPos should == the linkLength of the final link in the chain: [len, 0]
 	//   Right now, this is hardcoded to 0.5, so keep the same hardcoding here
 	J_endEffectorPos << 0.5, 0.0, 1.0;
@@ -134,8 +139,10 @@ void IKChain::PhysicsUpdate(const float delta_time) {
 
 void IKChain::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// Manually render all child links, since the scene doesn't manage them
-	for (auto& link : allLinks) {
-		link->Render(shader);
+	if (renderLinks) {
+		for (auto& link : allLinks) {
+			link->Render(shader);
+		}
 	}
 }
 

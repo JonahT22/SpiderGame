@@ -22,9 +22,9 @@ scene_objects:
         name: "right_cube"
         # If no meshfile is given, a simple cube will be loaded for the object
         meshfile: ""
-        texture: "resources/textures/wall.jpg"
+        texture: "resources/textures/awesomeface.png"
         # shader, relative_transform, and parent are inherited from SceneObject
-        shader: "rainbow"
+        shader: "unlit"
         relative_transform:
             location: [1.5, 0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]
@@ -35,7 +35,7 @@ scene_objects:
     -   type: "mesh"
         name: "left_cube"
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
+        texture: "resources/textures/wall.jpg"
         shader: "normal"
         relative_transform:
             location: [-1.5, 0.5, 0.0]
@@ -51,6 +51,16 @@ scene_objects:
             location: [0.0, 0.2, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
+        move_speed: 2.0
+        turn_speed: 1.2
+        num_legs_per_side: 3
+        num_joints_per_leg: 2
+        front_leg_location: [0.23, 0.1, 0.3]
+        front_target_location: [0.8, -0.2, 0.7]
+        show_legs: true
+        show_leg_targets: false
+        leg_target_threshold: 0.7
+        leg_move_time: 0.1
         parent: ""
 
         # By default, the gameengine will choose the 1st-listed camera as the main camera
@@ -105,6 +115,7 @@ scene_objects:
         meshfile: ""
         texture: "resources/textures/fabric.jpg"
         shader: "unlit"
+        tex_scale: [1.0, 0.1]
         relative_transform:
             location: [0.0, 0.15, 0.25]
             rotation: [0.0, 0.0, 0.0]
@@ -114,14 +125,13 @@ scene_objects:
     -   type: "mesh"
         name: "floor_cube"
         meshfile: ""
-        texture: "resources/textures/wall.jpg"
-        tex_scale: [10.0, 10.0]
+        texture: "resources/textures/marble.jpg"
+        tex_scale: [3.0, 3.0]
         shader: "unlit"
         relative_transform:
             location: [0.0, -0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [10.0, 1.0, 10.0]
-        # If parent_object is blank, this object is oriented to the world origin
         parent: ""
    
 

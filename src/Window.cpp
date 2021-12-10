@@ -4,13 +4,13 @@
 
 #include "GameEngine.h"
 
-Window::Window(const int width, const int height, const char* title,
+Window::Window(const int width, const int height, const std::string& title,
                GameEngine* engine) : engineRef(engine) {
 	// Note: GLFW should be initialized at this point, and do NOT call any OpenGL functions
 	//   in this constructor since the GameEngine hasn't yet initialized GLAD
 
 	// Create a window object
-	glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
+	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	// Make the context of the window the main context on the current thread
 	if (glfwWindow == NULL)
 	{

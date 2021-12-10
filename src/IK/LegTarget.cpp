@@ -9,8 +9,13 @@
 #include "../Mesh.h"
 #include "../SpiderCharacter.h"
 
-LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name) {}
+LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name,
+	const bool viz_mesh, const float threshold, const float lerp_time) :
+	SceneObject(engine, name),
+	visualizeMesh(viz_mesh),
+	threshold(threshold),
+	lerpTimeLength(lerp_time)
+{}
 
 void LegTarget::BeginPlay() {
 	// Initialize the modelMtx with the full set of parent transforms, without
@@ -22,7 +27,7 @@ void LegTarget::BeginPlay() {
 	if (visualizeMesh) {
 		vizMesh = std::make_shared<Mesh>(engineRef, objectName + "_vizmesh");
 		vizMesh->GenerateCubeMesh();
-		vizMesh->LoadTexture("resources/textures/wall.jpg");
+		vizMesh->LoadTexture("resources/textures/awesomeface.png");
 		vizMesh->SetRelativeScale(glm::vec3(0.1, 0.1, 0.1));
 		AddChildObject(vizMesh);
 		vizMesh->BeginPlay();

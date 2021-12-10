@@ -87,6 +87,12 @@
     <ClCompile Include="src\IK\OptimizerNM.cpp">
       <Filter>Source Files\IK</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\YAMLHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h">
@@ -148,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="src\IK\OptimizerNM.h">
       <Filter>Header Files\IK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameOptions.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

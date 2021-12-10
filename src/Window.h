@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 
 // Whenever GLFW is included without GLAD preceding it, define GLFW_INCLUDE_NONE first
 #define GLFW_INCLUDE_NONE
@@ -15,7 +16,7 @@ class GameEngine;
 /// 
 class Window {
 public:
-	Window(const int height, const int width, const char* title,
+	Window(const int height, const int width, const std::string& title,
 	       GameEngine* engine);
 	~Window() = default;
 

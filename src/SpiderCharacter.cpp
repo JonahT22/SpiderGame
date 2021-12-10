@@ -11,8 +11,19 @@
 #include "IK/IKChain.h"
 #include "IK/LegTarget.h"
 
-SpiderCharacter::SpiderCharacter(std::weak_ptr<GameEngine> engine, const std::string& name) :
-	SceneObject(engine, name) {}
+SpiderCharacter::SpiderCharacter(std::weak_ptr<GameEngine> engine, const std::string& name,
+	const float move_speed, const float turn_speed,
+	const size_t legs_per_side, const size_t links_per_chain,
+	const glm::vec3 leg_pos, const glm::vec3 target_pos,
+	const bool render_links, const bool render_leg_targets,
+	const float target_threshold, const float target_lerp_time) :
+	SceneObject(engine, name),
+	moveSpeed(move_speed), turnSpeed(turn_speed),
+	legsPerSide(legs_per_side), linksPerChain(links_per_chain),
+	legPos(leg_pos), targetPos(target_pos),
+	renderLinks(render_links), renderLegTargets(render_leg_targets),
+	targetThreshold(target_threshold), targetLerpTime(target_lerp_time)
+{}
 
 void SpiderCharacter::BeginPlay() {
 	// Create the legs
@@ -28,22 +39,24 @@ void SpiderCharacter::BeginPlay() {
 			// Avoid potential div by 0 when there is only 1 leg
 			z_alpha = 0.5f;
 		}
-		float leg_z = ((1.0f - z_alpha) * maxLegZ) + (z_alpha * -1.0f * maxLegZ);
+		float leg_z = ((1.0f - z_alpha) * legPos.z) + (z_alpha * -1.0f * legPos.z);
 		// Also space the leg targets evenly
-		float target_z = ((1.0f - z_alpha) * maxTargetZ) + (z_alpha * -1.0f * maxTargetZ);
+		float target_z = ((1.0f - z_alpha) * targetPos.z) + (z_alpha * -1.0f * targetPos.z);
 		// Right and left legs
 		for (size_t j = 0; j < 2; ++j) {
 			// Name has format 'leg_L_0', 'leg_R_1_target' etc.
 			auto new_leg_chain = std::make_shared<IKChain>(engineRef,
-				"leg_" + sides[j] + "_" + std::to_string(i));
+				"leg_" + sides[j] + "_" + std::to_string(i),
+				linksPerChain, renderLinks);
 			auto new_leg_target = std::make_shared<LegTarget>(engineRef,
-				"leg_" + sides[j] + "_" + std::to_string(i) + "_target");
-			new_leg_chain->SetRelativeLocation(glm::vec3(signs[j] * legX, legY, leg_z));
+				"leg_" + sides[j] + "_" + std::to_string(i) + "_target",
+				renderLegTargets, targetThreshold, targetLerpTime);
+			new_leg_chain->SetRelativeLocation(glm::vec3(signs[j] * legPos.x, legPos.y, leg_z));
 			// Legs on the right should be flipped
 			if (j == 1) {
 				new_leg_chain->SetRelativeRotationDegrees(glm::vec3(0.0f, 180.0f, 0.0f));
 			}
-			new_leg_target->SetRelativeLocation(glm::vec3(signs[j] * targetX, targetY, target_z));
+			new_leg_target->SetRelativeLocation(glm::vec3(signs[j] * targetPos.x, targetPos.y, target_z));
 
 			// Add the new chain & target to this object
 			legList.emplace_back(std::make_pair(new_leg_chain, new_leg_target));

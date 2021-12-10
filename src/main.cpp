@@ -1,11 +1,11 @@
 // Include order: std library, external libraries, project headers
 #include <memory>
+#include <iostream>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include "GameEngine.h"
-
 
 int main(int argc, char** argv) {
 	if (argc != 2) {
@@ -15,9 +15,7 @@ int main(int argc, char** argv) {
 	char* scene_file = argv[1];
 
 	/* ----- Create the game instance & main rendering window ----- */
-	// Use default options
-	GameOptions game_options;
-	auto spider_game = std::make_shared<GameEngine>(game_options);
+	auto spider_game = std::make_shared<GameEngine>("resources/enginesettings.yaml");
 
 	/* ----- Load the Scene Geometry ----- */
 	spider_game->SetupScene(scene_file);

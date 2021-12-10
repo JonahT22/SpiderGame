@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 
+#include <yaml-cpp/yaml.h>
+
 #include "Camera.h"
 #include "GameEngine.h"
 #include "IK/IKChain.h"
@@ -88,18 +90,18 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	YAML::Node full_scene = YAML::LoadFile(filename);
 
 	/* ----- Load Shaders ----- */
-	assert(YAML::DoesMapHaveSequence(full_scene, "shaders"));
+	assert(YAMLHelper::DoesMapHaveSequence(full_scene, "shaders"));
 	// Get the sequence of shaders (YAML::Sequence is similar to a std::vector)
 	YAML::Node shaders = full_scene["shaders"];
 	for (size_t i = 0; i < shaders.size(); ++i) {
-		std::string shader_name = YAML::GetMapVal<std::string>(shaders[i], "name");
+		std::string shader_name = YAMLHelper::GetMapVal<std::string>(shaders[i], "name");
 		// ShaderToObjectList is typedef'd as a std::pair with a shader and
 		//    a vector of object ptrs
 		ShaderToObjectList new_shader_list;
 		new_shader_list.first = std::make_shared<ShaderProgram>(shader_name);
 		// Load and compile the shader program from the filepaths provided in the YAML file
-		new_shader_list.first->Compile(YAML::GetMapVal<std::string>(shaders[i], "vert"),
-		                               YAML::GetMapVal<std::string>(shaders[i], "frag"));
+		new_shader_list.first->Compile(YAMLHelper::GetMapVal<std::string>(shaders[i], "vert"),
+		                               YAMLHelper::GetMapVal<std::string>(shaders[i], "frag"));
 		// Store this shader list, with a blank vector of object ptrs to be populated later
 		allObjects.push_back(new_shader_list);
 		// Keep a mapping between each shader's name and its index in the allObjects list
@@ -110,14 +112,14 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	// Keep a (temporary) mapping from object names to their pointers, for setting
 	//   parent-child relationships when loading SceneObjects
 	std::unordered_map<std::string, std::shared_ptr<SceneObject> > object_name_map;
-	assert(YAML::DoesMapHaveSequence(full_scene, "scene_objects"));
+	assert(YAMLHelper::DoesMapHaveSequence(full_scene, "scene_objects"));
 	YAML::Node objects = full_scene["scene_objects"];
 	// Keep track of which camera is the first to be loaded (set as the main cam by default)
 	bool first_camera = true;
 	// Read every SceneObject from the sequence
 	for (size_t i = 0; i < objects.size(); ++i) {
 		std::shared_ptr<SceneObject> new_object;
-		std::string object_type = YAML::GetMapVal<std::string>(objects[i], "type");
+		std::string object_type = YAMLHelper::GetMapVal<std::string>(objects[i], "type");
 		if (object_type == "mesh") {
 			new_object = LoadMesh(objects[i]);
 		}
@@ -146,13 +148,13 @@ void Scene::LoadSceneFile(const std::string& filename) {
 		std::cerr << std::endl;
 	}
 	skyboxShader = std::make_unique<ShaderProgram>("skybox");
-	skyboxShader->Compile(YAML::GetMapVal<std::string>(skybox_node, "vert"),
-	                      YAML::GetMapVal<std::string>(skybox_node, "frag"));
+	skyboxShader->Compile(YAMLHelper::GetMapVal<std::string>(skybox_node, "vert"),
+	                      YAMLHelper::GetMapVal<std::string>(skybox_node, "frag"));
 	// Load the skybox images
 	std::string cube_map_image_paths[6];
 	const std::string side_names[6] = { "right", "left", "top", "bottom", "front", "back" };
 	for (size_t i = 0; i < 6; ++i) {
-		cube_map_image_paths[i] = YAML::GetMapVal<std::string>(skybox_node, side_names[i]);
+		cube_map_image_paths[i] = YAMLHelper::GetMapVal<std::string>(skybox_node, side_names[i]);
 	}
 	skybox = std::make_unique<Skybox>(cube_map_image_paths);
 
@@ -173,13 +175,13 @@ void Scene::LoadSceneFile(const std::string& filename) {
 }
 
 inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
-	std::string mesh_name = YAML::GetMapVal<std::string>(mesh_node, "name");
+	std::string mesh_name = YAMLHelper::GetMapVal<std::string>(mesh_node, "name");
 	auto mesh_object = std::make_shared<Mesh>(engineRef, mesh_name);
 	// Load the mesh file, or make the default cube if none is provided
-	std::string mesh_filename = YAML::GetMapVal<std::string>(mesh_node, "meshfile");
+	std::string mesh_filename = YAMLHelper::GetMapVal<std::string>(mesh_node, "meshfile");
 	glm::vec2 tex_scale(1.0f);
-	if (YAML::DoesMapHaveField(mesh_node, "tex_scale")) {
-		tex_scale = YAML::GetMapVal<glm::vec2>(mesh_node, "tex_scale");
+	if (YAMLHelper::DoesMapHaveField(mesh_node, "tex_scale")) {
+		tex_scale = YAMLHelper::GetMapVal<glm::vec2>(mesh_node, "tex_scale");
 	}
 	if (mesh_filename == "") {
 		mesh_object->GenerateCubeMesh(tex_scale.x, tex_scale.y);
@@ -187,17 +189,17 @@ inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
 	else {
 		mesh_object->LoadMesh(mesh_filename);
 	}
-	mesh_object->LoadTexture(YAML::GetMapVal<std::string>(mesh_node, "texture"));
+	mesh_object->LoadTexture(YAMLHelper::GetMapVal<std::string>(mesh_node, "texture"));
 	return mesh_object;
 }
 
 inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, bool is_first) {
-	std::string camera_name = YAML::GetMapVal<std::string>(camera_node, "name");
+	std::string camera_name = YAMLHelper::GetMapVal<std::string>(camera_node, "name");
 	auto new_camera = std::make_shared<Camera>(engineRef, camera_name);
 	new_camera->SetAspectRatio(engineRef.lock()->GetWindow()->GetAspect());
-	new_camera->SetFovDegrees(YAML::GetMapVal<float>(camera_node, "fov_y"));
-	new_camera->SetArmLength(YAML::GetMapVal<float>(camera_node, "arm_length"));
-	new_camera->SetArmAngleDegrees(YAML::GetMapVal<glm::vec2>(camera_node, "arm_angle"));
+	new_camera->SetFovDegrees(YAMLHelper::GetMapVal<float>(camera_node, "fov_y"));
+	new_camera->SetArmLength(YAMLHelper::GetMapVal<float>(camera_node, "arm_length"));
+	new_camera->SetArmAngleDegrees(YAMLHelper::GetMapVal<glm::vec2>(camera_node, "arm_angle"));
 
 	if (is_first) {
 		// By default, the GameEngine selects the first-listed camera as the main camera
@@ -207,9 +209,21 @@ inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, 
 }
 
 inline std::shared_ptr<SpiderCharacter> Scene::LoadSpider(const YAML::Node& spider_node) {
-	// TODO: add more parameters for the spider
-	std::string spider_name = YAML::GetMapVal<std::string>(spider_node, "name");
-	auto new_spider = std::make_shared<SpiderCharacter>(engineRef, spider_name);
+	// TODO: cleanup
+	const std::string spider_name = YAMLHelper::GetMapVal<std::string>(spider_node, "name");
+	const float move_speed = YAMLHelper::GetMapVal<float>(spider_node, "move_speed");
+	const float turn_speed = YAMLHelper::GetMapVal<float>(spider_node, "turn_speed");
+	const size_t legs_per_side = YAMLHelper::GetMapVal<size_t>(spider_node, "num_legs_per_side");
+	const size_t links_per_chain = YAMLHelper::GetMapVal<size_t>(spider_node, "num_joints_per_leg");
+	glm::vec3 leg_loc = YAMLHelper::GetMapVal<glm::vec3>(spider_node, "front_leg_location");
+	glm::vec3 target_loc = YAMLHelper::GetMapVal<glm::vec3>(spider_node, "front_target_location");
+	const bool show_legs = YAMLHelper::GetMapVal<bool>(spider_node, "show_legs");
+	const bool show_targets = YAMLHelper::GetMapVal<bool>(spider_node, "show_leg_targets");
+	const float target_threshold = YAMLHelper::GetMapVal<float>(spider_node, "leg_target_threshold");
+	const float leg_move_time = YAMLHelper::GetMapVal<float>(spider_node, "leg_move_time");
+	auto new_spider = std::make_shared<SpiderCharacter>(engineRef, spider_name,
+		move_speed, turn_speed, legs_per_side, links_per_chain, leg_loc, target_loc,
+		show_legs, show_targets, target_threshold, leg_move_time);
 	return new_spider;
 }
 
@@ -217,12 +231,12 @@ void Scene::LoadSceneObject(const YAML::Node& object_node,
                             const std::shared_ptr<SceneObject>& new_object,
                             std::unordered_map<std::string, std::shared_ptr<SceneObject>>& object_name_map) {
 	// Load the transform as a single map object
-	new_object->SetRelativeTransform(YAML::GetMapVal<Transform>(object_node,
+	new_object->SetRelativeTransform(YAMLHelper::GetMapVal<Transform>(object_node,
 		                            "relative_transform"));
 	
 	// Set the parent object, if it has been created
 	const std::string object_name = new_object->GetName();
-	const std::string parent_name = YAML::GetMapVal<std::string>(object_node, "parent");
+	const std::string parent_name = YAMLHelper::GetMapVal<std::string>(object_node, "parent");
 	if (parent_name != "") {
 		if (object_name_map.count(parent_name) > 0) {
 			// Attach this object to the parent with the given name
@@ -244,7 +258,7 @@ void Scene::LoadSceneObject(const YAML::Node& object_node,
 	}
 
 	// Every object must be drawn by a shader, so get the shader's name
-	std::string shader_name = YAML::GetMapVal<std::string>(object_node, "shader");
+	std::string shader_name = YAMLHelper::GetMapVal<std::string>(object_node, "shader");
 	// Add the object to the shader's list
 	if (shaderMap.count(shader_name) > 0) {
 		allObjects.at(shaderMap[shader_name]).second.push_back(new_object);

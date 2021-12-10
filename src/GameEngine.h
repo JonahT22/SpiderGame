@@ -7,19 +7,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "Window.h"
-#include "Scene.h"
+class Window;
+class Scene;
 class Camera;
-
-struct GameOptions {
-	const int windowWidth = 800;
-	const int windowHeight = 600;
-	const char* windowName = "Spider Game";
-	const glm::vec3 clearColor = glm::vec3(0.1f, 0.1f, 0.1f);
-	const float physicsTimeStep = 1.0f / 60.0f;
-	const unsigned int frameDelayMs = 0;
-	const bool showFramerate = false;
-};
 
 ///
 /// Handles rendering frames, calling physics updates, managing the
@@ -30,7 +20,7 @@ struct GameOptions {
 ///   newly-created SceneObjects with weak references to this GameEngine
 class GameEngine : public std::enable_shared_from_this<GameEngine> {
 public:
-	GameEngine(const GameOptions options);
+	GameEngine(const std::string& options_file);
 	~GameEngine();
 
 	void SetupScene(const std::string& filename);
@@ -67,11 +57,11 @@ private:
 
 	/* ----- Framerate and display settings ----- */
 	// Desired period for the physics updates, and a running timer for the next physics step
-	const float physicsTimeStep = 0.1f;
+	float physicsTimeStep = 0.1f;
 	float physicsTimer = 0.0f;
 	// Artificial delay on each rendering frame, for testing physics behavior
-	const unsigned int  frameDelayMs = 0;
+	unsigned int  frameDelayMs = 0;
 	// Should the framerate be printed to the log?
-	const bool showFramerate = false;
+	bool showFramerate = false;
 };
 

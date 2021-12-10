@@ -24,7 +24,8 @@ public:
 	// Wrap angles to the range [-pi, pi]
 	static void WrapAngles(Eigen::VectorXd& angles);
 
-	IKChain(std::weak_ptr<GameEngine> engine, const std::string& name);
+	IKChain(std::weak_ptr<GameEngine> engine, const std::string& name,
+		const size_t num_links, const bool render_links);
 	~IKChain() = default;
 
 	// Inherited from SceneObject
@@ -46,8 +47,9 @@ private:
 	// Iterates over each link and recalculates its J-space transform matrices with new angles
 	void UpdateLinkAngles();
 
-	// TODO: set this from file
-	size_t numLinks = 2;
+	size_t numLinks;
+	bool renderLinks;
+
 	// Empty SceneObject placed at the root of the links, for rotating the leg on the y axis
 	std::shared_ptr<SceneObject> linkRoot;
 	// IKChain has exclusive control over the links attached to it, so make this a vector
