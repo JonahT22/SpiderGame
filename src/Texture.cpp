@@ -7,7 +7,7 @@
 void Texture::LoadFromFile(const std::string& filename) {
 	// TODO: eventually, this should be read from the scene configuration file. For now,
 	//   just hardcode the texture options
-	TextureOptions options{ GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
+	TextureOptions options{ GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
 	                            GL_LINEAR, GL_RGB };
 
 	// Create the texture object

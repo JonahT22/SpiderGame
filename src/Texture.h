@@ -6,7 +6,7 @@
 
 struct TextureOptions {
 	// Sets GL_TEXTURE_WRAP_(S or T)
-	GLenum wrapType = GL_MIRRORED_REPEAT;
+	GLenum wrapType = GL_REPEAT;
 	// Sets GL_TEXTURE_MIN_FILTER
 	GLenum minFilter = GL_LINEAR_MIPMAP_LINEAR;
 	// Sets GL_TEXTURE_MAX_FILTER
