@@ -2,10 +2,14 @@
 
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "SceneObject.h"
 class ShaderProgram;
 class GameEngine;
+class IKChain;
+class LegTarget;
 
 ///
 /// Controllable character
@@ -20,6 +24,17 @@ public:
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
 private:
+	// TODO: read from file
+	size_t legsPerSide = 3;
+	float legY = 0.14;
+	float legX = 0.25;
+	float maxLegZ = 0.3;
+	float targetX = 0.65;
+	float targetY = -0.2;
+	float maxTargetZ = 0.7;
+	// Keep a list of legs & target that the SpiderObject controls (NOT controlled by the scene)
+	typedef std::pair<std::shared_ptr<IKChain>, std::shared_ptr<LegTarget> > Leg;
+	std::vector<Leg> legList;
 	// Distance to cover per physics frame
 	// TODO: make this a proper speed affected by physicstickrate
 	const float moveSpeed = 0.05f;

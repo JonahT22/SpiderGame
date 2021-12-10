@@ -97,77 +97,7 @@ scene_objects:
             scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
-    -   type: "leg_target"
-        name: "leg_L_1_target"
-        shader: "normal"
-        relative_transform:
-            location: [0.65, -0.2, 0.5]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
 
-    -   type: "ik_chain"
-        name: "leg_L_1"
-        shader: "unlit"
-        relative_transform:
-            location: [0.25, 0.14, 0.3]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "leg_target"
-        name: "leg_L_2_target"
-        shader: "normal"
-        relative_transform:
-            location: [0.65, -0.2, -0.5]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "ik_chain"
-        name: "leg_L_2"
-        shader: "unlit"
-        relative_transform:
-            location: [0.25, 0.14, -0.3]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "leg_target"
-        name: "leg_R_1_target"
-        shader: "normal"
-        relative_transform:
-            location: [-0.65, -0.2, 0.5]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "ik_chain"
-        name: "leg_R_1"
-        shader: "unlit"
-        relative_transform:
-            location: [-0.25, 0.14, 0.3]
-            rotation: [0.0, 180.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "leg_target"
-        name: "leg_R_2_target"
-        shader: "normal"
-        relative_transform:
-            location: [-0.65, -0.2, -0.5]
-            rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
-
-    -   type: "ik_chain"
-        name: "leg_R_2"
-        shader: "unlit"
-        relative_transform:
-            location: [-0.25, 0.14, -0.3]
-            rotation: [0.0, 180.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        parent: "spider"
 
    
 
