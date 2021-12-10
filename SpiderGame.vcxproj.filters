@@ -196,5 +196,8 @@
     <None Include="resources\shaders\rainbow_vert.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="resources\enginesettings.yaml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -65,6 +65,7 @@
     <ClInclude Include="src\YAMLHelper.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\enginesettings.yaml" />
     <None Include="resources\scenes\demoscene.yaml" />
     <None Include="resources\scenes\testscene.yaml" />
     <None Include="resources\shaders\normal_frag.glsl" />
