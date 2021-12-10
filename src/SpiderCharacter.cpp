@@ -78,28 +78,10 @@ void SpiderCharacter::BeginPlay() {
 }
 
 void SpiderCharacter::PhysicsUpdate(const float delta_time) {
-	auto engine = engineRef.lock();
-	// Rotation input
-	if (engine->IsKeyPressed(GLFW_KEY_RIGHT)) {
-		rootTransform.AddRotationOffset(-1.0f * turnSpeed, glm::vec3(0.0f, 1.0f, 0.0f));
-	}
-	else if (engine->IsKeyPressed(GLFW_KEY_LEFT)) {
-		rootTransform.AddRotationOffset(turnSpeed, glm::vec3(0.0f, 1.0f, 0.0f));
-	}
-	// Foward/Backward input
-	if (engine->IsKeyPressed(GLFW_KEY_W)) {
-		rootTransform.loc += rootTransform.GetForwardVector() * moveSpeed;
-	}
-	else if (engine->IsKeyPressed(GLFW_KEY_S)) {
-		rootTransform.loc -= rootTransform.GetForwardVector() * moveSpeed;
-	}
-	// Side to side input
-	if (engine->IsKeyPressed(GLFW_KEY_A)) {
-		rootTransform.loc += rootTransform.GetRightVector() * moveSpeed;
-	}
-	else if (engine->IsKeyPressed(GLFW_KEY_D)) {
-		rootTransform.loc -= rootTransform.GetRightVector() * moveSpeed;
-	}
+	// Rotation from input
+	rootTransform.AddRotationOffset(GetAngularSpeed() * delta_time,
+	                                glm::vec3(0.0f, 1.0f, 0.0f));
+	rootTransform.loc += GetLinearVelocity() * delta_time;
 	MarkPhysicsDirty();
 	SceneObject::PhysicsUpdate(delta_time);
 }
@@ -113,8 +95,37 @@ void SpiderCharacter::Render(const std::shared_ptr<ShaderProgram> shader) const 
 }
 
 glm::vec3 SpiderCharacter::GetLinearVelocity() const {
-	
-	return glm::vec3();
+	auto engine = engineRef.lock();
+	glm::vec3 total_velocity(0.0f);
+	// Foward/Backward input
+	if (engine->IsKeyPressed(GLFW_KEY_W)) {
+		total_velocity += rootTransform.GetForwardVector();
+	}
+	else if (engine->IsKeyPressed(GLFW_KEY_S)) {
+		total_velocity -= rootTransform.GetForwardVector();
+	}
+	// Side to side input
+	if (engine->IsKeyPressed(GLFW_KEY_A)) {
+		total_velocity += rootTransform.GetRightVector();
+	}
+	else if (engine->IsKeyPressed(GLFW_KEY_D)) {
+		total_velocity -= rootTransform.GetRightVector();
+	}
+	total_velocity *= moveSpeed;
+	return total_velocity;
+}
+
+float SpiderCharacter::GetAngularSpeed() const {
+	auto engine = engineRef.lock();
+	// Rotation input
+	if (engine->IsKeyPressed(GLFW_KEY_RIGHT)) {
+		return -1.0f * turnSpeed;
+	}
+	else if (engine->IsKeyPressed(GLFW_KEY_LEFT)) {
+		return turnSpeed;
+		
+	}
+	else return 0.0f;
 }
 
 inline void SpiderCharacter::MakeLegNeighbors(size_t index_1, size_t index_2) {

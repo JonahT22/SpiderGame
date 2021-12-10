@@ -23,8 +23,11 @@ public:
 	virtual void PhysicsUpdate(const float delta_time) override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
-	// Return the current velocity of this object by getting the current user inputs
+	// Query the user inputs to find what velocity the spider should be moving at
 	glm::vec3 GetLinearVelocity() const;
+	// Query the user inputs to find the angular speed (abt the y axis) that the
+	//   spider should be moving at
+	float GetAngularSpeed() const;
 
 private:
 	// Make 2 LegTargets in the legList neighbors of each other
@@ -41,10 +44,8 @@ private:
 	// Keep a list of legs & target that the SpiderObject controls (NOT controlled by the scene)
 	std::vector<std::pair<std::shared_ptr<IKChain>, std::shared_ptr<LegTarget> > > legList;
 	// Distance to cover per physics frame
-	// TODO: make this a proper speed affected by physicstickrate
-	const float moveSpeed = 0.03f;
+	const float moveSpeed = 1.2f;
 	// Amount to rotate about this object's y axis per frame
-	// TODO: make this a proper angular velocity affected by physicstickrate
-	const float turnSpeed = 0.03f;
+	const float turnSpeed = 1.2f;
 };
 
