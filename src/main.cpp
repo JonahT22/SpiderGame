@@ -8,14 +8,15 @@
 #include "GameEngine.h"
 
 int main(int argc, char** argv) {
-	if (argc != 2) {
-		std::cerr << "Usage: <SCENE_FILE>" << std::endl;
+	if (argc != 3) {
+		std::cerr << "Usage: <ENGINE_SETTINGS> <SCENE_FILE>" << std::endl;
 		return 1;
 	}
-	char* scene_file = argv[1];
+	char* engine_settings = argv[1];
+	char* scene_file = argv[2];
 
 	/* ----- Create the game instance & main rendering window ----- */
-	auto spider_game = std::make_shared<GameEngine>("resources/enginesettings.yaml");
+	auto spider_game = std::make_shared<GameEngine>(engine_settings);
 
 	/* ----- Load the Scene Geometry ----- */
 	spider_game->SetupScene(scene_file);
