@@ -22,7 +22,7 @@ public:
 	// Load mesh data into buffer vectors
 	void LoadMesh(const std::string& filename, const bool use_EBO = false);
 	// Create a hardcoded cube for testing
-	void GenerateCubeMesh();
+	void GenerateCubeMesh(const float tex_mult_u = 1.0f, const float tex_mult_v = 1.0f);
 	// Create the texture object that this mesh will use
 	void LoadTexture(const std::string& filename);
 	// Draw this mesh onto the screen

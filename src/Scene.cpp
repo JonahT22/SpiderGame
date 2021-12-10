@@ -183,8 +183,12 @@ inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
 	auto mesh_object = std::make_shared<Mesh>(engineRef, mesh_name);
 	// Load the mesh file, or make the default cube if none is provided
 	std::string mesh_filename = YAML::GetMapVal<std::string>(mesh_node, "meshfile");
+	glm::vec2 tex_scale(1.0f);
+	if (YAML::DoesMapHaveField(mesh_node, "tex_scale")) {
+		tex_scale = YAML::GetMapVal<glm::vec2>(mesh_node, "tex_scale");
+	}
 	if (mesh_filename == "") {
-		mesh_object->GenerateCubeMesh();
+		mesh_object->GenerateCubeMesh(tex_scale.x, tex_scale.y);
 	}
 	else {
 		mesh_object->LoadMesh(mesh_filename);

@@ -144,4 +144,18 @@ bool DoesMapHaveSequence(const YAML::Node& map_node, const std::string& sequence
 		return true;
 	}
 }
+
+// Check if a given node has a map field with a given name, and that this field is a sequence
+bool DoesMapHaveField(const YAML::Node& map_node, const std::string& field_name) {
+	// TODO: test this thoroughly
+	if (!map_node.IsMap()) {
+		std::cerr << "ERROR: Attempted to get a field from a map, but the provided";
+		std::cerr << " node is not a map!" << std::endl;
+		return false;
+	}
+	if (map_node[field_name]) {
+		return true;
+	}
+	else return false;
+}
 }
