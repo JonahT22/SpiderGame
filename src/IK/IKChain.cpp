@@ -104,7 +104,9 @@ void IKChain::PhysicsUpdate() {
 	// Rotate the Chain to face the target location
 	// TODO: Figure out why this -1.0f is necessary
 	float rot_angle = -1.0f * atan2(target_loc.z, target_loc.x);
-	linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
+	if (abs(rot_angle) < glm::radians(90.0)) {
+		linkRoot->SetRelativeRotation(glm::vec3(0.0f, rot_angle, 0.0f));
+	}
 
 	// Set up the local-space target for the objective evaluation
 	Eigen::Vector2d x(target_loc.x, target_loc.y);

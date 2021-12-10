@@ -25,10 +25,20 @@ public:
 	virtual void PhysicsUpdate() override;
 	virtual void Render(const std::shared_ptr<ShaderProgram> shader) const override;
 
+	// Getters
+	bool IsMoving() const;
+
+	// Setters
+	void AddNeighbor(std::weak_ptr<LegTarget> new_neighbor);
+
 private:
 	// TODO: organize the parameters and pass in through file
 	const bool visualizeMesh = true;
 	std::shared_ptr<Mesh> vizMesh;
+
+	// Reference to any adjacent LegTargets. This LegTarget should not start moving
+	//   if any of its neighbors are also moving
+	std::vector<std::weak_ptr<LegTarget> > neighbors;
 	
 	// World-space radius threshold before the lazy location decides to catch up
 	//   to actual location
@@ -44,6 +54,9 @@ private:
 	glm::vec4 prevLoc = glm::vec4(0, 0, 0, 1);
 	// Tracks whether the leg is currently lerping to the goal point
 	bool isLegMoving = false;
+	// If one LegTarget is always moving, it's neighbors will be starved. Add this lock
+	//   to prevent a LegTarget from moving again immediately after reaching its target
+	bool justFinishedMoving = false;
 	// Amount that the leg should lift in the air when moving from point-to-point
 	const float legLiftHeight = 0.2f;
 	// Store the value of Pi for easy reference

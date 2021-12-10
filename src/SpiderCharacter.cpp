@@ -1,6 +1,7 @@
 #include "SpiderCharacter.h"
 
 #include <iostream>
+#include <cassert>
 
 #include <glm/glm.hpp>
 
@@ -51,6 +52,21 @@ void SpiderCharacter::BeginPlay() {
 		}
 	}
 
+	// Set the 'neighbor' refs for the LegTargets
+	// Order placed in the legList: L1, R1, L2, R2, L3, R3, etc...
+	size_t end = legList.size() - 1;
+	// Front 2 legs
+	MakeLegNeighbors(0, 1);
+	// Back 2 legs
+	MakeLegNeighbors(end, end - 1);
+	// Middle neighbors. Work from the front of the spider backward
+	for (size_t i = 0; i + 3 < legList.size(); i += 2) {
+		// Left-side neighbors
+		MakeLegNeighbors(i, i + 2);
+		// Right-side neighbors
+		MakeLegNeighbors(i + 1, i + 3);
+	}
+
 	// Manually call BeginPlay on child objects, since they aren't being managed by the Scene
 	for (auto& child : childObjects) {
 		child.lock()->BeginPlay();
@@ -94,4 +110,10 @@ void SpiderCharacter::Render(const std::shared_ptr<ShaderProgram> shader) const 
 	for (auto& child : childObjects) {
 		child.lock()->Render(shader);
 	}
+}
+
+inline void SpiderCharacter::MakeLegNeighbors(size_t index_1, size_t index_2) {
+	assert(index_1 < legList.size() && index_2 < legList.size());
+	legList.at(index_1).second->AddNeighbor(legList.at(index_2).second);
+	legList.at(index_2).second->AddNeighbor(legList.at(index_1).second);
 }
