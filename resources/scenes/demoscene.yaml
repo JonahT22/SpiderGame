@@ -1,8 +1,3 @@
-# Note: tabs are not allowed in yaml files, use spaces instead
-# All filepaths are given relative to the root SpiderGame folder
-# Use !!int or !!str to declare a value as specific type
-# Use --- to separate multiple documents in the same file
-
 # List of every shader that will be used in the lifetime of the game
 shaders:
     -   name: "unlit"
@@ -13,41 +8,100 @@ shaders:
         vert: "resources/shaders/normal_vert.glsl"
         frag: "resources/shaders/normal_frag.glsl"
 
+    -   name: "rainbow"
+        vert: "resources/shaders/rainbow_vert.glsl"
+        frag: "resources/shaders/rainbow_frag.glsl"
+
 scene_objects:
     -   type: "mesh"
-        name: "right_cube"
-        # If no meshfile is given, a simple cube will be loaded for the object
+        name: "floor_cube"
         meshfile: ""
-        texture: "resources/textures/wall.jpg"
-        # shader, relative_transform, and parent are inherited from SceneObject
+        texture: "resources/textures/marble.jpg"
+        tex_scale: [3.0, 3.0]
         shader: "unlit"
         relative_transform:
-            location: [1.0, 0.0, 0.0]
+            location: [0.0, -0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        # If parent_object is blank, this object is oriented to the world origin
+            scale: [50.0, 1.0, 50.0]
         parent: ""
 
     -   type: "mesh"
-        name: "left_cube"
+        name: "ceiling_cube"
         meshfile: ""
-        # TODO: later, add support for jpg files (tex_options.externalformat = RGB)
-        texture: "resources/textures/awesomeface.png"
-        shader: "unlit"
+        texture: "resources/textures/marble.jpg"
+        tex_scale: [3.0, 3.0]
+        shader: "rainbow"
         relative_transform:
-            location: [-2.0, 0.0, 0.0]
+            location: [0.0, 5.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
-            scale: [1.0, 1.0, 1.0]
-        # If parent_object is blank, this object is oriented to the world origin
+            scale: [50.0, 1.0, 50.0]
         parent: ""
 
+    -   type: "mesh"
+        name: "pillar_1"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        tex_scale: [2.0, 2.5]
+        shader: "unlit"
+        relative_transform:
+            location: [10.0, 2.5, 10.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [5.0, 5.0, 5.0]
+        parent: ""
+
+    -   type: "mesh"
+        name: "pillar_2"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        tex_scale: [2.0, 2.5]
+        shader: "unlit"
+        relative_transform:
+            location: [-10.0, 2.5, 10.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [5.0, 5.0, 5.0]
+        parent: ""
+
+    -   type: "mesh"
+        name: "pillar_3"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        tex_scale: [2.0, 2.5]
+        shader: "unlit"
+        relative_transform:
+            location: [-10.0, 2.5, -10.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [5.0, 5.0, 5.0]
+        parent: ""
+
+    -   type: "mesh"
+        name: "pillar_4"
+        meshfile: ""
+        texture: "resources/textures/awesomeface.png"
+        tex_scale: [2.0, 2.5]
+        shader: "unlit"
+        relative_transform:
+            location: [10.0, 2.5, -10.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [5.0, 5.0, 5.0]
+        parent: ""
+   
     -   type: "spider"
         name: "spider"
         shader: "unlit"
         relative_transform:
-            location: [0.0, 0.0, 0.0]
+            location: [0.0, 0.2, 0.0]
             rotation: [0.0, 0.0, 0.0]
             scale: [1.0, 1.0, 1.0]
+        move_speed: 2.0
+        turn_speed: 1.2
+        num_legs_per_side: 1
+        num_joints_per_leg: 2
+        front_leg_location: [0.23, 0.1, 0.3]
+        front_target_location: [0.8, -0.2, 0.7]
+        show_legs: true
+        show_leg_targets: false
+        leg_target_threshold: 0.7
+        leg_move_time: 0.1
         parent: ""
 
         # By default, the gameengine will choose the 1st-listed camera as the main camera
@@ -55,7 +109,7 @@ scene_objects:
         name: "spider_camera"
         fov_y: 45.0
         arm_length: 5.0
-        arm_angle: [30.0, 90.0]
+        arm_angle: [30.0, -90.0]
         # Ideally, there should be a built-in minimal shader that cameras can use
         shader: "unlit"
         relative_transform:
@@ -67,13 +121,48 @@ scene_objects:
     -   type: "mesh"
         name: "spider_body"
         meshfile: ""
-        texture: "resources/textures/awesomeface.png"
-        shader: "normal"
+        texture: "resources/textures/fabric.jpg"
+        shader: "unlit"
         relative_transform:
             location: [0.0, 0.0, 0.0]
             rotation: [0.0, 0.0, 0.0]
-            scale: [0.2, 0.2, 0.2]
+            scale: [0.5, 0.2, 0.7]
         parent: "spider"
+
+    -   type: "mesh"
+        name: "spider_eye_right"
+        meshfile: ""
+        texture: "resources/textures/eye.png"
+        shader: "unlit"
+        relative_transform:
+            location: [0.14, 0.1, 0.32]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.2, 0.2, 0.1]
+        parent: "spider"
+
+    -   type: "mesh"
+        name: "spider_eye_left"
+        meshfile: ""
+        texture: "resources/textures/eye.png"
+        shader: "unlit"
+        relative_transform:
+            location: [-0.14, 0.1, 0.32]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.2, 0.2, 0.1]
+        parent: "spider"
+
+    -   type: "mesh"
+        name: "spider_eye_cover"
+        meshfile: ""
+        texture: "resources/textures/fabric.jpg"
+        shader: "unlit"
+        tex_scale: [1.0, 0.1]
+        relative_transform:
+            location: [0.0, 0.15, 0.25]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [0.51, 0.11, 0.2]
+        parent: "spider"
+   
 
 skybox:
     vert: "resources/shaders/skybox_vert.glsl"
