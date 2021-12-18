@@ -79,6 +79,9 @@
     <None Include="resources\shaders\unlit_frag.glsl" />
     <None Include="resources\shaders\unlit_vert.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\coreassets\cube.obj" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
