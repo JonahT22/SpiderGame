@@ -17,6 +17,21 @@ shaders:
         vert: "resources/shaders/rainbow_vert.glsl"
         frag: "resources/shaders/rainbow_frag.glsl"
 
+# TODO
+meshes:
+# Collections of vertex data, like position, normal, texcoord, and indexing
+    -   name: "cube"
+        filename: "asdf"
+
+# TODO
+textures:
+    -   name: "texutre"
+
+# TODO
+materials:
+# Link between textures and shaders (might have multiple textures per material)
+    -   name: "mat_white"
+
 scene_objects:
     -   type: "mesh"
         name: "right_cube"
@@ -53,7 +68,7 @@ scene_objects:
             scale: [1.0, 1.0, 1.0]
         move_speed: 2.0
         turn_speed: 1.2
-        num_legs_per_side: 3
+        num_legs_per_side: 1
         num_joints_per_leg: 2
         front_leg_location: [0.23, 0.1, 0.3]
         front_target_location: [0.8, -0.2, 0.7]
@@ -144,3 +159,11 @@ skybox:
     bottom: "resources/textures/skybox2/bottom.png"
     front: "resources/textures/skybox2/front.png"
     back: "resources/textures/skybox2/back.png"
+
+# Default parameters if any fields are excluded from an object's entry
+# TODO
+defaults:
+    scene_object:
+        type:
+        name:
+        meshfile:

@@ -28,9 +28,6 @@
     <Filter Include="Source Files\IK">
       <UniqueIdentifier>{344d9cce-10e0-47b8-b36d-a4be28e2bf0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Core Assets">
-      <UniqueIdentifier>{7ddb7e8e-87f0-4b00-912c-0cf73e6a8d57}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -202,10 +199,5 @@
     <None Include="resources\enginesettings.yaml">
       <Filter>Resource Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="resources\coreassets\cube.obj">
-      <Filter>Resource Files\Core Assets</Filter>
-    </Object>
   </ItemGroup>
 </Project>
