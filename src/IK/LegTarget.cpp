@@ -5,7 +5,7 @@
 
 #include "LegTarget.h"
 #include "../GameEngine.h"
-#include "../AssetImport/Mesh.h"
+#include "../Rendering/MeshObject.h"
 #include "../Player/SpiderCharacter.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name,
@@ -24,7 +24,7 @@ void LegTarget::BeginPlay() {
 	}
 	// (optionally) Create the visualizer mesh
 	if (visualizeMesh) {
-		vizMesh = std::make_shared<Mesh>(engineRef, objectName + "_vizmesh");
+		vizMesh = std::make_shared<MeshObject>(engineRef, objectName + "_vizmesh");
 		vizMesh->GenerateCubeMesh();
 		vizMesh->LoadTexture("resources/textures/awesomeface.png");
 		vizMesh->SetRelativeScale(glm::vec3(0.1, 0.1, 0.1));

@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\glad.c" />
-    <ClCompile Include="src\AssetImport\Mesh.cpp" />
+    <ClCompile Include="src\Rendering\MeshObject.cpp" />
     <ClCompile Include="src\AssetImport\stb_image_instantiate.cpp" />
     <ClCompile Include="src\AssetImport\Texture.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\stb_image.h" />
-    <ClInclude Include="src\AssetImport\Mesh.h" />
+    <ClInclude Include="src\Rendering\MeshObject.h" />
     <ClInclude Include="src\AssetImport\Texture.h" />
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\IK\IKChain.h" />

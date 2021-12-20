@@ -5,21 +5,21 @@
 
 #include <glad/glad.h>
 
-#include "../Rendering/SceneObject.h"
-#include "Texture.h"
+#include "SceneObject.h"
+#include "../AssetImport/Texture.h"
 
 ///
 /// Base class for any object that is made from a collection of renderable triangles
 ///
-class Mesh : public SceneObject {
+class MeshObject : public SceneObject {
 public:
-	Mesh(std::weak_ptr<GameEngine> engine, const std::string& name);
-	~Mesh();
+	MeshObject(std::weak_ptr<GameEngine> engine, const std::string& name);
+	~MeshObject();
 
 	// Inherited from SceneObject
 	virtual void BeginPlay() override;
 
-	// Load mesh data into buffer vectors
+	// Load MeshObject data into buffer vectors
 	void LoadMesh(const std::string& filename, const bool use_EBO = false);
 	// Create a hardcoded cube for testing
 	void GenerateCubeMesh(const float tex_mult_u = 1.0f, const float tex_mult_v = 1.0f);

@@ -1,26 +1,25 @@
-#include "Mesh.h"
-
 #include <cassert>
 #include <iostream>
 
-#include "../Rendering/ShaderProgram.h"
+#include "MeshObject.h"
+#include "ShaderProgram.h"
 
-Mesh::Mesh(std::weak_ptr<GameEngine> engine, const std::string& name) :
+MeshObject::MeshObject(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {
 
 }
 
-Mesh::~Mesh() {
+MeshObject::~MeshObject() {
 	// Deallocate all of the buffers and arrays
 	glDeleteVertexArrays(1, &vertexArrayID);
 	glDeleteBuffers(1, &vertexBufferID);
 	glDeleteBuffers(1, &elementBufferID);
 }
 
-void Mesh::BeginPlay() {}
+void MeshObject::BeginPlay() {}
 
-void Mesh::LoadMesh(const std::string& filename, const bool use_EBO) {
-	std::cerr << "ERROR: Mesh::LoadMesh() is not yet implemented!" << std::endl;
+void MeshObject::LoadMesh(const std::string& filename, const bool use_EBO) {
+	std::cerr << "ERROR: MeshObject::LoadMesh() is not yet implemented!" << std::endl;
 	assert(0);
 
 	/* ----- Load vertex data from file ----- */
@@ -41,7 +40,7 @@ void Mesh::LoadMesh(const std::string& filename, const bool use_EBO) {
 	SetupVertexArray();
 }
 
-void Mesh::GenerateCubeMesh(const float tex_mult_u, const float tex_mult_v) {
+void MeshObject::GenerateCubeMesh(const float tex_mult_u, const float tex_mult_v) {
 	useEBO = false;
 	// Specify the positions in Normalized Device Coordinates (range -1 to 1,
 	//   where 0,0,0 is the center of the world)
@@ -98,11 +97,11 @@ void Mesh::GenerateCubeMesh(const float tex_mult_u, const float tex_mult_v) {
 	SetupVertexArray();
 }
 
-void Mesh::LoadTexture(const std::string& filename) {
+void MeshObject::LoadTexture(const std::string& filename) {
 	texture.LoadFromFile(filename);
 }
 
-void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
+void MeshObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// Call the parent's render function, which checks if the shader is bound and sends
 	//   the model/invT matrices
 	SceneObject::Render(shader);
@@ -131,7 +130,7 @@ void Mesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	}
 }
 
-void Mesh::SetupVertexArray() {
+void MeshObject::SetupVertexArray() {
 	/* ----- Create the vertex array object ----- */
 	// VAO - Stores the buffer & attribute configurations for this object, so you
 	//   don't have to re-specify how the attributes are set up each time you draw

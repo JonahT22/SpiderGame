@@ -13,7 +13,7 @@
 #include "../GameEngine.h"
 #include "../IK/IKChain.h"
 #include "../IK/LegTarget.h"
-#include "../AssetImport/Mesh.h"
+#include "MeshObject.h"
 #include "Scene.h"
 #include "SceneObject.h"
 #include "ShaderProgram.h"
@@ -175,9 +175,9 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	UpdateScenePhysics(engineRef.lock()->GetPhysicsTimeStep());
 }
 
-inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
+inline std::shared_ptr<MeshObject> Scene::LoadMesh(const YAML::Node& mesh_node) {
 	std::string mesh_name = YAMLHelper::GetMapVal<std::string>(mesh_node, "name");
-	auto mesh_object = std::make_shared<Mesh>(engineRef, mesh_name);
+	auto new_mesh = std::make_shared<MeshObject>(engineRef, mesh_name);
 	// Load the mesh file, or make the default cube if none is provided
 	std::string mesh_filename = YAMLHelper::GetMapVal<std::string>(mesh_node, "meshfile");
 	glm::vec2 tex_scale(1.0f);
@@ -185,13 +185,13 @@ inline std::shared_ptr<Mesh> Scene::LoadMesh(const YAML::Node& mesh_node) {
 		tex_scale = YAMLHelper::GetMapVal<glm::vec2>(mesh_node, "tex_scale");
 	}
 	if (mesh_filename == "") {
-		mesh_object->GenerateCubeMesh(tex_scale.x, tex_scale.y);
+		new_mesh->GenerateCubeMesh(tex_scale.x, tex_scale.y);
 	}
 	else {
-		mesh_object->LoadMesh(mesh_filename);
+		new_mesh->LoadMesh(mesh_filename);
 	}
-	mesh_object->LoadTexture(YAMLHelper::GetMapVal<std::string>(mesh_node, "texture"));
-	return mesh_object;
+	new_mesh->LoadTexture(YAMLHelper::GetMapVal<std::string>(mesh_node, "texture"));
+	return new_mesh;
 }
 
 inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, bool is_first) {

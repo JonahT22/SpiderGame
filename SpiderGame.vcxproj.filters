@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AssetImport\Mesh.cpp">
+    <ClCompile Include="src\Rendering\MeshObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AssetImport\stb_image_instantiate.cpp">
@@ -80,7 +80,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AssetImport\Mesh.h">
+    <ClInclude Include="src\Rendering\MeshObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetImport\Texture.h">
