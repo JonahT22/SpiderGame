@@ -1,5 +1,3 @@
-#include "GameOptions.h"
-
 #include <string>
 #include <stdexcept>
 #include <iostream>
@@ -7,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
 
+#include "GameOptions.h"
 #include "YAMLHelper.h"
 
 GameOptions::GameOptions(const std::string& filename) {

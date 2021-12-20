@@ -1,5 +1,3 @@
-#include "Scene.h"
-
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -9,18 +7,21 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "Camera.h"
-#include "GameEngine.h"
-#include "IK/IKChain.h"
-#include "IK/LegTarget.h"
-#include "Mesh.h"
+// TODO: Scene shouldn't need to include every kind of sceneobject. Instead, let them
+//   manage their own loading
+#include "../Player/Camera.h"
+#include "../GameEngine.h"
+#include "../IK/IKChain.h"
+#include "../IK/LegTarget.h"
+#include "../AssetImport/Mesh.h"
+#include "Scene.h"
 #include "SceneObject.h"
 #include "ShaderProgram.h"
 #include "Skybox.h"
-#include "SpiderCharacter.h"
-#include "Texture.h"
+#include "../Player/SpiderCharacter.h"
+#include "../AssetImport/Texture.h"
 #include "Window.h"
-#include "YAMLHelper.h"
+#include "../Utils/YAMLHelper.h"
 
 Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}

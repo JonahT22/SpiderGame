@@ -1,6 +1,4 @@
 #pragma once
-#ifndef OPTIMIZER_GDLS_H
-#define OPTIMIZER_GDLS_H
 
 #include "Optimizer.h"
 #include "LinkObjective.h"
@@ -24,5 +22,3 @@ private:
 	int iterMax;
 	int iter;
 };
-
-#endif

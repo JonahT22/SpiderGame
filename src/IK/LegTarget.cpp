@@ -1,13 +1,12 @@
-#include "LegTarget.h"
-
 #include <cassert>
 #include <iostream>
 
 #include <glad/glad.h>
 
+#include "LegTarget.h"
 #include "../GameEngine.h"
-#include "../Mesh.h"
-#include "../SpiderCharacter.h"
+#include "../AssetImport/Mesh.h"
+#include "../Player/SpiderCharacter.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name,
 	const bool viz_mesh, const float threshold, const float lerp_time) :

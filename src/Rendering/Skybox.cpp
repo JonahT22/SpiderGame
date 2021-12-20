@@ -1,9 +1,8 @@
-#include "Skybox.h"
-
 #include <iostream>
 
 #include "stb_image.h"
 
+#include "Skybox.h"
 #include "ShaderProgram.h"
 
 Skybox::Skybox(const std::string filenames[6]) {

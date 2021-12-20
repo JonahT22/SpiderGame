@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 
-#include "SceneObject.h"
+#include "../Rendering/SceneObject.h"
 #include "Texture.h"
 
 ///

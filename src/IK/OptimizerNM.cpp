@@ -1,9 +1,8 @@
-#include "OptimizerNM.h"
-#include "LinkObjective.h"
 #include <iostream>
 
-using namespace std;
-using namespace Eigen;
+#include "LinkObjective.h"
+#include "OptimizerNM.h"
+
 
 OptimizerNM::OptimizerNM(const int num_links) :
 	tol(2e-1),
@@ -13,15 +12,15 @@ OptimizerNM::OptimizerNM(const int num_links) :
 	
 }
 
-void OptimizerNM::optimize(const LinkObjective& objective, VectorXd& x) {
+void OptimizerNM::optimize(const LinkObjective& objective, Eigen::VectorXd& x) {
 	int n = x.rows();
-	VectorXd g(n);
-	MatrixXd H(n, n);
+	Eigen::VectorXd g(n);
+	Eigen::MatrixXd H(n, n);
 	iter = 0;
 	for (size_t i = 1; i < iterMax; ++i) {
 		// Evaluate f, g, and H
 		double f = objective.evalObjective(x, &g, &H);
-		VectorXd dx = -1.0 * H.inverse() * g;
+		Eigen::VectorXd dx = -1.0 * H.inverse() * g;
 		x += dx;
 
 		if (dx.norm() < tol) {

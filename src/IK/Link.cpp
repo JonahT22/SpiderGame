@@ -6,7 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Link.h"
-#include "../Mesh.h"
+#include "../AssetImport/Mesh.h"
+#include "../Utils/Transform.h"
 
 Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name, const float length) :
 	SceneObject(engine, name), linkLength(length) {}

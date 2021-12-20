@@ -1,15 +1,14 @@
-#include "SpiderCharacter.h"
-
 #include <iostream>
 #include <cassert>
 
 #include <glm/glm.hpp>
 
-#include "GameEngine.h"
-#include "ShaderProgram.h"
-#include "Transform.h"
-#include "IK/IKChain.h"
-#include "IK/LegTarget.h"
+#include "SpiderCharacter.h"
+#include "../GameEngine.h"
+#include "../Rendering/ShaderProgram.h"
+#include "../Utils/Transform.h"
+#include "../IK/IKChain.h"
+#include "../IK/LegTarget.h"
 
 SpiderCharacter::SpiderCharacter(std::weak_ptr<GameEngine> engine, const std::string& name,
 	const float move_speed, const float turn_speed,

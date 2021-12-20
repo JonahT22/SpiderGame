@@ -1,8 +1,7 @@
-#include "Window.h"
-
 #include <glad/glad.h>
 
-#include "GameEngine.h"
+#include "Window.h"
+#include "../GameEngine.h"
 
 Window::Window(const int width, const int height, const std::string& title,
                GameEngine* engine) : engineRef(engine) {

@@ -13,191 +13,135 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\Shaders">
-      <UniqueIdentifier>{afef993f-67d7-4283-90b0-cb361e98bcc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Scenes">
-      <UniqueIdentifier>{39d193f9-b9f4-4251-950b-0b52b3882396}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Library Files">
-      <UniqueIdentifier>{3277d289-d23a-454c-9f58-f024e7b4cbdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\IK">
-      <UniqueIdentifier>{b3f0c21a-574e-403c-9ed2-75e636bbb1bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\IK">
-      <UniqueIdentifier>{344d9cce-10e0-47b8-b36d-a4be28e2bf0f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\AssetImport\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShaderProgram.cpp">
+    <ClCompile Include="src\AssetImport\stb_image_instantiate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
+    <ClCompile Include="src\AssetImport\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
+    <ClCompile Include="src\IK\IKChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\stb_image_instantiate.cpp">
+    <ClCompile Include="src\IK\LegTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
+    <ClCompile Include="src\IK\Link.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
+    <ClCompile Include="src\IK\LinkObjective.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SceneObject.cpp">
+    <ClCompile Include="src\IK\OptimizerGDLS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IK\OptimizerNM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\SpiderCharacter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\SceneObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\GameOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\YAMLHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Skybox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\include\glad.c">
-      <Filter>Resource Files\Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpiderCharacter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\LegTarget.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\IKChain.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\Link.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\LinkObjective.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\OptimizerGDLS.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IK\OptimizerNM.cpp">
-      <Filter>Source Files\IK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameOptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\YAMLHelper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ShaderProgram.h">
+    <ClInclude Include="src\AssetImport\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh.h">
+    <ClInclude Include="src\AssetImport\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window.h">
+    <ClInclude Include="src\IK\IKChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Texture.h">
+    <ClInclude Include="src\IK\LegTarget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\SceneObject.h">
+    <ClInclude Include="src\IK\Link.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Transform.h">
+    <ClInclude Include="src\IK\LinkObjective.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Camera.h">
+    <ClInclude Include="src\IK\Optimizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\OptimizerGDLS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IK\OptimizerNM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\SpiderCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\SceneObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\GameOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\YAMLHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Skybox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\YAMLHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\stb_image.h">
-      <Filter>Resource Files\Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpiderCharacter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\LegTarget.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\IKChain.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\Link.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\LinkObjective.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\Optimizer.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\OptimizerGDLS.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IK\OptimizerNM.h">
-      <Filter>Header Files\IK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameOptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\shaders\normal_frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\normal_vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\silhouette_frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\silhouette_vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\skybox_frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\skybox_vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\unlit_frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\unlit_vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\scenes\testscene.yaml">
-      <Filter>Resource Files\Scenes</Filter>
-    </None>
-    <None Include="resources\scenes\demoscene.yaml">
-      <Filter>Resource Files\Scenes</Filter>
-    </None>
-    <None Include="resources\shaders\rainbow_frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\rainbow_vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\enginesettings.yaml">
       <Filter>Resource Files</Filter>
-    </None>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -68,7 +68,7 @@ scene_objects:
             scale: [1.0, 1.0, 1.0]
         move_speed: 2.0
         turn_speed: 1.2
-        num_legs_per_side: 1
+        num_legs_per_side: 3
         num_joints_per_leg: 2
         front_leg_location: [0.23, 0.1, 0.3]
         front_target_location: [0.8, -0.2, 0.7]

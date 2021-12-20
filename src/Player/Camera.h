@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "SceneObject.h"
+#include "../Rendering/SceneObject.h"
 
 /// 
 /// Controllable camera that always points toward its root transform from

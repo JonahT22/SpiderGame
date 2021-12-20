@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "SceneObject.h"
+#include "../Rendering/SceneObject.h"
 class ShaderProgram;
 class GameEngine;
 class IKChain;

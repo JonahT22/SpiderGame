@@ -5,7 +5,7 @@
 
 #include <eigen-3.4.0/Eigen/Dense>
 
-#include "../SceneObject.h"
+#include "../Rendering/SceneObject.h"
 #include "LinkObjective.h"
 #include "OptimizerGDLS.h"
 #include "OptimizerNM.h"

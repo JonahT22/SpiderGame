@@ -1,18 +1,16 @@
-#include "IKChain.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cassert>
 
 #include <eigen-3.4.0/Eigen/Dense>
-// TODO
-#include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/constants.hpp>
 
+#include "IKChain.h"
 #include "Link.h"
 #include "OptimizerGDLS.h"
 #include "OptimizerNM.h"
-#include "../SceneObject.h"
+#include "../Rendering/SceneObject.h"
 
 IKChain::IKChain(std::weak_ptr<GameEngine> engine, const std::string& name,
 	const size_t num_links, const bool render_links) :

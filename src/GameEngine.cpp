@@ -1,16 +1,15 @@
-#include "GameEngine.h"
-
 #include <iostream>
 
 #include <glad/glad.h>
 
-#include "Camera.h"
-#include "GameOptions.h"
-#include "Scene.h"
-#include "Window.h"
+#include "Player/Camera.h"
+#include "GameEngine.h"
+#include "Utils/GameOptions.h"
+#include "Rendering/Scene.h"
+#include "Rendering/Window.h"
 // TODO: I shouldn't need to include these, but for some reason I do
-#include "Skybox.h"
-#include "ShaderProgram.h"
+#include "Rendering/Skybox.h"
+#include "Rendering/ShaderProgram.h"
 
 GameEngine::GameEngine(const std::string& options_file) {
 	GameOptions options(options_file);

@@ -1,9 +1,8 @@
-#include "SceneObject.h"
-
 #include <iostream>
 
-#include "Camera.h"
-#include "GameEngine.h"
+#include "../Player/Camera.h"
+#include "../GameEngine.h"
+#include "SceneObject.h"
 #include "ShaderProgram.h"
 
 SceneObject::SceneObject(std::weak_ptr<GameEngine> engine, const std::string& name) :

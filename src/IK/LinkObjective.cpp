@@ -1,8 +1,8 @@
-#include "LinkObjective.h"
 #include <cmath>
 #include <iostream>
 #include <cassert>
 
+#include "LinkObjective.h"
 #include "IKChain.h"
 
 LinkObjective::LinkObjective() :

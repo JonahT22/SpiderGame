@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "ShaderProgram.h"
+#include "../Rendering/ShaderProgram.h"
 
 Mesh::Mesh(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {

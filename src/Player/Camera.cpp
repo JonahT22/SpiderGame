@@ -1,10 +1,10 @@
-#include "Camera.h"
-
 #include <iostream>
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/matrix_access.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Camera.h"
 
 Camera::Camera(std::weak_ptr<GameEngine> engine, const std::string& name) :
 	SceneObject(engine, name) {

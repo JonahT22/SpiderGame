@@ -1,12 +1,12 @@
-#include "YAMLHelper.h"
-
 #include <string>
 
 #include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
 
 #include "Transform.h"
-// TODO: cleanup from header/cpp split
+#include "YAMLHelper.h"
+
+// TODO: cleanup from header/cpp split, or return all functions to header (marked as inline)
 namespace YAML {
 // Define custom parsing for glm vec3's, using starter code from yaml-cpp tutorial page
 Node convert<glm::vec3>::encode(const glm::vec3& rhs) {
