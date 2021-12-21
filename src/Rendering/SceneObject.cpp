@@ -59,19 +59,11 @@ void SceneObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		// Shaders might use the Mv matrix, or the Mvp matrix. Try sending both, and the
 		//   shader will ignore whichever is not being used.
 		// Note: Shaders should never use BOTH Mv and Mvp
-		if (shader->GetUniform("Mv") != -1) {
-			shader->SetMat4Uniform("Mv", model_view_mtx, true);
-		}
-		else if (shader->GetUniform("Mvp") != -1) {
-			shader->SetMat4Uniform("Mvp", main_camera->GetProjectionMtx() *
-			                       model_view_mtx, true);
-		}
+		shader->SetMat4Uniform("Mv", model_view_mtx);
+		shader->SetMat4Uniform("Mvp", main_camera->GetProjectionMtx() * model_view_mtx);
 		// If the shader needs to transform normals into world space, it also needs the
 		//   inverse transpose of the modelview matrix:
-		if (shader->GetUniform("Mv_invT") != -1) {
-			shader->SetMat4Uniform("Mv_invT",
-			                       glm::transpose(glm::inverse(model_view_mtx)), true);
-		}
+		shader->SetMat4Uniform("Mv_invT", glm::transpose(glm::inverse(model_view_mtx)));
 	}
 	else {
 		std::cerr << "ERROR: Invalid engineRef access in SceneObject!" << std::endl;

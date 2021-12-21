@@ -123,17 +123,23 @@ const std::string ShaderProgram::GetShaderName() const {
 void ShaderProgram::SetIntUniform(const std::string& name, const GLint value,
                                   bool verbose) {
 	GLint location = GetUniform(name, verbose);
-	glUniform1i(location, value);
+	if (location != -1) {
+		glUniform1i(location, value);
+	}
 }
 
 void ShaderProgram::SetFloatUniform(const std::string& name, const GLfloat value,
                                     bool verbose) {
 	GLint location = GetUniform(name, verbose);
-	glUniform1f(location, value);
+	if (location != -1) {
+		glUniform1f(location, value);
+	}
 }
 
 void ShaderProgram::SetMat4Uniform(const std::string& name, const glm::mat4& matrix,
                                    bool verbose) {
 	GLint location = GetUniform(name, verbose);
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	if (location != -1) {
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
 }
