@@ -25,14 +25,14 @@ public:
 
 	/* ----- Getters ----- */
 	// Return index of uniform if it exists, -1 if it doesn't
-	GLint GetUniform(const GLchar* name, bool verbose = false) const;
+	GLint GetUniform(const std::string& name, bool verbose = false) const;
 	bool IsShaderActive() const;
 	const std::string GetShaderName() const;
 
 	/* ----- Setters ----- */
-	void SetIntUniform(const GLchar* name, const GLint value, bool verbose = false);
-	void SetFloatUniform(const GLchar* name, const GLfloat value, bool verbose = false);
-	void SetMat4Uniform(const GLchar* name, const glm::mat4& matrix, bool verbose = false);
+	void SetIntUniform(const std::string& name, const GLint value, bool verbose = false);
+	void SetFloatUniform(const std::string& name, const GLfloat value, bool verbose = false);
+	void SetMat4Uniform(const std::string& name, const glm::mat4& matrix, bool verbose = false);
 
 private:
 	const std::string shaderName = "unnamed_shader";
