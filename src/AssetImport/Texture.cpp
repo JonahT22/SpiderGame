@@ -4,11 +4,37 @@
 
 #include "stb_image.h"
 
+Texture::Texture(const std::string& filepath, const TextureType type) :
+	type(type),
+	textureID(0) {
+	LoadFromFile(filepath);
+}
+
+void Texture::Bind(GLuint texture_unit) const {
+	// Check that the texture has been generated
+	if (textureID <= 0) {
+		std::cerr << "ERROR: Attempted to bind a texture that has not been loaded!";
+		std::cerr << std::endl;
+		return;
+	}
+	// When working with multiple textures, it's necessary to define the texture unit
+	//   that each texture occupies when you bind it. Then, the shader can look in the
+	//   corresponding texture unit's location when it accesses the sampler2D data
+	glActiveTexture(GL_TEXTURE0 + texture_unit);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
+bool Texture::IsLoaded() const {
+	return (textureID > 0);
+}
+
+
 void Texture::LoadFromFile(const std::string& filename) {
+	// TODO: set the texture type
 	// TODO: eventually, this should be read from the scene configuration file. For now,
 	//   just hardcode the texture options
 	TextureOptions options{ GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
-	                            GL_LINEAR, GL_RGB };
+								GL_LINEAR, GL_RGB };
 
 	// Create the texture object
 	glGenTextures(1, &textureID);
@@ -64,22 +90,4 @@ void Texture::LoadFromFile(const std::string& filename) {
 		std::cerr << std::endl;
 	}
 	stbi_image_free(data);
-}
-
-void Texture::Bind(GLuint texture_unit) const {
-	// Check that the texture has been generated
-	if (textureID <= 0) {
-		std::cerr << "ERROR: Attempted to bind a texture that has not been loaded!";
-		std::cerr << std::endl;
-		return;
-	}
-	// When working with multiple textures, it's necessary to define the texture unit
-	//   that each texture occupies when you bind it. Then, the shader can look in the
-	//   corresponding texture unit's location when it accesses the sampler2D data
-	glActiveTexture(GL_TEXTURE0 + texture_unit);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-}
-
-bool Texture::IsLoaded() const {
-	return (textureID > 0);
 }

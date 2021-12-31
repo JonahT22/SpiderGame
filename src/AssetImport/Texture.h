@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <iostream>
 
 #include <glad/glad.h>
 
@@ -20,11 +22,36 @@ struct TextureOptions {
 /// 
 class Texture {
 public:
-	Texture() = default;
+	// List of texture types that are supported by shaders
+	enum class TextureType : GLuint {
+		DIFFUSE,
+		SPECULAR,
+		NORMAL,
+		ENUM_END
+	};
+	// Mapping from texture types to strings with their names in shader programs
+	inline static std::string TypeToString(const TextureType type) {
+		switch (type) {
+		case TextureType::DIFFUSE:
+			return "Diffuse";
+			break;
+		case TextureType::SPECULAR:
+			return "Specular";
+			break;
+		case TextureType::NORMAL:
+			return "Normal";
+			break;
+		default:
+			std::cerr << "ERROR: Unhandled texture type in Texture::TypeToString!" << std::endl;
+		}
+		return "undefined_texture_type";
+	}
+
+	Texture(const std::string& filepath, const TextureType type);
 	~Texture() = default;
 
-	void LoadFromFile(const std::string& filename);
 	// Binds this texture to the provided texture unit (default = 0)
+	// TODO: is Bind() needed when the staticmesh handles all the texture binding stuff?
 	void Bind(GLuint texture_unit = 0) const;
 
 	/* ----- Getters ----- */
@@ -32,6 +59,10 @@ public:
 	bool IsLoaded() const;
 
 private:
-	GLuint textureID = 0;
+	// Texture properties
+	GLuint textureID;
+	TextureType type = TextureType::DIFFUSE;
+
+	void LoadFromFile(const std::string& filename);
 };
 
