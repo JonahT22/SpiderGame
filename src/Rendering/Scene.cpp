@@ -171,9 +171,9 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	UpdateScenePhysics(engineRef.lock()->GetPhysicsTimeStep());
 }
 
-inline std::shared_ptr<MeshObject> Scene::LoadMesh(const YAML::Node& mesh_node) {
+inline std::shared_ptr<ModelObject> Scene::LoadMesh(const YAML::Node& mesh_node) {
 	std::string mesh_name = YAMLHelper::GetMapVal<std::string>(mesh_node, "name");
-	auto new_mesh = std::make_shared<MeshObject>(engineRef, mesh_name);
+	auto new_mesh = std::make_shared<ModelObject>(engineRef, mesh_name);
 	// Load the mesh file, or make the default cube if none is provided
 	std::string mesh_filename = YAMLHelper::GetMapVal<std::string>(mesh_node, "meshfile");
 	glm::vec2 tex_scale(1.0f);

@@ -11,7 +11,7 @@ class Camera;
 class GameEngine;
 class IKChain;
 class LegTarget;
-class MeshObject;
+class ModelObject;
 class SceneObject;
 class ShaderProgram;
 class Skybox;
@@ -34,7 +34,7 @@ public:
 
 private:
 	// Creates a subclass of a Sceneobject and loads any subclass-specific parameters
-	inline std::shared_ptr<MeshObject> LoadMesh(const YAML::Node& mesh_node);
+	inline std::shared_ptr<ModelObject> LoadMesh(const YAML::Node& mesh_node);
 	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
 	                                          bool is_first = false);
 	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);

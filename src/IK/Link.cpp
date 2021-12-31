@@ -14,7 +14,7 @@ Link::Link(std::weak_ptr<GameEngine> engine, const std::string& name, const floa
 
 void Link::BeginPlay() {
 	// Create the mesh that this link will use
-	linkMesh = std::make_shared<MeshObject>(engineRef, objectName + "_mesh");
+	linkMesh = std::make_shared<ModelObject>(engineRef, objectName + "_mesh");
 	linkMesh->GenerateCubeMesh(linkLength, 0.1f);
 	// TODO: remove hardcoding
 	linkMesh->LoadTexture("resources/textures/fabric.jpg");

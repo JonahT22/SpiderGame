@@ -24,7 +24,7 @@ void LegTarget::BeginPlay() {
 	}
 	// (optionally) Create the visualizer mesh
 	if (visualizeMesh) {
-		vizMesh = std::make_shared<MeshObject>(engineRef, objectName + "_vizmesh");
+		vizMesh = std::make_shared<ModelObject>(engineRef, objectName + "_vizmesh");
 		vizMesh->GenerateCubeMesh();
 		vizMesh->LoadTexture("resources/textures/awesomeface.png");
 		vizMesh->SetRelativeScale(glm::vec3(0.1, 0.1, 0.1));

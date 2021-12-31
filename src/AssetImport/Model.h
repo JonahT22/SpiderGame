@@ -11,10 +11,10 @@
 class ShaderProgram;
 
 ///
-/// A model is a collection of StaticMeshes that are loaded from the same file
+/// A model is a collection of StaticMeshes and textures
 /// that are always drawn together.
 /// Meshes in a model may use different textures, but always use the same shader.
-/// Manages loading the mesh files from assimp and drawing the mesh objects
+/// Model class anages loading the mesh files from assimp and drawing the mesh objects.
 ///
 class Model {
 public:

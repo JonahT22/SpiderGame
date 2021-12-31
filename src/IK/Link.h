@@ -5,7 +5,7 @@
 #include <eigen-3.4.0/Eigen/Dense>
 
 #include "../Rendering/SceneObject.h"
-class MeshObject;
+class ModelObject;
 
 ///
 /// Link in an IK chain. MUST be parented under an IKChain. Links location is constrained in
@@ -34,7 +34,7 @@ public:
 	void SetLinkAngle(double a);
 	
 private:
-	std::shared_ptr<MeshObject> linkMesh;
+	std::shared_ptr<ModelObject> linkMesh;
 
 	// Length of this link (distance to the next link's root along the x axis)
 	const float linkLength = 1.0f;
