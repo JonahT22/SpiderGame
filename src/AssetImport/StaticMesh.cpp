@@ -44,7 +44,7 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		glActiveTexture(GL_TEXTURE0 + i);
 
 		// Get a string representing this texture's type
-		const Texture::TextureType tex_type = textureList.at(i).type;
+		const Texture::TextureType tex_type = textureList.at(i).GetType();
 		const std::string type_string = Texture::TypeToString(tex_type);
 		// Find the 'number' of this texture (i.e. diffuse_0 vs diffuse_1)
 		const GLuint tex_type_idx = static_cast<GLuint>(tex_type);

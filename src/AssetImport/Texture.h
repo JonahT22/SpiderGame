@@ -57,6 +57,7 @@ public:
 	/* ----- Getters ----- */
 	// Has this texture been assigned an image file?
 	bool IsLoaded() const;
+	TextureType GetType() const;
 
 private:
 	// Texture properties

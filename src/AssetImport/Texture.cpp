@@ -28,6 +28,10 @@ bool Texture::IsLoaded() const {
 	return (textureID > 0);
 }
 
+Texture::TextureType Texture::GetType() const {
+	return type;
+}
+
 
 void Texture::LoadFromFile(const std::string& filename) {
 	// TODO: set the texture type
