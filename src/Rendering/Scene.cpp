@@ -13,7 +13,7 @@
 #include "../GameEngine.h"
 #include "../IK/IKChain.h"
 #include "../IK/LegTarget.h"
-#include "MeshObject.h"
+#include "ModelObject.h"
 #include "Scene.h"
 #include "SceneObject.h"
 #include "ShaderProgram.h"
@@ -117,8 +117,8 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	for (size_t i = 0; i < objects.size(); ++i) {
 		std::shared_ptr<SceneObject> new_object;
 		std::string object_type = YAMLHelper::GetMapVal<std::string>(objects[i], "type");
-		if (object_type == "mesh") {
-			new_object = LoadMesh(objects[i]);
+		if (object_type == "model") {
+			new_object = LoadModel(objects[i]);
 		}
 		else if (object_type == "camera") {
 			new_object = LoadCamera(objects[i], first_camera);
@@ -171,23 +171,12 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	UpdateScenePhysics(engineRef.lock()->GetPhysicsTimeStep());
 }
 
-inline std::shared_ptr<ModelObject> Scene::LoadMesh(const YAML::Node& mesh_node) {
-	std::string mesh_name = YAMLHelper::GetMapVal<std::string>(mesh_node, "name");
-	auto new_mesh = std::make_shared<ModelObject>(engineRef, mesh_name);
-	// Load the mesh file, or make the default cube if none is provided
-	std::string mesh_filename = YAMLHelper::GetMapVal<std::string>(mesh_node, "meshfile");
+inline std::shared_ptr<ModelObject> Scene::LoadModel(const YAML::Node& model_node) {
+	std::string model_name = YAMLHelper::GetMapVal<std::string>(model_node, "name");
+	std::string model_filepath = YAMLHelper::GetMapVal<std::string>(model_node, "meshfile");
+	auto new_model = std::make_shared<ModelObject>(engineRef, model_name, model_filepath);
 	glm::vec2 tex_scale(1.0f);
-	if (YAMLHelper::DoesMapHaveField(mesh_node, "tex_scale")) {
-		tex_scale = YAMLHelper::GetMapVal<glm::vec2>(mesh_node, "tex_scale");
-	}
-	if (mesh_filename == "") {
-		new_mesh->GenerateCubeMesh(tex_scale.x, tex_scale.y);
-	}
-	else {
-		new_mesh->LoadMesh(mesh_filename);
-	}
-	new_mesh->LoadTexture(YAMLHelper::GetMapVal<std::string>(mesh_node, "texture"));
-	return new_mesh;
+	return new_model;
 }
 
 inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, bool is_first) {

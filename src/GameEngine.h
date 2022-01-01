@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "Utils/GameOptions.h"
 class Window;
 class Scene;
 class Camera;
@@ -36,6 +37,7 @@ public:
 	bool IsWindowOpen() const;
 	bool IsKeyPressed(const int key) const;
 	const float GetPhysicsTimeStep() const;
+	std::string GetDefaultModelPath() const;
 
 	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);

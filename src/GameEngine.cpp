@@ -150,6 +150,10 @@ const float GameEngine::GetPhysicsTimeStep() const {
 	return physicsTimeStep;
 }
 
+std::string GameEngine::GetDefaultModelPath() const {
+	return options.defaultModelPath;
+}
+
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {
 	cameraRef = new_camera;
 }

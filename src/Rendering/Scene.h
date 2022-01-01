@@ -33,8 +33,8 @@ public:
 	void LoadSceneFile(const std::string& filename);
 
 private:
-	// Creates a subclass of a Sceneobject and loads any subclass-specific parameters
-	inline std::shared_ptr<ModelObject> LoadMesh(const YAML::Node& mesh_node);
+	/* ----- Functions for loading subclasses of SceneObjects ----- */
+	inline std::shared_ptr<ModelObject> LoadModel(const YAML::Node& model_node);
 	inline std::shared_ptr<Camera> LoadCamera(const YAML::Node& camera_node,
 	                                          bool is_first = false);
 	inline std::shared_ptr<SpiderCharacter> LoadSpider(const YAML::Node& spider_node);
@@ -52,7 +52,7 @@ private:
 	//   this shadermap with the new indices of all shaders)
 	std::unordered_map<std::string, size_t> shaderMap;
 
-	// Pair containing a shader and a list of objects that it will be drawn with it
+	// Datatype containing a shader and a list of objects that it will be drawn with it
 	// TODO: make these just regular shaderprograms, not shared_ptrs
 	typedef std::pair<std::shared_ptr<ShaderProgram>,
 	                  std::vector<std::shared_ptr<SceneObject> > > ShaderToObjectList;

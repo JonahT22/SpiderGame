@@ -5,3 +5,5 @@ clear_color: [0.1, 0.1, 0.1]
 physics_fps: 60
 frame_delay_ms: 0
 show_frame_rate: false
+# TODO
+default_model_path: "resources/coreassets/cube.obj"
