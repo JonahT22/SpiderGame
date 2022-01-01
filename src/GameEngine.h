@@ -57,13 +57,9 @@ private:
 	// Keep track of which keys are currently being pressed
 	bool keysPressed[GLFW_KEY_LAST] = {false};
 
-	/* ----- Framerate and display settings ----- */
-	// Desired period for the physics updates, and a running timer for the next physics step
-	float physicsTimeStep = 0.1f;
+	// Counter for keeping track of physics updates
 	float physicsTimer = 0.0f;
-	// Artificial delay on each rendering frame, for testing physics behavior
-	unsigned int  frameDelayMs = 0;
-	// Should the framerate be printed to the log?
-	bool showFramerate = false;
+	
+	GameOptions options;
 };
 
