@@ -17,6 +17,9 @@ shaders:
         vert: "resources/shaders/rainbow_vert.glsl"
         frag: "resources/shaders/rainbow_frag.glsl"
 
+# TODO: remove tex_scale, not neede when loading models from files
+# TODO: mesh->model
+
 # TODO
 meshes:
 # Collections of vertex data, like position, normal, texcoord, and indexing
@@ -24,12 +27,8 @@ meshes:
         filename: "asdf"
 
 # TODO
-textures:
-    -   name: "texutre"
-
-# TODO
 materials:
-# Link between textures and shaders (might have multiple textures per material)
+# Collection of textures & other parameters (like emissive color)
     -   name: "mat_white"
 
 scene_objects:
