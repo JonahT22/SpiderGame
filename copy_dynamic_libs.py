@@ -1,5 +1,5 @@
-# Gets any dynamic libraries in ../../lib/dynamic_libs and copies them into the Release and Debug folders (where
-# the project executables are built).
+# With the current project setup, all .dll dynamic libraries need to be placed into the same
+# folder as the project's .exe file. This script copies those files from libs/dynamic_libs
 # Run this script from OpenGL/Projects/SpiderGame
 
 import os
