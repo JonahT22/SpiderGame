@@ -40,7 +40,6 @@
     <ClCompile Include="src\Rendering\ShaderProgram.cpp" />
     <ClCompile Include="src\Rendering\Skybox.cpp" />
     <ClCompile Include="src\Rendering\Window.cpp" />
-    <ClCompile Include="src\Utils\GameOptions.cpp" />
     <ClCompile Include="src\Utils\YAMLHelper.cpp" />
   </ItemGroup>
   <ItemGroup>

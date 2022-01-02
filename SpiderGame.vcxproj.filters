@@ -63,9 +63,6 @@
     <ClCompile Include="src\Rendering\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\GameOptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utils\YAMLHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
