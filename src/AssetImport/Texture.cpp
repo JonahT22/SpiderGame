@@ -4,6 +4,10 @@
 
 #include "stb_image.h"
 
+Texture::Texture() :
+	textureID(0),
+	type(TextureType::ENUM_END){}
+
 Texture::Texture(const std::string& filepath, const TextureType type) :
 	type(type),
 	textureID(0) {
@@ -34,8 +38,10 @@ Texture::TextureType Texture::GetType() const {
 
 
 void Texture::LoadFromFile(const std::string& filename) {
+	// TODO: remove
+	std::cout << "Loading texture " << filename << "..." << std::endl;
 	// TODO: set the texture type
-	// TODO: eventually, this should be read from the scene configuration file. For now,
+	// TODO: eventually, this should be read from the assimp material. For now,
 	//   just hardcode the texture options
 	TextureOptions options{ GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
 								GL_LINEAR, GL_RGB };

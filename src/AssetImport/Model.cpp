@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -7,18 +9,7 @@
 #include "Model.h"
 #include "Texture.h"
 
-Model::Model(const std::string& filename) {
-	// TODO: does this need to be a separate function?
-	LoadFromFile(filename);
-}
-
-void Model::Render(const std::shared_ptr<ShaderProgram>& shader) const {
-	for (auto& mesh : meshList) {
-		mesh.Render(shader);
-	}
-}
-
-void Model::LoadFromFile(const std::string& filename) {
+void Model::LoadFromFile(const std::string& filename, bool load_textures) {
 	Assimp::Importer importer;
 	// Load the model's file into an Assimp scene (different than the Scene class)
 	// Read the file with some aiPostProcessSteps flags (see assimp->postprocess.h)
@@ -33,27 +24,40 @@ void Model::LoadFromFile(const std::string& filename) {
 		return;
 	}
 	modelDir = filename.substr(0, filename.find_last_of('/'));
-	ProcessNode(scene->mRootNode, scene);
+	ProcessNode(scene->mRootNode, scene, load_textures);
 }
 
-void Model::ProcessNode(aiNode* node, const aiScene* scene) {
+void Model::OverrideTextures(const Texture& override_texture) {
+	// Clear any loaded textures and replace with the override texture
+	for (auto& mesh : meshList) {
+		mesh.ClearTextures();
+		mesh.AddTexture(override_texture);
+	}
+}
+
+void Model::Render(const std::shared_ptr<ShaderProgram>& shader) const {
+	for (auto& mesh : meshList) {
+		mesh.Render(shader);
+	}
+}
+
+void Model::ProcessNode(aiNode* node, const aiScene* scene, bool load_textures) {
 	// Assimp scenes have a heirarchy of nodes, and each node can have multiple meshes
 	// Get the meshes attached to this node
 	for (size_t i = 0; i < node->mNumMeshes; ++i) {
 		aiMesh* new_mesh = scene->mMeshes[node->mMeshes[i]];
-		meshList.emplace_back(ProcessMesh(new_mesh, scene));
+		meshList.emplace_back(ProcessMesh(new_mesh, scene, load_textures));
 	}
 	// Process the child nodes recursively
 	for (size_t i = 0; i < node->mNumChildren; ++i) {
-		ProcessNode(node->mChildren[i], scene);
+		ProcessNode(node->mChildren[i], scene, load_textures);
 	}
-	// Note: Assimp stores nodes/meshes in parent-child relationships, but our model
+	// Note: Assimp can read nodes/meshes in parent-child relationships, but our model
 	//   class doesn't store these relationships. If an assimp scene is read that has
-	//   parents & children, the Model class will need to account for them
+	//   parents & children, the Model class will need to be updated to account for them
 }
 
-StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
-{
+StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures) {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
@@ -96,14 +100,18 @@ StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	if (mesh->mMaterialIndex >= 0) {
 		// Get the material from the scene
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		// An assimp material contains many properties, including lists of 
-		//   textures for diffuse, specular, emmissive, etc (see material.h)
-		// Load diffuse & specular textures
-		LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE,
-			Texture::TextureType::DIFFUSE, textures);
-		LoadTexturesFromMaterial(material, aiTextureType_SPECULAR,
-			Texture::TextureType::SPECULAR, textures);
+		if (load_textures) {
+			// An assimp material contains many properties, including lists of 
+			//   textures for diffuse, specular, emmissive, etc (see material.h)
+			// Load diffuse & specular textures
+			LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE,
+				Texture::TextureType::DIFFUSE, textures);
+			LoadTexturesFromMaterial(material, aiTextureType_SPECULAR,
+				Texture::TextureType::SPECULAR, textures);
+		}
 	}
+	// TODO: get a default texture from the scene if there is no material, or if there
+	//   are no textures on the material
 
 	return StaticMesh(vertices, indices, textures);
 }

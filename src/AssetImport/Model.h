@@ -9,29 +9,41 @@
 #include "StaticMesh.h"
 #include "Texture.h"
 class ShaderProgram;
+class Scene;
 
 ///
-/// A model is a collection of StaticMeshes and textures
-/// that are always drawn together.
+/// A model is a collection of StaticMeshes and textures that are always drawn together.
 /// Meshes in a model may use different textures, but always use the same shader.
-/// Model class anages loading the mesh files from assimp and drawing the mesh objects.
+/// The model class manages loading the mesh files from assimp and drawing the mesh objects.
 ///
 class Model {
 public:
-	Model(const std::string& filename);
+	// TODO: remove comment
+	// Next up: the model class needs a default constructor, and load the file in
+	//   a separate function. This way, the ModelObject class can take in an optional
+	//   texture override, and call the correct loading function based on whether the
+	//   override was provided or not. Right now, since the model must be created
+	//   in the modelobject's initializer list, the modelobject can't choose between the
+	//   model's two constructors.
+	// Basic constructor - load from file
+	Model() = default;
 	~Model() = default;
 
+	// Load the model into an assimp scene
+	void LoadFromFile(const std::string& filename, bool load_textures = true);
+	// Optional texture override - discard all textures in model when loading
+	void OverrideTextures(const Texture& override_texture);
 	void Render(const std::shared_ptr<ShaderProgram>& shader) const;
 
 private:
-	// Load the model into an assimp scene
-	void LoadFromFile(const std::string& filename);
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	StaticMesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	void ProcessNode(aiNode* node, const aiScene* scene, bool load_textures = true);
+	StaticMesh ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures = true);
 	void LoadTexturesFromMaterial(aiMaterial* material, aiTextureType ai_tex_type,
 		Texture::TextureType custom_tex_type, std::vector<Texture>& tex_list);
 
 	// Directory holding this model's file (not including the model's filename)
 	std::string modelDir;
 	std::vector<StaticMesh> meshList;
+	// Reference to the scene for managing textures
+	std::weak_ptr<Scene> sceneRef;
 };

@@ -31,24 +31,28 @@ public:
 	~StaticMesh();
 
 	void Render(const std::shared_ptr<ShaderProgram> shader) const;
+	// Add a new texture to the texture list
+	void AddTexture(const Texture& new_tex);
+	// Remove every texture from this object
+	void ClearTextures();
 
 private:
 	void SetupVertexArray();
 
 	// Vertex Array Object - holds the mappings between buffers and attributes
-	GLuint vertexArrayID = 0;
+	GLuint vertexArrayID;
 
 	// Vertex Buffer Objects - Stores raw vertex data
 	// Note: all vertex data is currently stored in a single VBO. This is good when
 	//   vertex data doesn't change, but if position data changes often (i.e. cloth sim),
 	//   then keep position & normal in separate VBO from other data
 	std::vector<Vertex> vertexBuffer;
-	GLuint vertexBufferID = 0;
+	GLuint vertexBufferID;
 
 	// Element Buffer Object (optional) - Specifies which vertices to use for each triangle
 	bool useEBO = false;
 	std::vector<GLuint> elementBuffer;
-	GLuint elementBufferID = 0;
+	GLuint elementBufferID;
 
 	// Array of textures used by this mesh. Since textures are small objects (just
 	//   an ID and type), each mesh can store full copies of its texture objects

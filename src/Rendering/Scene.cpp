@@ -173,9 +173,18 @@ void Scene::LoadSceneFile(const std::string& filename) {
 
 inline std::shared_ptr<ModelObject> Scene::LoadModel(const YAML::Node& model_node) {
 	std::string model_name = YAMLHelper::GetMapVal<std::string>(model_node, "name");
-	std::string model_filepath = YAMLHelper::GetMapVal<std::string>(model_node, "meshfile");
-	auto new_model = std::make_shared<ModelObject>(engineRef, model_name, model_filepath);
-	glm::vec2 tex_scale(1.0f);
+	std::string model_filepath = YAMLHelper::GetMapVal<std::string>(model_node, "modelfile");
+	// Optionally load a texture to override the model's provided texture. The default
+	//   Texture constructor creates an invalid Texture and is ignored by the modelobject
+	// TODO: Check if this texture has been loaded already
+	Texture override_texture = Texture();
+	if (YAMLHelper::DoesMapHaveField(model_node, "texture_override")) {
+		std::string tex_path =
+			YAMLHelper::GetMapVal<std::string>(model_node, "texture_override");
+		override_texture = Texture(tex_path, Texture::TextureType::DIFFUSE);
+	}
+	auto new_model = std::make_shared<ModelObject>(engineRef, model_name, model_filepath,
+		override_texture);
 	return new_model;
 }
 

@@ -17,26 +17,14 @@ shaders:
         vert: "resources/shaders/rainbow_vert.glsl"
         frag: "resources/shaders/rainbow_frag.glsl"
 
-# TODO: remove tex_scale, not neede when loading models from files
-# TODO: mesh->model
-
-# TODO
-meshes:
-# Collections of vertex data, like position, normal, texcoord, and indexing
-    -   name: "cube"
-        filename: "asdf"
-
-# TODO
-materials:
-# Collection of textures & other parameters (like emissive color)
-    -   name: "mat_white"
-
 scene_objects:
-    -   type: "mesh"
+    -   type: "model"
         name: "right_cube"
-        # If no meshfile is given, a simple cube will be loaded for the object
-        meshfile: ""
-        texture: "resources/textures/awesomeface.png"
+        # If no modelfile is given, a simple cube will be loaded for the object
+        modelfile: ""
+        # Optional override for whatever textures are included in the model file
+        # TODO: test w/no texture override, need default texture from engine settings
+        texture_override: "resources/textures/awesomeface.png"
         # shader, relative_transform, and parent are inherited from SceneObject
         shader: "rainbow"
         relative_transform:
@@ -46,10 +34,24 @@ scene_objects:
         # If parent_object is blank, this object is oriented to the world origin
         parent: ""
 
-    -   type: "mesh"
+    -   type: "camera"
+        name: "main_camera"
+        fov_y: 45.0
+        arm_length: 5.0
+        arm_angle: [30.0, -90.0]
+        # Ideally, there should be a built-in minimal shader that cameras can use
+        shader: "unlit"
+        relative_transform:
+            location: [0.0, 0.0, 0.0]
+            rotation: [0.0, 0.0, 0.0]
+            scale: [1.0, 1.0, 1.0]
+        parent: "right_cube"
+
+removed_objects:
+    -   type: "model"
         name: "left_cube"
-        meshfile: ""
-        texture: "resources/textures/wall.jpg"
+        modelfile: ""
+        texture_override: "resources/textures/wall.jpg"
         shader: "normal"
         relative_transform:
             location: [-1.5, 0.5, 0.0]
@@ -91,10 +93,10 @@ scene_objects:
             scale: [1.0, 1.0, 1.0]
         parent: "spider"
 
-    -   type: "mesh"
+    -   type: "model"
         name: "spider_body"
-        meshfile: ""
-        texture: "resources/textures/fabric.jpg"
+        modelfile: ""
+        texture_override: "resources/textures/fabric.jpg"
         shader: "unlit"
         relative_transform:
             location: [0.0, 0.0, 0.0]
@@ -102,10 +104,10 @@ scene_objects:
             scale: [0.5, 0.2, 0.7]
         parent: "spider"
 
-    -   type: "mesh"
+    -   type: "model"
         name: "spider_eye_right"
-        meshfile: ""
-        texture: "resources/textures/eye.png"
+        modelfile: ""
+        texture_override: "resources/textures/eye.png"
         shader: "unlit"
         relative_transform:
             location: [0.14, 0.1, 0.32]
@@ -113,10 +115,10 @@ scene_objects:
             scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
-    -   type: "mesh"
+    -   type: "model"
         name: "spider_eye_left"
-        meshfile: ""
-        texture: "resources/textures/eye.png"
+        modelfile: ""
+        texture_override: "resources/textures/eye.png"
         shader: "unlit"
         relative_transform:
             location: [-0.14, 0.1, 0.32]
@@ -124,10 +126,10 @@ scene_objects:
             scale: [0.2, 0.2, 0.1]
         parent: "spider"
 
-    -   type: "mesh"
+    -   type: "model"
         name: "spider_eye_cover"
-        meshfile: ""
-        texture: "resources/textures/fabric.jpg"
+        modelfile: ""
+        texture_override: "resources/textures/fabric.jpg"
         shader: "unlit"
         tex_scale: [1.0, 0.1]
         relative_transform:
@@ -136,11 +138,12 @@ scene_objects:
             scale: [0.51, 0.11, 0.2]
         parent: "spider"
 
-    -   type: "mesh"
+    -   type: "model"
         name: "floor_cube"
-        meshfile: ""
-        texture: "resources/textures/marble.jpg"
-        tex_scale: [3.0, 3.0]
+        modelfile: ""
+        texture_override: "resources/textures/marble.jpg"
+        # TODO: implement this
+        tex_scale_override: [3.0, 3.0]
         shader: "unlit"
         relative_transform:
             location: [0.0, -0.5, 0.0]

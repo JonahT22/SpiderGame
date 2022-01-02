@@ -22,11 +22,13 @@ struct TextureOptions {
 /// 
 class Texture {
 public:
+	/* ----- Enums & static functions ----- */
 	// List of texture types that are supported by shaders
 	enum class TextureType : GLuint {
 		DIFFUSE,
 		SPECULAR,
 		NORMAL,
+		// Last entry MUST be ENUM_END, used for iterating over texture types
 		ENUM_END
 	};
 	// Mapping from texture types to strings with their names in shader programs
@@ -47,7 +49,14 @@ public:
 		return "undefined_texture_type";
 	}
 
+	/* ----- Class Definition ----- */
+	// Default (invalid) constructor
+	Texture();
+	// Proper constructor from file
 	Texture(const std::string& filepath, const TextureType type);
+	// Note: Do NOT call glDeleteTextures when destructed. Multiple Texture objects can
+	//   reference the same glTexture (i.e. one of them actually allocates the texture,
+	//   and the others just store a copy of the textureID)
 	~Texture() = default;
 
 	// Binds this texture to the provided texture unit (default = 0)
@@ -55,14 +64,14 @@ public:
 	void Bind(GLuint texture_unit = 0) const;
 
 	/* ----- Getters ----- */
-	// Has this texture been assigned an image file?
+	// Has this texture been correctly loaded from an image file?
 	bool IsLoaded() const;
 	TextureType GetType() const;
 
 private:
 	// Texture properties
 	GLuint textureID;
-	TextureType type = TextureType::DIFFUSE;
+	TextureType type;
 
 	void LoadFromFile(const std::string& filename);
 };
