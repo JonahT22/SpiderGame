@@ -15,6 +15,7 @@ void Model::LoadFromFile(const std::string& filename, bool load_textures) {
 	// Read the file with some aiPostProcessSteps flags (see assimp->postprocess.h)
 	//   - Triangulate: make sure the file is read as a triangle mesh
 	//   - OptimizeMeshes: try to combine meshes to reduce the # of draw calls
+	//   - TODO: JoinIdenticalVertices might be a good one too
 	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate |
 		aiProcess_FlipUVs | aiProcess_OptimizeMeshes);
 	// Check if the scene loaded properly
@@ -122,7 +123,7 @@ void Model::LoadTexturesFromMaterial(aiMaterial* material, aiTextureType ai_tex_
 		// Construct a texture object from the path in the material
 		aiString local_tex_path;
 		material->GetTexture(ai_tex_type, i, &local_tex_path);
-		std::string path = modelDir + std::string(local_tex_path.C_Str());
+		std::string path = modelDir + "/" + std::string(local_tex_path.C_Str());
 		tex_list.emplace_back(path, custom_tex_type);
 		// TODO: Get texture import info (wrapping, wireframe, 2 sided,
 		//     etc) from the material (see assimp material.h)

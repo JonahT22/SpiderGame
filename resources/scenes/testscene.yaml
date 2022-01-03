@@ -21,12 +21,12 @@ scene_objects:
     -   type: "model"
         name: "right_cube"
         # If no modelfile is given, a simple cube will be loaded for the object
-        modelfile: ""
+        modelfile: "resources/models/teapot.obj"
         # Optional override for whatever textures are included in the model file
         # TODO: test w/no texture override, need default texture from engine settings
         texture_override: "resources/textures/awesomeface.png"
         # shader, relative_transform, and parent are inherited from SceneObject
-        shader: "rainbow"
+        shader: "unlit"
         relative_transform:
             location: [1.5, 0.5, 0.0]
             rotation: [0.0, 0.0, 0.0]

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <iostream>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -18,6 +19,13 @@ struct Vertex {
 	glm::vec2 texCoord;
 
 	Vertex() : position(0.0f), normal(0.0f), texCoord(0.0f) {}
+	Vertex(const glm::vec3& pos, const glm::vec3& nor, const glm::vec2& tex) :
+		position(pos), normal(nor), texCoord(tex) {}
+	void Print() {
+		std::cout << "pos(" << position.x << ", " << position.y << ", " << position.z;
+		std::cout << "), nor(" << normal.x << ", " << normal.y << ", " << normal.z;
+		std::cout << "), tex(" << texCoord.x << ", " << texCoord.y << ")" << std::endl;
+	}
 };
 
 /// 
@@ -29,6 +37,8 @@ public:
 	           std::vector<GLuint>& indices,
 	           std::vector<Texture>& textures);
 	~StaticMesh();
+
+	void GenerateCubeMesh();
 
 	void Render(const std::shared_ptr<ShaderProgram> shader) const;
 	// Add a new texture to the texture list

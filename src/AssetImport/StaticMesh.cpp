@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include <glad/glad.h>
 
@@ -7,6 +8,7 @@
 #include "Texture.h"
 #include "../Rendering/ShaderProgram.h"
 
+// TODO: is this necessary/used?
 using T = Texture::TextureType;
 
 StaticMesh::StaticMesh(std::vector<Vertex>& vertices, 
@@ -20,7 +22,14 @@ StaticMesh::StaticMesh(std::vector<Vertex>& vertices,
     textureList = std::move(textures);
 	// Only allocate and draw using the ebo if indices are provided
 	useEBO = (elementBuffer.size() > 0);
+	//GenerateCubeMesh();
 	SetupVertexArray();
+
+	// TODO: remove
+	std::cout << "Creating static mesh: " << std::endl;
+	for (auto& vertex : vertexBuffer) {
+		//vertex.Print();
+	}
 }
 
 StaticMesh::~StaticMesh() {
@@ -28,6 +37,58 @@ StaticMesh::~StaticMesh() {
     glDeleteVertexArrays(1, &vertexArrayID);
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementBufferID);
+}
+
+void StaticMesh::GenerateCubeMesh() {
+	float tex_mult_u = 1.0f;
+	float tex_mult_v = 1.0f;
+	Vertex positions[] = {
+		// Vertex data for a cube
+		// posX, posY, posZ,  norX,  norY,  norZ, texU, texV,
+		// Back
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		//Vertex(glm::vec3(// Front			), glm::vec3(					 ), glm::vec2(									   ))
+		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		//Vertex(glm::vec3(// Left			), glm::vec3(					 ), glm::vec2(									   ))
+		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		//Vertex(glm::vec3(// Right			 ), glm::vec3(					 ), glm::vec2(									   ))
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		//Vertex(glm::vec3( // Bottom			 ), glm::vec3(					  ), glm::vec2(
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		//Vertex(glm::vec3( // Top			 ), glm::vec3(					  ), glm::vec2(										))
+		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
+		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v))
+	};
+	vertexBuffer.assign(std::begin(positions), std::end(positions));
 }
 
 void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
@@ -60,32 +121,17 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		
 		// Set the texture unit value on the shader
 		// TODO: remove print
-		std::cout << "Setting texture name: " << "texture" + type_string + num_string;
-		std::cout << " to unit number " << i << std::endl;
+		//std::cout << "Setting texture name: " << "texture" + type_string + num_string;
+		//std::cout << " to unit number " << i << std::endl;
 		shader->SetIntUniform("texture" + type_string + num_string, i);
 	}
 	glActiveTexture(GL_TEXTURE0);
 
 	/* ----- Bind vertex data & draw the mesh ----- */
 	// Load this mesh's buffer/attribute settings
-	GLint vaidx;
-	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &vaidx);
 	glBindVertexArray(vertexArrayID);
-	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &vaidx);
 	// Draw the mesh using either indexed EBO drawing or raw VBO drawing
-	if (useEBO) {
-		GLint ebufidx;
-		GLint vbufidx;
-		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
-		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
-		std::cout << ebufidx << ", " << vbufidx << std::endl;
-		// TODO: shouldn't need to re-bind here
-		//glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
-
-		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
-		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
-
+	if (false) {
 		// Draw the mesh using indexed drawing & the element buffer
 		glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
 		// ^ 1: the primitive type (just like the VBO DrawArrays version)
@@ -98,11 +144,12 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		//   this ever get called? If so, is that /8 correct?
 
 		// Draw straight from the VBO (w/out indexed drawing)
-		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size() / 8);
+		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 		// ^ 1: the primitive type that we want to draw
 		//   2: The starting index of the vertex array that we want to draw
 		//   3: How many vertices we want to draw
 	}
+	glBindVertexArray(0);
 }
 
 void StaticMesh::AddTexture(const Texture& new_tex) {
@@ -158,19 +205,12 @@ void StaticMesh::SetupVertexArray() {
 		// From now on, binding to the VAO will also bind to this EBO, Letting us use
 		//   glDrawElements instead of glDrawArrays for this mesh
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.size() * sizeof(GLfloat),
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.size() * sizeof(GLuint),
 			&elementBuffer[0], GL_STATIC_DRAW);
 		// EBO's don't have attributes
 		// IMPORTANT NOTE: a VAO can only have 1 EBO. The VAO uses whatever EBO was
 		//   most recently bound
 	}
-
-	// TODO: remove
-	GLint ebufidx;
-	GLint vbufidx;
-	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
-	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
-	std::cout << ebufidx << ", " << vbufidx << std::endl;
 
 	/* ----- (Optional) Unbind the Buffers & Vertex Array Object ----- */
 	// This prevents further calls from accidentally modifying these objects
@@ -182,14 +222,4 @@ void StaticMesh::SetupVertexArray() {
 	//   unbind this while VAO is active, or VAO will stop recognizing it as
 	//   the current EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
-	// TODO: remove
-	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
-	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
-	// Try re-binding the vertex array to see if the values hold
-	glBindVertexArray(vertexArrayID);
-	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
-	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
-	std::cout << ebufidx << ", " << vbufidx << std::endl;
 }
