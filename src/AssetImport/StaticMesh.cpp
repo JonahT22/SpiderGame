@@ -78,9 +78,10 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		GLint vbufidx;
 		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
 		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
+		std::cout << ebufidx << ", " << vbufidx << std::endl;
 		// TODO: shouldn't need to re-bind here
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
+		//glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
 
 		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
 		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
@@ -169,6 +170,7 @@ void StaticMesh::SetupVertexArray() {
 	GLint vbufidx;
 	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ebufidx);
 	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbufidx);
+	std::cout << ebufidx << ", " << vbufidx << std::endl;
 
 	/* ----- (Optional) Unbind the Buffers & Vertex Array Object ----- */
 	// This prevents further calls from accidentally modifying these objects
