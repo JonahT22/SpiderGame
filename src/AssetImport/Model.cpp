@@ -66,15 +66,17 @@ StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_text
 	/* ----- Process vertices ----- */
 	for (size_t i = 0; i < mesh->mNumVertices; ++i) {
 		Vertex new_vertex;
-		// Position
+		// Positions
 		new_vertex.position.x = mesh->mVertices[i].x;
 		new_vertex.position.y = mesh->mVertices[i].y;
 		new_vertex.position.z = mesh->mVertices[i].z;
-		// Normal
-		new_vertex.normal.x = mesh->mNormals[i].x;
-		new_vertex.normal.y = mesh->mNormals[i].y;
-		new_vertex.normal.z = mesh->mNormals[i].z;
-		// Check if the mesh has tex coords
+		// Normals
+		if (mesh->HasNormals()) {
+			new_vertex.normal.x = mesh->mNormals[i].x;
+			new_vertex.normal.y = mesh->mNormals[i].y;
+			new_vertex.normal.z = mesh->mNormals[i].z;
+		}
+		// Texture coords
 		if (mesh->mTextureCoords[0]) {
 			// Assimp meshes may have multiple sets of tex coords, but just
 			//   grab the first set
@@ -103,7 +105,7 @@ StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_text
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		if (load_textures) {
 			// An assimp material contains many properties, including lists of 
-			//   textures for diffuse, specular, emmissive, etc (see material.h)
+			//   textures for diffuse, specular, emissive, etc (see material.h)
 			// Load diffuse & specular textures
 			LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE,
 				Texture::TextureType::DIFFUSE, textures);

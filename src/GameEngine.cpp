@@ -118,8 +118,9 @@ const std::unique_ptr<Window>& GameEngine::GetWindow() const {
 std::shared_ptr<Camera> GameEngine::GetMainCamera() {
 	// Note: This function cannot be declared as const. A const specifier prevents passing
 	//   a non-const weak_from_this to the empty camera constructor
-	if (std::shared_ptr<Camera> camera = cameraRef.lock())
+	if (std::shared_ptr<Camera> camera = cameraRef.lock()) {
 		return camera;
+	}
 	else {
 		std::cerr << "ERROR: Tried to get current camera, but there is no camera set in";
 		std::cerr << " the game engine!" << std::endl;
