@@ -8,43 +8,17 @@
 #include "Texture.h"
 #include "../Rendering/ShaderProgram.h"
 
-// TODO: is this necessary/used?
-using T = Texture::TextureType;
-
 StaticMesh::StaticMesh(std::vector<Vertex>& vertices, 
                        std::vector<GLuint>& indices,
                        std::vector<Texture>& textures) :
 	vertexArrayID(0),
 	vertexBufferID(0),
 	elementBufferID(0) {
-	//vertexBuffer = std::move(vertices);
-    //elementBuffer = std::move(indices);
+	vertexBuffer = std::move(vertices);
+    elementBuffer = std::move(indices);
     textureList = std::move(textures);
 
-	// TODO: remove
-	// For testing, just hardcode a square
-	vertexBuffer.emplace_back(glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f));  // top right
-	vertexBuffer.emplace_back(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f));  // bottom right
-	vertexBuffer.emplace_back(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)); // bottom left
-	vertexBuffer.emplace_back(glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)); // top left 
-
-	//vertexBuffer.emplace_back(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f));  // bottom right
-	//vertexBuffer.emplace_back(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)); // bottom left
-	//vertexBuffer.emplace_back(glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)); // top left 
-	
-	GLuint hardcoded_indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
-	elementBuffer.assign(std::begin(hardcoded_indices), std::end(hardcoded_indices));
-
 	SetupVertexArray();
-
-	// TODO: remove
-	/*std::cout << "Creating static mesh: " << std::endl;
-	for (auto& vertex : vertexBuffer) {
-		vertex.Print();
-	}*/
 }
 
 StaticMesh::~StaticMesh() {
@@ -71,10 +45,6 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	for (size_t i = 0; i < textureList.size(); ++i) {
 		// Bind textures to units 0, 1, 2, ...
 		textureList.at(i).Bind(i);
-		// TODO: does this work without using texture.bind()?
-		//glActiveTexture(GL_TEXTURE0 + i);
-		// A: ^ no, you also need to call glBindTexture to actually assign the texture
-		//   to the active texture unit
 
 		// Get a string representing this texture's type
 		const Texture::TextureType tex_type = textureList.at(i).GetType();
@@ -85,9 +55,6 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		const std::string num_string = std::to_string(tex_counts.at(tex_type_idx)++);
 		
 		// Set the texture unit value on the shader
-		// TODO: remove print
-		//std::cout << "Setting texture name: " << "texture" + type_string + num_string;
-		//std::cout << " to unit number " << i << std::endl;
 		shader->SetIntUniform("texture" + type_string + num_string, i, true);
 	}
 
@@ -99,13 +66,7 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// ^ 1: the primitive type (just like the VBO DrawArrays version)
 	//   2: # of elements to draw
 	//   3: the type of the indices
-	//   4: offset or array ref, we don't need to worry abt it now
-	// TODO: remove
-	// Draw straight from the VBO (w/out indexed drawing)
-	//glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
-	// ^ 1: the primitive type that we want to draw
-	//   2: The starting index of the vertex array that we want to draw
-	//   3: How many vertices we want to draw
+	//   4: offset or array ref, not needed
 
 	// Set everything back to the defaults
 	glBindVertexArray(0);

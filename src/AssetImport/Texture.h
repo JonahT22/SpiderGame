@@ -60,7 +60,6 @@ public:
 	~Texture() = default;
 
 	// Binds this texture to the provided texture unit (default = 0)
-	// TODO: is Bind() needed when the staticmesh handles all the texture binding stuff?
 	void Bind(GLuint texture_unit = 0) const;
 
 	/* ----- Getters ----- */

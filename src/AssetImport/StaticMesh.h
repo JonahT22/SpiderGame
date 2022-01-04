@@ -11,7 +11,7 @@
 class ShaderProgram;
 
 ///
-/// Helper struct for storing mesh data (TODO: maybe move to separate file?)
+/// Helper struct for storing mesh data
 /// 
 struct Vertex {
 	glm::vec3 position;

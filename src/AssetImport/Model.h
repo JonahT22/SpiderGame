@@ -18,13 +18,6 @@ class Scene;
 ///
 class Model {
 public:
-	// TODO: remove comment
-	// Next up: the model class needs a default constructor, and load the file in
-	//   a separate function. This way, the ModelObject class can take in an optional
-	//   texture override, and call the correct loading function based on whether the
-	//   override was provided or not. Right now, since the model must be created
-	//   in the modelobject's initializer list, the modelobject can't choose between the
-	//   model's two constructors.
 	// Basic constructor - load from file
 	Model() = default;
 	~Model() = default;
