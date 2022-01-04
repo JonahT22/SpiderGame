@@ -37,7 +37,7 @@ public:
 
 private:
 	void ProcessNode(aiNode* node, const aiScene* scene, bool load_textures = true);
-	StaticMesh ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures = true);
+	void ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures = true);
 	void LoadTexturesFromMaterial(aiMaterial* material, aiTextureType ai_tex_type,
 		Texture::TextureType custom_tex_type, std::vector<Texture>& tex_list);
 

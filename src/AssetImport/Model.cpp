@@ -47,7 +47,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, bool load_textures) 
 	// Get the meshes attached to this node
 	for (size_t i = 0; i < node->mNumMeshes; ++i) {
 		aiMesh* new_mesh = scene->mMeshes[node->mMeshes[i]];
-		meshList.emplace_back(ProcessMesh(new_mesh, scene, load_textures));
+		ProcessMesh(new_mesh, scene, load_textures);
 	}
 	// Process the child nodes recursively
 	for (size_t i = 0; i < node->mNumChildren; ++i) {
@@ -58,7 +58,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, bool load_textures) 
 	//   parents & children, the Model class will need to be updated to account for them
 }
 
-StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures) {
+void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures) {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
@@ -116,7 +116,7 @@ StaticMesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_text
 	// TODO: get a default texture from the scene if there is no material, or if there
 	//   are no textures on the material
 
-	return StaticMesh(vertices, indices, textures);
+	meshList.emplace_back(vertices, indices, textures);
 }
 
 void Model::LoadTexturesFromMaterial(aiMaterial* material, aiTextureType ai_tex_type,
