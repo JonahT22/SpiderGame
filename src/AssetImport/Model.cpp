@@ -31,14 +31,14 @@ void Model::LoadFromFile(const std::string& filename, bool load_textures) {
 void Model::OverrideTextures(const Texture& override_texture) {
 	// Clear any loaded textures and replace with the override texture
 	for (auto& mesh : meshList) {
-		mesh.ClearTextures();
-		mesh.AddTexture(override_texture);
+		mesh->ClearTextures();
+		mesh->AddTexture(override_texture);
 	}
 }
 
 void Model::Render(const std::shared_ptr<ShaderProgram>& shader) const {
 	for (auto& mesh : meshList) {
-		mesh.Render(shader);
+		mesh->Render(shader);
 	}
 }
 
@@ -116,7 +116,7 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, bool load_textures) 
 	// TODO: get a default texture from the scene if there is no material, or if there
 	//   are no textures on the material
 
-	meshList.emplace_back(vertices, indices, textures);
+	meshList.emplace_back(std::make_shared<StaticMesh>(vertices, indices, textures));
 }
 
 void Model::LoadTexturesFromMaterial(aiMaterial* material, aiTextureType ai_tex_type,

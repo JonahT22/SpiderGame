@@ -43,7 +43,7 @@ private:
 
 	// Directory holding this model's file (not including the model's filename)
 	std::string modelDir;
-	std::vector<StaticMesh> meshList;
+	std::vector<std::shared_ptr<StaticMesh> > meshList;
 	// Reference to the scene for managing textures
 	std::weak_ptr<Scene> sceneRef;
 };
