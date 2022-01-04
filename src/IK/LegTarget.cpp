@@ -1,13 +1,12 @@
-#include "LegTarget.h"
-
 #include <cassert>
 #include <iostream>
 
 #include <glad/glad.h>
 
+#include "LegTarget.h"
 #include "../GameEngine.h"
-#include "../Mesh.h"
-#include "../SpiderCharacter.h"
+#include "../Rendering/ModelObject.h"
+#include "../Player/SpiderCharacter.h"
 
 LegTarget::LegTarget(std::weak_ptr<GameEngine> engine, const std::string& name,
 	const bool viz_mesh, const float threshold, const float lerp_time) :
@@ -25,9 +24,7 @@ void LegTarget::BeginPlay() {
 	}
 	// (optionally) Create the visualizer mesh
 	if (visualizeMesh) {
-		vizMesh = std::make_shared<Mesh>(engineRef, objectName + "_vizmesh");
-		vizMesh->GenerateCubeMesh();
-		vizMesh->LoadTexture("resources/textures/awesomeface.png");
+		vizMesh = std::make_shared<ModelObject>(engineRef, objectName + "_vizmesh");
 		vizMesh->SetRelativeScale(glm::vec3(0.1, 0.1, 0.1));
 		AddChildObject(vizMesh);
 		vizMesh->BeginPlay();

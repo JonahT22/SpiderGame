@@ -1,23 +1,18 @@
-#include "GameEngine.h"
-
 #include <iostream>
 
 #include <glad/glad.h>
 
-#include "Camera.h"
-#include "GameOptions.h"
-#include "Scene.h"
-#include "Window.h"
+#include "Player/Camera.h"
+#include "GameEngine.h"
+#include "Utils/GameOptions.h"
+#include "Rendering/Scene.h"
+#include "Rendering/Window.h"
 // TODO: I shouldn't need to include these, but for some reason I do
-#include "Skybox.h"
-#include "ShaderProgram.h"
+#include "Rendering/Skybox.h"
+#include "Rendering/ShaderProgram.h"
 
-GameEngine::GameEngine(const std::string& options_file) {
-	GameOptions options(options_file);
-	physicsTimeStep = options.physicsTimeStep;
-	frameDelayMs = options.frameDelayMs;
-	showFramerate = options.showFramerate;
-
+GameEngine::GameEngine(const std::string& options_file) :
+	options(options_file) {
 	/* ----- Set up GLFW ----- */
 	if (!glfwInit()) {
 		std::cerr << "Error during GLFW Initialization!" << std::endl;
@@ -85,21 +80,21 @@ void GameEngine::RenderScene(double delta_time) {
 	// Clear the color & depth buffers 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	int run_this_frame = 0;
-	while (physicsTimer > physicsTimeStep) {
-		scene->UpdateScenePhysics(physicsTimeStep);
+	while (physicsTimer > options.physicsTimeStep) {
+		scene->UpdateScenePhysics(options.physicsTimeStep);
 		run_this_frame++;
-		physicsTimer -= physicsTimeStep;
+		physicsTimer -= options.physicsTimeStep;
 	}
 	physicsTimer += delta_time;
 	
-	scene->RenderScene(frameDelayMs);
+	scene->RenderScene(options.frameDelayMs);
 
 	// Swap OpenGL buffers
 	glfwSwapBuffers(mainWindow->GetGLFWWindow()); // swap the color buffers
 	// Check if any events been triggered
 	glfwPollEvents();
 
-	if (showFramerate) {
+	if (options.showFramerate) {
 		std::cout << "Framerate: " << 1.0f / delta_time << std::endl;
 	}
 }
@@ -148,7 +143,11 @@ bool GameEngine::IsKeyPressed(const int key) const {
 }
 
 const float GameEngine::GetPhysicsTimeStep() const {
-	return physicsTimeStep;
+	return options.physicsTimeStep;
+}
+
+std::string GameEngine::GetDefaultModelPath() const {
+	return options.defaultModelPath;
 }
 
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {

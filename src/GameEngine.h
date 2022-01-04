@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "Utils/GameOptions.h"
 class Window;
 class Scene;
 class Camera;
@@ -36,6 +37,7 @@ public:
 	bool IsWindowOpen() const;
 	bool IsKeyPressed(const int key) const;
 	const float GetPhysicsTimeStep() const;
+	std::string GetDefaultModelPath() const;
 
 	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
@@ -55,13 +57,9 @@ private:
 	// Keep track of which keys are currently being pressed
 	bool keysPressed[GLFW_KEY_LAST] = {false};
 
-	/* ----- Framerate and display settings ----- */
-	// Desired period for the physics updates, and a running timer for the next physics step
-	float physicsTimeStep = 0.1f;
+	// Counter for keeping track of physics updates
 	float physicsTimer = 0.0f;
-	// Artificial delay on each rendering frame, for testing physics behavior
-	unsigned int  frameDelayMs = 0;
-	// Should the framerate be printed to the log?
-	bool showFramerate = false;
+	
+	GameOptions options;
 };
 

@@ -1,9 +1,7 @@
-#include "OptimizerGDLS.h"
-#include "LinkObjective.h"
 #include <iostream>
 
-using namespace std;
-using namespace Eigen;
+#include "OptimizerGDLS.h"
+#include "LinkObjective.h"
 
 OptimizerGDLS::OptimizerGDLS(const int num_links) :
 	alphaInit(1.0),
@@ -15,10 +13,10 @@ OptimizerGDLS::OptimizerGDLS(const int num_links) :
 	
 }
 
-void OptimizerGDLS::optimize(const LinkObjective& objective, VectorXd& x) {
+void OptimizerGDLS::optimize(const LinkObjective& objective, Eigen::VectorXd& x) {
 	int n = x.rows();
-	VectorXd g(n);
-	VectorXd dx(n);
+	Eigen::VectorXd g(n);
+	Eigen::VectorXd dx(n);
 	iter = 0;
 	for (size_t i = 1; i <= iterMax; ++i) {
 		// Evaluate f and g

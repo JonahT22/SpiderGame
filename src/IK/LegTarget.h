@@ -5,10 +5,10 @@
 
 #include <glm/glm.hpp>
 
-#include "../SceneObject.h"
+#include "../Rendering/SceneObject.h"
 class ShaderProgram;
 class GameEngine;
-class Mesh;
+class ModelObject;
 
 ///
 /// Empty SceneObject that lazily updates its model matrix location to match its
@@ -35,7 +35,7 @@ public:
 private:
 	// TODO: organize the parameters and pass in through file
 	const bool visualizeMesh = false;
-	std::shared_ptr<Mesh> vizMesh;
+	std::shared_ptr<ModelObject> vizMesh;
 
 	// Reference to any adjacent LegTargets. This LegTarget should not start moving
 	//   if any of its neighbors are also moving
