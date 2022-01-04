@@ -50,15 +50,14 @@ private:
 	// Vertex Array Object - holds the mappings between buffers and attributes
 	GLuint vertexArrayID;
 
-	// Vertex Buffer Objects - Stores raw vertex data
+	// Vertex Buffer - Stores raw vertex data
 	// Note: all vertex data is currently stored in a single VBO. This is good when
 	//   vertex data doesn't change, but if position data changes often (i.e. cloth sim),
 	//   then keep position & normal in separate VBO from other data
 	std::vector<Vertex> vertexBuffer;
 	GLuint vertexBufferID;
 
-	// Element Buffer Object (optional) - Specifies which vertices to use for each triangle
-	bool useEBO = false;
+	// Element Buffer - stores the order to draw vertices in the vertexBuffer
 	std::vector<GLuint> elementBuffer;
 	GLuint elementBufferID;
 

@@ -20,8 +20,6 @@ StaticMesh::StaticMesh(std::vector<Vertex>& vertices,
 	//vertexBuffer = std::move(vertices);
     //elementBuffer = std::move(indices);
     textureList = std::move(textures);
-	// Only allocate and draw using the ebo if indices are provided
-	useEBO = (elementBuffer.size() > 0);
 
 	// TODO: remove
 	// For testing, just hardcode a square
@@ -34,7 +32,7 @@ StaticMesh::StaticMesh(std::vector<Vertex>& vertices,
 	//vertexBuffer.emplace_back(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)); // bottom left
 	//vertexBuffer.emplace_back(glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)); // top left 
 	
-	unsigned int hardcoded_indices[] = {  // note that we start from 0!
+	GLuint hardcoded_indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
@@ -75,6 +73,8 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		textureList.at(i).Bind(i);
 		// TODO: does this work without using texture.bind()?
 		//glActiveTexture(GL_TEXTURE0 + i);
+		// A: ^ no, you also need to call glBindTexture to actually assign the texture
+		//   to the active texture unit
 
 		// Get a string representing this texture's type
 		const Texture::TextureType tex_type = textureList.at(i).GetType();
@@ -90,33 +90,26 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		//std::cout << " to unit number " << i << std::endl;
 		shader->SetIntUniform("texture" + type_string + num_string, i, true);
 	}
-	glActiveTexture(GL_TEXTURE0);
 
 	/* ----- Bind vertex data & draw the mesh ----- */
 	// Load this mesh's buffer/attribute settings
 	glBindVertexArray(vertexArrayID);
-	// Draw the mesh using either indexed EBO drawing or raw VBO drawing
-	// TODO: use ebo
-	if (true) {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
-		// Draw the mesh using indexed drawing & the element buffer
-		glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
-		// ^ 1: the primitive type (just like the VBO DrawArrays version)
-		//   2: # of elements to draw
-		//   3: the type of the indices
-		//   4: offset or array ref, we don't need to worry abt it now
-	}
-	else {
-		// TODO: I think Assimp automatically makes EVERYTHING use indexed drawing. Does
-		//   this ever get called? If so, is that /8 correct?
+	// Draw the mesh using indexed drawing & the element buffer
+	glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
+	// ^ 1: the primitive type (just like the VBO DrawArrays version)
+	//   2: # of elements to draw
+	//   3: the type of the indices
+	//   4: offset or array ref, we don't need to worry abt it now
+	// TODO: remove
+	// Draw straight from the VBO (w/out indexed drawing)
+	//glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
+	// ^ 1: the primitive type that we want to draw
+	//   2: The starting index of the vertex array that we want to draw
+	//   3: How many vertices we want to draw
 
-		// Draw straight from the VBO (w/out indexed drawing)
-		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
-		// ^ 1: the primitive type that we want to draw
-		//   2: The starting index of the vertex array that we want to draw
-		//   3: How many vertices we want to draw
-	}
+	// Set everything back to the defaults
 	glBindVertexArray(0);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void StaticMesh::AddTexture(const Texture& new_tex) {
@@ -128,56 +121,48 @@ void StaticMesh::ClearTextures() {
 }
 
 void StaticMesh::SetupVertexArray() {
-	/* ----- Create the vertex array object ----- */
+	/* ----- Create the vertex array & buffers ----- */
 	// VAO - Stores the buffer & attribute configurations for this object, so you
 	//   don't have to re-specify how the attributes are set up each time you draw
 	//   the object (just bind the VAO and you're good)
 	// Usually, you want to generate the VAOs for all the objects you want at the
 	//   start of the program, and store them for later use
 	glGenVertexArrays(1, &vertexArrayID);
-	glBindVertexArray(vertexArrayID);
-
-	/* ----- Create the buffer objects ----- */
-	// Main VBO
+	// VBO - raw vertex data
 	glGenBuffers(1, &vertexBufferID);
-	// Optional EBO
-	if (useEBO) {
-		// Create the EBO - a way to specify both the vertices, and the order to draw them.
-		//   This lets you do things like draw a rectangle by only specifying 4 points
-		//   (otherwise, you'd have to define two triangles: 6 points,
-		//   2 of them identical)
-		glGenBuffers(1, &elementBufferID);
-	}
+	// EBO - a way to specify both the vertices, and the order to draw them.
+	//   This lets you do things like draw a rectangle by only specifying 4 points
+	//   (otherwise, you'd have to define two triangles: 6 points,
+	//   2 of them identical)
+	glGenBuffers(1, &elementBufferID);
 
-	/* ----- Send the buffers to the GPU and set their attribute pointers ----- */
+	/* ----- Send the buffers to the GPU ----- */
+	glBindVertexArray(vertexArrayID);
 	// Send vertex data to the GPU
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(Vertex),
 		&vertexBuffer[0], GL_STATIC_DRAW);
-	// Setup the position attribute. Use the offsetof() macro for getting vertex offsets
+	// Send element index data to the GPU
+	// From now on, binding to the VAO will also bind to this EBO, Letting us use
+	//   glDrawElements instead of glDrawArrays for this mesh
+	// IMPORTANT NOTE: a VAO can only have 1 EBO. The VAO uses whatever EBO was
+	//   most recently bound
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.size() * sizeof(GLuint),
+		&elementBuffer[0], GL_STATIC_DRAW);
+
+	/* ----- Set the attribute pointers for vertex data ----- */
+	// Position attribute
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-		(void*)offsetof(Vertex, position));
-	// Setup the normal attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	// Normal attribute. Use the offsetof() macro for getting vertex offsets
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(void*)offsetof(Vertex, normal));
-	// Setup the texCoord attribute
+	// TexCoord attribute
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(void*)offsetof(Vertex, texCoord));
-
-	if (useEBO) {
-		// Element Buffer
-		// From now on, binding to the VAO will also bind to this EBO, Letting us use
-		//   glDrawElements instead of glDrawArrays for this mesh
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.size() * sizeof(GLuint),
-			&elementBuffer[0], GL_STATIC_DRAW);
-		// EBO's don't have attributes
-		// IMPORTANT NOTE: a VAO can only have 1 EBO. The VAO uses whatever EBO was
-		//   most recently bound
-	}
 
 	/* ----- (Optional) Unbind the Buffers & Vertex Array Object ----- */
 	// This prevents further calls from accidentally modifying these objects
