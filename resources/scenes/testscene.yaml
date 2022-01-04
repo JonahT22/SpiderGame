@@ -21,7 +21,7 @@ scene_objects:
     -   type: "model"
         name: "right_cube"
         # If no modelfile is given, a simple cube will be loaded for the object
-        modelfile: "resources/models/teapot.obj"
+        modelfile: "resources/models/cube.obj"
         # Optional override for whatever textures are included in the model file
         # TODO: test w/no texture override, need default texture from engine settings
         texture_override: "resources/textures/skybox1/back.jpg"
