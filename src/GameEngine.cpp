@@ -22,11 +22,14 @@ GameEngine::GameEngine(const std::string& options_file) :
 	//    client API version that the created context must be compatible with.
 	//    The exact behavior of these hints depend on the requested client API.
 	// I.e. does the user have a recent-enough version of opengl installed?
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	// Use the (modern) core profile - don't include backwards-compatible features
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // only needed for Mac
+	// Add debug support (Note: SIGNIFICANTLY slows down program, so TODO make this
+	//   optional later
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 	/* ----- Create the game window ----- */
 	mainWindow = std::make_unique<Window>(options.windowWidth, options.windowHeight,
@@ -40,11 +43,21 @@ GameEngine::GameEngine(const std::string& options_file) :
 		abort();
 	}
 
-	// Once GLAD function pointers are loaded into the new context, set up the OpenGL viewport
-
 	// Print OpenGL version. Don't need to print GLSL version since GLSL versions match
 	//   with OpenGL for all versions after OpenGL 3.3
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+
+	// Set up debug_output extension
+	int flags;
+	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+		// Set opengl debug messages to use a custom callback function
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
+		glDebugMessageCallback(DebugCallback, nullptr);
+		// Optionally set filters for messages. GL_DONT_CARE allows any messages
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+	}
 
 	// Call the window's resizing function to initialize the OpenGL window size
 	mainWindow->ResizeEvent(options.windowWidth, options.windowHeight);
@@ -54,6 +67,9 @@ GameEngine::GameEngine(const std::string& options_file) :
 	// Change the depth check from < to <=, so that skyboxes (which always have a depth
 	//   of 1) can still pass depth tests
 	glDepthFunc(GL_LEQUAL);
+
+	// Set the debug message callback
+	glEnable(GL_DEBUG_OUTPUT);
 
 	// Set the void color
 	glClearColor(options.clearColor.r, options.clearColor.g, options.clearColor.b, 1.0f);
@@ -162,4 +178,49 @@ void GameEngine::SetKeyPressed(int key, bool is_pressed) {
 		return;
 	}
 	keysPressed[key] = is_pressed;
+}
+
+void APIENTRY GameEngine::DebugCallback(GLenum source, GLenum type, GLuint id,
+	GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	// Debug callback adapted from https://learnopengl.com/In-Practice/Debugging
+	
+	// Ignore non-significant error/warning codes
+    if(id == 131169 || id == 131185 || id == 131218 || id == 131204) {
+		return;
+	}
+
+    std::cout << "---------------" << std::endl;
+    std::cout << "Debug message (" << id << "): " <<  message << std::endl;
+
+    switch (source)
+    {
+        case GL_DEBUG_SOURCE_API:             std::cout << "Source: API"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   std::cout << "Source: Window System"; break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: std::cout << "Source: Shader Compiler"; break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:     std::cout << "Source: Third Party"; break;
+        case GL_DEBUG_SOURCE_APPLICATION:     std::cout << "Source: Application"; break;
+        case GL_DEBUG_SOURCE_OTHER:           std::cout << "Source: Other"; break;
+    } std::cout << std::endl;
+
+    switch (type)
+    {
+        case GL_DEBUG_TYPE_ERROR:               std::cout << "Type: Error"; break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cout << "Type: Deprecated Behaviour"; break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cout << "Type: Undefined Behaviour"; break; 
+        case GL_DEBUG_TYPE_PORTABILITY:         std::cout << "Type: Portability"; break;
+        case GL_DEBUG_TYPE_PERFORMANCE:         std::cout << "Type: Performance"; break;
+        case GL_DEBUG_TYPE_MARKER:              std::cout << "Type: Marker"; break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:          std::cout << "Type: Push Group"; break;
+        case GL_DEBUG_TYPE_POP_GROUP:           std::cout << "Type: Pop Group"; break;
+        case GL_DEBUG_TYPE_OTHER:               std::cout << "Type: Other"; break;
+    } std::cout << std::endl;
+    
+    switch (severity)
+    {
+        case GL_DEBUG_SEVERITY_HIGH:         std::cout << "Severity: high"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       std::cout << "Severity: medium"; break;
+        case GL_DEBUG_SEVERITY_LOW:          std::cout << "Severity: low"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: std::cout << "Severity: notification"; break;
+    } std::cout << std::endl;
+    std::cout << std::endl;
 }
