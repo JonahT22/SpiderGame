@@ -17,19 +17,36 @@ StaticMesh::StaticMesh(std::vector<Vertex>& vertices,
 	vertexArrayID(0),
 	vertexBufferID(0),
 	elementBufferID(0) {
-	vertexBuffer = std::move(vertices);
-    elementBuffer = std::move(indices);
+	//vertexBuffer = std::move(vertices);
+    //elementBuffer = std::move(indices);
     textureList = std::move(textures);
 	// Only allocate and draw using the ebo if indices are provided
 	useEBO = (elementBuffer.size() > 0);
-	//GenerateCubeMesh();
+
+	// TODO: remove
+	// For testing, just hardcode a square
+	vertexBuffer.emplace_back(glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f));  // top right
+	vertexBuffer.emplace_back(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f));  // bottom right
+	vertexBuffer.emplace_back(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)); // bottom left
+	vertexBuffer.emplace_back(glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)); // top left 
+
+	//vertexBuffer.emplace_back(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f));  // bottom right
+	//vertexBuffer.emplace_back(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)); // bottom left
+	//vertexBuffer.emplace_back(glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)); // top left 
+	
+	unsigned int hardcoded_indices[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+	elementBuffer.assign(std::begin(hardcoded_indices), std::end(hardcoded_indices));
+
 	SetupVertexArray();
 
 	// TODO: remove
-	std::cout << "Creating static mesh: " << std::endl;
+	/*std::cout << "Creating static mesh: " << std::endl;
 	for (auto& vertex : vertexBuffer) {
-		//vertex.Print();
-	}
+		vertex.Print();
+	}*/
 }
 
 StaticMesh::~StaticMesh() {
@@ -37,58 +54,6 @@ StaticMesh::~StaticMesh() {
     glDeleteVertexArrays(1, &vertexArrayID);
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementBufferID);
-}
-
-void StaticMesh::GenerateCubeMesh() {
-	float tex_mult_u = 1.0f;
-	float tex_mult_v = 1.0f;
-	Vertex positions[] = {
-		// Vertex data for a cube
-		// posX, posY, posZ,  norX,  norY,  norZ, texU, texV,
-		// Back
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		//Vertex(glm::vec3(// Front			), glm::vec3(					 ), glm::vec2(									   ))
-		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		//Vertex(glm::vec3(// Left			), glm::vec3(					 ), glm::vec2(									   ))
-		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		//Vertex(glm::vec3(// Right			 ), glm::vec3(					 ), glm::vec2(									   ))
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		//Vertex(glm::vec3( // Bottom			 ), glm::vec3(					  ), glm::vec2(
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		//Vertex(glm::vec3( // Top			 ), glm::vec3(					  ), glm::vec2(										))
-		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 1.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 0.0f * tex_mult_v)),
-		Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f * tex_mult_u, 1.0f * tex_mult_v))
-	};
-	vertexBuffer.assign(std::begin(positions), std::end(positions));
 }
 
 void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
@@ -123,7 +88,7 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		// TODO: remove print
 		//std::cout << "Setting texture name: " << "texture" + type_string + num_string;
 		//std::cout << " to unit number " << i << std::endl;
-		shader->SetIntUniform("texture" + type_string + num_string, i);
+		shader->SetIntUniform("texture" + type_string + num_string, i, true);
 	}
 	glActiveTexture(GL_TEXTURE0);
 
@@ -131,7 +96,9 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// Load this mesh's buffer/attribute settings
 	glBindVertexArray(vertexArrayID);
 	// Draw the mesh using either indexed EBO drawing or raw VBO drawing
-	if (false) {
+	// TODO: use ebo
+	if (true) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferID);
 		// Draw the mesh using indexed drawing & the element buffer
 		glDrawElements(GL_TRIANGLES, elementBuffer.size(), GL_UNSIGNED_INT, 0);
 		// ^ 1: the primitive type (just like the VBO DrawArrays version)

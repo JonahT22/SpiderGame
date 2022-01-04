@@ -38,8 +38,6 @@ public:
 	           std::vector<Texture>& textures);
 	~StaticMesh();
 
-	void GenerateCubeMesh();
-
 	void Render(const std::shared_ptr<ShaderProgram> shader) const;
 	// Add a new texture to the texture list
 	void AddTexture(const Texture& new_tex);
