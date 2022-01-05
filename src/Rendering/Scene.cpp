@@ -7,8 +7,6 @@
 
 #include <yaml-cpp/yaml.h>
 
-// TODO: Scene shouldn't need to include every kind of sceneobject. Instead, let them
-//   manage their own loading
 #include "../AssetImport/Model.h"
 #include "../AssetImport/Texture.h"
 #include "../GameEngine.h"
@@ -185,12 +183,12 @@ std::shared_ptr<Model> Scene::GetModel(const std::string& filename) {
 }
 
 std::shared_ptr<Texture> Scene::GetTexture(const std::string& filename,
-	Texture::TextureType tex_type) {
+	Texture::TextureType tex_type, TextureOptions options) {
 	if (textureMap.count(filename)) {
 		return textureMap[filename];
 	}
 	else {
-		textureMap[filename] = std::make_shared<Texture>(filename, tex_type);
+		textureMap[filename] = std::make_shared<Texture>(filename, tex_type, options);
 		return textureMap[filename];
 	}
 }
@@ -224,7 +222,6 @@ inline std::shared_ptr<Camera> Scene::LoadCamera(const YAML::Node& camera_node, 
 }
 
 inline std::shared_ptr<SpiderCharacter> Scene::LoadSpider(const YAML::Node& spider_node) {
-	// TODO: cleanup
 	const std::string spider_name = YAMLHelper::GetMapVal<std::string>(spider_node, "name");
 	const float move_speed = YAMLHelper::GetMapVal<float>(spider_node, "move_speed");
 	const float turn_speed = YAMLHelper::GetMapVal<float>(spider_node, "turn_speed");

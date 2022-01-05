@@ -39,7 +39,8 @@ public:
 	// Get/Create a Texture with the provided path. If creating a new texture,
 	//   set its texture type with tex_type
 	std::shared_ptr<Texture> GetTexture(const std::string& filename,
-		Texture::TextureType tex_type = Texture::TextureType::DIFFUSE);
+		Texture::TextureType tex_type = Texture::TextureType::DIFFUSE,
+		TextureOptions options = TextureOptions());
 
 private:
 	/* ----- Functions for loading subclasses of SceneObjects ----- */

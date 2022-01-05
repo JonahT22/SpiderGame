@@ -8,13 +8,19 @@
 
 struct TextureOptions {
 	// Sets GL_TEXTURE_WRAP_(S or T)
-	GLenum wrapType = GL_REPEAT;
+	GLenum wrapType;
 	// Sets GL_TEXTURE_MIN_FILTER
-	GLenum minFilter = GL_LINEAR_MIPMAP_LINEAR;
+	GLenum minFilter;
 	// Sets GL_TEXTURE_MAX_FILTER
-	GLenum maxFilter = GL_LINEAR;
+	GLenum maxFilter;
 	// Used in glTexImage2D
-	GLenum internalFormat = GL_RGB;
+	// TODO: test with getting rid of this (i.e. if I read in a RGBA or RED image and
+	//   represent it internally as RGBA or RED, will it cause issues?)
+	GLenum internalFormat;
+	// Default constructor
+	TextureOptions() :
+		wrapType(GL_REPEAT), minFilter(GL_LINEAR_MIPMAP_LINEAR),
+		maxFilter(GL_LINEAR), internalFormat(GL_RGB) {}
 };
 
 /// 
@@ -50,12 +56,10 @@ public:
 	}
 
 	/* ----- Class Definition ----- */
-	// Default (invalid) constructor
-	Texture();
-	// Proper constructor from file
-	Texture(const std::string& filepath, const TextureType type);
-	// Deallocate this texture's GPU resources (Note: Do NOT make copies of Texture
-	//   objects to avoid accidental deallocation)
+	Texture(const std::string& filepath, const TextureType type,
+	        const TextureOptions options);
+	// Destructor deallocates this texture's GPU resources (Note: Do NOT make copies
+	//   of Texture objects to avoid accidental deallocation)
 	~Texture();
 
 	// Binds this texture to the provided texture unit (default = 0)
@@ -66,11 +70,15 @@ public:
 	bool IsLoaded() const;
 	TextureType GetType() const;
 
+	/* ----- Setters ----- */
+	void SetType(const TextureType new_type);
+
 private:
 	// Texture properties
 	GLuint textureID;
 	TextureType type;
 
-	void LoadFromFile(const std::string& filename);
+	// Load and allocate this texture
+	void LoadFromFile(const std::string& filename, TextureOptions options);
 };
 

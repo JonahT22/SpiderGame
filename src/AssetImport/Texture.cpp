@@ -4,14 +4,11 @@
 
 #include "stb_image.h"
 
-Texture::Texture() :
-	textureID(0),
-	type(TextureType::ENUM_END){}
-
-Texture::Texture(const std::string& filepath, const TextureType type) :
+Texture::Texture(const std::string& filepath, const TextureType type,
+                 const TextureOptions options) :
 	type(type),
 	textureID(0) {
-	LoadFromFile(filepath);
+	LoadFromFile(filepath, options);
 }
 
 Texture::~Texture() {
@@ -19,38 +16,7 @@ Texture::~Texture() {
 	glDeleteTextures(1, &textureID);
 }
 
-void Texture::Bind(GLuint texture_unit) const {
-	// Check that the texture has been generated
-	if (textureID <= 0) {
-		std::cerr << "ERROR: Attempted to bind a texture that has not been loaded!";
-		std::cerr << std::endl;
-		return;
-	}
-	// When working with multiple textures, it's necessary to define the texture unit
-	//   that each texture occupies when you bind it. Then, the shader can look in the
-	//   corresponding texture unit's location when it accesses the sampler2D data
-	glActiveTexture(GL_TEXTURE0 + texture_unit);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-}
-
-bool Texture::IsLoaded() const {
-	return (textureID > 0);
-}
-
-Texture::TextureType Texture::GetType() const {
-	return type;
-}
-
-
-void Texture::LoadFromFile(const std::string& filename) {
-	// TODO: remove
-	std::cout << "Loading texture " << filename << "..." << std::endl;
-	// TODO: set the texture type
-	// TODO: eventually, this should be read from the assimp material. For now,
-	//   just hardcode the texture options
-	TextureOptions options{ GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR,
-								GL_LINEAR, GL_RGB };
-
+void Texture::LoadFromFile(const std::string& filename, TextureOptions options) {
 	// Create the texture object
 	glGenTextures(1, &textureID);
 	// Set this texture as the current texture, to be modified by further opengl calls
@@ -82,6 +48,7 @@ void Texture::LoadFromFile(const std::string& filename) {
 	}
 	if (data) {
 		// Create the texture object
+		// TODO remove?
 		// Arguments:
 		//   GLenum target - which texture object in the current context is being created?
 		//   GLint level - mipmap level to set (if you're setting them manually)
@@ -93,8 +60,6 @@ void Texture::LoadFromFile(const std::string& filename) {
 		//     even if it doesn't
 		//   GLenum type - what datatype is used to represent the image in the file?
 		//   const void* pixels - the raw data
-		// TODO: external format is currently hardcoded, but should be read from the number
-		//   of channels in the image
 		glTexImage2D(GL_TEXTURE_2D, 0, options.internalFormat, width, height, 0,
 			external_format, GL_UNSIGNED_BYTE, data);
 		// Let OpenGL create the other mipmaps automatically, instead of calling glTexImage2D for them
@@ -105,4 +70,31 @@ void Texture::LoadFromFile(const std::string& filename) {
 		std::cerr << std::endl;
 	}
 	stbi_image_free(data);
+}
+
+
+void Texture::Bind(GLuint texture_unit) const {
+	// Check that the texture has been generated
+	if (textureID <= 0) {
+		std::cerr << "ERROR: Attempted to bind a texture that has not been loaded!";
+		std::cerr << std::endl;
+		return;
+	}
+	// When working with multiple textures, it's necessary to define the texture unit
+	//   that each texture occupies when you bind it. Then, the shader can look in the
+	//   corresponding texture unit's location when it accesses the sampler2D data
+	glActiveTexture(GL_TEXTURE0 + texture_unit);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
+bool Texture::IsLoaded() const {
+	return (textureID > 0);
+}
+
+Texture::TextureType Texture::GetType() const {
+	return type;
+}
+
+void Texture::SetType(const TextureType new_type) {
+	type = new_type;
 }
