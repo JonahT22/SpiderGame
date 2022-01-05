@@ -54,9 +54,9 @@ public:
 	Texture();
 	// Proper constructor from file
 	Texture(const std::string& filepath, const TextureType type);
-	// TODO: add a proper destructor with glDeleteTexture. Scene should manage all textures
-	//   so it shouldn't be called multiple times
-	~Texture() = default;
+	// Deallocate this texture's GPU resources (Note: Do NOT make copies of Texture
+	//   objects to avoid accidental deallocation)
+	~Texture();
 
 	// Binds this texture to the provided texture unit (default = 0)
 	void Bind(GLuint texture_unit = 0) const;

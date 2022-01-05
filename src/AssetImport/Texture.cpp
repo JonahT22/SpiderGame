@@ -14,6 +14,11 @@ Texture::Texture(const std::string& filepath, const TextureType type) :
 	LoadFromFile(filepath);
 }
 
+Texture::~Texture() {
+	// Deallocate the texture's GPU resources
+	glDeleteTextures(1, &textureID);
+}
+
 void Texture::Bind(GLuint texture_unit) const {
 	// Check that the texture has been generated
 	if (textureID <= 0) {
