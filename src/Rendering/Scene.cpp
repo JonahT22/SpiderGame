@@ -203,7 +203,7 @@ inline std::shared_ptr<ModelObject> Scene::LoadModel(const YAML::Node& model_nod
 	if (YAMLHelper::DoesMapHaveField(model_node, "texture_override")) {
 		std::string override_tex_path =
 			YAMLHelper::GetMapVal<std::string>(model_node, "texture_override");
-		// TODO: from this path, get the texture from the scene and pass to the modelobject
+		new_model->SetTextureOverride(GetTexture(override_tex_path));
 	}
 	return new_model;
 }

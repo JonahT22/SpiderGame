@@ -28,35 +28,44 @@ StaticMesh::~StaticMesh() {
     glDeleteBuffers(1, &elementBufferID);
 }
 
-void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
-	/* ----- Bind texture data ----- */
-	// Each object can have multiple textures
-	//   of several types. Bind them to texture units, and set the uniforms for the
-	//   texture samplers in the shader to the corresponding texture units
-	// Assume shaders use the naming convention:
-	//   textureDiffuse0
-	//   textureDiffuse1
-	//   textureSpecular0, etc...
+void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader,
+                        const std::weak_ptr<Texture> tex_override) const {
+	
+	if (tex_override.lock()) {
+		// If the texture override points to a valid texture, ignore this mesh's
+		//   texturelist and just bind the override texture
+		tex_override.lock()->Bind();
+	}
+	else {
+		// If no texture override is provided, bind the texture data in the texList
+		// Each object can have multiple textures
+		//   of several types. Bind them to texture units, and set the uniforms for the
+		//   texture samplers in the shader to the corresponding texture units
+		// Assume shaders use the naming convention:
+		//   textureDiffuse0
+		//   textureDiffuse1
+		//   textureSpecular0, etc...
 
-	// Keep track of how many textures of each type have been bound
-	constexpr GLuint num_tex_types = static_cast<GLuint>(Texture::TextureType::ENUM_END);
-	std::vector<GLuint> tex_counts(num_tex_types, 0);
-	// Try binding each texture and send the texture's unit to the shader
-	for (size_t i = 0; i < textureList.size(); ++i) {
-		std::shared_ptr<Texture> current_texture = textureList.at(i).lock();
-		// Bind textures to units 0, 1, 2, ...
-		current_texture->Bind(i);
+		// Keep track of how many textures of each type have been bound
+		constexpr GLuint num_tex_types = static_cast<GLuint>(Texture::TextureType::ENUM_END);
+		std::vector<GLuint> tex_counts(num_tex_types, 0);
+		// Try binding each texture and send the texture's unit to the shader
+		for (size_t i = 0; i < textureList.size(); ++i) {
+			std::shared_ptr<Texture> current_texture = textureList.at(i).lock();
+			// Bind textures to units 0, 1, 2, ...
+			current_texture->Bind(i);
 
-		// Get a string representing this texture's type
-		const Texture::TextureType tex_type = current_texture->GetType();
-		const std::string type_string = Texture::TypeToString(tex_type);
-		// Find the 'number' of this texture (i.e. diffuse_0 vs diffuse_1)
-		const GLuint tex_type_idx = static_cast<GLuint>(tex_type);
-		// Get the texture's number, THEN increment the counter for this texture type
-		const std::string num_string = std::to_string(tex_counts.at(tex_type_idx)++);
-		
-		// Set the texture unit value on the shader
-		shader->SetIntUniform("texture" + type_string + num_string, i, false);
+			// Get a string representing this texture's type
+			const Texture::TextureType tex_type = current_texture->GetType();
+			const std::string type_string = Texture::TypeToString(tex_type);
+			// Find the 'number' of this texture (i.e. diffuse_0 vs diffuse_1)
+			const GLuint tex_type_idx = static_cast<GLuint>(tex_type);
+			// Get the texture's number, THEN increment the counter for this texture type
+			const std::string num_string = std::to_string(tex_counts.at(tex_type_idx)++);
+
+			// Set the texture unit value on the shader
+			shader->SetIntUniform("texture" + type_string + num_string, i, false);
+		}
 	}
 
 	/* ----- Bind vertex data & draw the mesh ----- */

@@ -38,7 +38,9 @@ public:
 	           std::vector<std::weak_ptr<Texture> >& textures);
 	~StaticMesh();
 
-	void Render(const std::shared_ptr<ShaderProgram> shader) const;
+	// Draw the mesh, with an optional texture override
+	void Render(const std::shared_ptr<ShaderProgram> shader,
+	            const std::weak_ptr<Texture> tex_override) const;
 
 private:
 	void SetupVertexArray();

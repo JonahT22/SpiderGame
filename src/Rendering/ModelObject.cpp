@@ -9,8 +9,9 @@
 #include "ShaderProgram.h"
 
 ModelObject::ModelObject(std::weak_ptr<GameEngine> engine, const std::string& name,
-	const std::string& model_path) :
-	SceneObject(engine, name) {
+                         const std::string& model_path) :
+	SceneObject(engine, name),
+	textureOverride() {
 	std::string path;
 	if (model_path == "") {
 		// If no model is provided, load the default model from the engine
@@ -25,6 +26,10 @@ ModelObject::ModelObject(std::weak_ptr<GameEngine> engine, const std::string& na
 	model = scene_ref->GetModel(path);
 }
 
+void ModelObject::SetTextureOverride(std::weak_ptr<Texture> tex_override) {
+	textureOverride = tex_override;
+}
+
 void ModelObject::BeginPlay() {}
 
 void ModelObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
@@ -32,6 +37,6 @@ void ModelObject::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	//   the model/invT matrices
 	SceneObject::Render(shader);
 
-	model.lock()->Render(shader);
+	model.lock()->Render(shader, textureOverride);
 }
 

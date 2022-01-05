@@ -33,11 +33,7 @@ scene_objects:
 
     -   type: "model"
         name: "center_backpack"
-        # If no modelfile is given, a simple cube will be loaded for the object
         modelfile: "resources/models/backpack/backpack.obj"
-        # Optional override for whatever textures are included in the model file
-        # TODO: test w/no texture override, need default texture from engine settings
-        texture_override: "resources/textures/skybox1/back.jpg"
         # shader, relative_transform, and parent are inherited from SceneObject
         shader: "unlit"
         relative_transform:
@@ -130,7 +126,6 @@ scene_objects:
         modelfile: ""
         texture_override: "resources/textures/fabric.jpg"
         shader: "unlit"
-        tex_scale: [1.0, 0.1]
         relative_transform:
             location: [0.0, 0.15, 0.25]
             rotation: [0.0, 0.0, 0.0]
@@ -141,8 +136,6 @@ scene_objects:
         name: "floor_cube"
         modelfile: ""
         texture_override: "resources/textures/marble.jpg"
-        # TODO: implement this
-        tex_scale_override: [3.0, 3.0]
         shader: "unlit"
         relative_transform:
             location: [0.0, -0.5, 0.0]

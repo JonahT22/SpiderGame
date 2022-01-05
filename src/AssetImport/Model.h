@@ -30,8 +30,9 @@ public:
 	//   to the 1st diffuse texture, and just skip the texture binding when
 	//   rendering the model's meshes). 
 
-	// TODO: optionally override texture when rendering
-	void Render(const std::shared_ptr<ShaderProgram>& shader) const;
+	// Render each mesh in the model, with an optional texture override
+	void Render(const std::shared_ptr<ShaderProgram>& shader,
+	            const std::weak_ptr<Texture> tex_override) const;
 
 private:
 	void ProcessNode(aiNode* node, const aiScene* scene,

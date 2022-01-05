@@ -32,9 +32,10 @@ Model::Model(const std::string& filename, std::weak_ptr<Scene> scene_ref) {
 	ProcessNode(ai_scene->mRootNode, ai_scene, scene_ref);
 }
 
-void Model::Render(const std::shared_ptr<ShaderProgram>& shader) const {
+void Model::Render(const std::shared_ptr<ShaderProgram>& shader,
+                   const std::weak_ptr<Texture> tex_override) const {
 	for (auto& mesh : meshList) {
-		mesh->Render(shader);
+		mesh->Render(shader, tex_override);
 	}
 }
 
