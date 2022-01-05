@@ -48,7 +48,6 @@ void Texture::LoadFromFile(const std::string& filename, TextureOptions options) 
 	}
 	if (data) {
 		// Create the texture object
-		// TODO remove?
 		// Arguments:
 		//   GLenum target - which texture object in the current context is being created?
 		//   GLint level - mipmap level to set (if you're setting them manually)

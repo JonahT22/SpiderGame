@@ -17,9 +17,9 @@ Model::Model(const std::string& filename, std::weak_ptr<Scene> scene_ref) {
 	// Read the file with some aiPostProcessSteps flags (see assimp->postprocess.h)
 	//   - Triangulate: make sure the file is read as a triangle mesh
 	//   - OptimizeMeshes: try to combine meshes to reduce the # of draw calls
-	//   - TODO: JoinIdenticalVertices might be a good one too
+	//   - JoinIdenticalVertices: Reduce number of vertices for indexed drawing
 	const aiScene* ai_scene = importer.ReadFile(filename, aiProcess_Triangulate |
-		aiProcess_FlipUVs | aiProcess_OptimizeMeshes);
+		aiProcess_FlipUVs | aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices);
 	// Check if the scene loaded properly
 	if (!ai_scene || ai_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !ai_scene->mRootNode) {
 		std::cout << "ERROR while loading model with Assimp: ";
@@ -27,6 +27,7 @@ Model::Model(const std::string& filename, std::weak_ptr<Scene> scene_ref) {
 		return;
 	}
 	modelDir = filename.substr(0, filename.find_last_of('/'));
+	// Iterate through the scene and load the meshes & textures
 	ProcessNode(ai_scene->mRootNode, ai_scene, scene_ref);
 }
 
