@@ -88,7 +88,7 @@ void GameEngine::SetupScene(const std::string& filename) {
 	//   "control rotation" and "control velocity" inputs that the camera & 
 	//   character reference for their functions
 
-	scene = std::make_unique<Scene>(enable_shared_from_this::weak_from_this());
+	scene = std::make_shared<Scene>(enable_shared_from_this::weak_from_this());
 	scene->LoadSceneFile(filename);
 }
 
@@ -165,6 +165,10 @@ const float GameEngine::GetPhysicsTimeStep() const {
 
 std::string GameEngine::GetDefaultModelPath() const {
 	return options.defaultModelPath;
+}
+
+std::shared_ptr<Scene> GameEngine::GetCurrentScene() const {
+	return scene;
 }
 
 void GameEngine::SetCurrentCamera(const std::shared_ptr<Camera> new_camera) {

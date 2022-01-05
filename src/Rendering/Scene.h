@@ -7,10 +7,12 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "../AssetImport/Texture.h"
 class Camera;
 class GameEngine;
 class IKChain;
 class LegTarget;
+class Model;
 class ModelObject;
 class SceneObject;
 class ShaderProgram;
@@ -20,7 +22,7 @@ class SpiderCharacter;
 /// 
 /// Container class that manages all SceneObjects and Shaders in a level
 ///
-class Scene {
+class Scene : public std::enable_shared_from_this<Scene> {
 public:
 	Scene(std::weak_ptr<GameEngine> engine);
 	~Scene() = default;
@@ -31,6 +33,13 @@ public:
 	void RenderScene(const unsigned int frameDelayMs) const;
 	// Instantiate every shader & SceneObject that will be used in this game
 	void LoadSceneFile(const std::string& filename);
+	// Get a reference to the Model with the provided path, or 
+	//   create a new one if it hasn't been loaded yet
+	std::shared_ptr<Model> GetModel(const std::string& filename);
+	// Get/Create a Texture with the provided path. If creating a new texture,
+	//   set its texture type with tex_type
+	std::shared_ptr<Texture> GetTexture(const std::string& filename,
+		Texture::TextureType tex_type = Texture::TextureType::DIFFUSE);
 
 private:
 	/* ----- Functions for loading subclasses of SceneObjects ----- */
@@ -65,6 +74,19 @@ private:
 
 	// List of every physics object in the scene (for raycasting)
 	// TODO
+
+	// Mapping from filepaths to models. All ModelObjects store references
+	//   to this master list
+	std::unordered_map<std::string, std::shared_ptr<Model> > modelMap;
+	// ^ Note: If I stored these as weak_ptrs, they would automatically deallocate
+	//   themselves if no ModelObjects are referencing them
+
+	// Mapping from filepaths to textures. All StaticMeshes store references
+	//   to this master list
+	std::unordered_map<std::string, std::shared_ptr<Texture> > textureMap;
+
+	// List of every texture in the scene, excluding skybox textures
+
 
 	// Skybox and its shader. The scene has exclusive control over the skybox
 	std::unique_ptr<Skybox> skybox;

@@ -9,19 +9,20 @@
 
 // TODO: Scene shouldn't need to include every kind of sceneobject. Instead, let them
 //   manage their own loading
-#include "../Player/Camera.h"
+#include "../AssetImport/Model.h"
+#include "../AssetImport/Texture.h"
 #include "../GameEngine.h"
 #include "../IK/IKChain.h"
 #include "../IK/LegTarget.h"
+#include "../Player/Camera.h"
+#include "../Player/SpiderCharacter.h"
+#include "../Utils/YAMLHelper.h"
 #include "ModelObject.h"
 #include "Scene.h"
 #include "SceneObject.h"
 #include "ShaderProgram.h"
 #include "Skybox.h"
-#include "../Player/SpiderCharacter.h"
-#include "../AssetImport/Texture.h"
 #include "Window.h"
-#include "../Utils/YAMLHelper.h"
 
 Scene::Scene(std::weak_ptr<GameEngine> engine) :
 	engineRef(engine) {}
@@ -171,20 +172,39 @@ void Scene::LoadSceneFile(const std::string& filename) {
 	UpdateScenePhysics(engineRef.lock()->GetPhysicsTimeStep());
 }
 
+std::shared_ptr<Model> Scene::GetModel(const std::string& filename) {
+	if (modelMap.count(filename)) {
+		// If it's already been loaded, return it
+		return modelMap[filename];
+	}
+	else {
+		// If it hasn't been loaded, create a new model and return it
+		modelMap[filename] = std::make_shared<Model>(filename, shared_from_this());
+		return modelMap[filename];
+	}
+}
+
+std::shared_ptr<Texture> Scene::GetTexture(const std::string& filename,
+	Texture::TextureType tex_type) {
+	if (textureMap.count(filename)) {
+		return textureMap[filename];
+	}
+	else {
+		textureMap[filename] = std::make_shared<Texture>(filename, tex_type);
+		return textureMap[filename];
+	}
+}
+
 inline std::shared_ptr<ModelObject> Scene::LoadModel(const YAML::Node& model_node) {
 	std::string model_name = YAMLHelper::GetMapVal<std::string>(model_node, "name");
 	std::string model_filepath = YAMLHelper::GetMapVal<std::string>(model_node, "modelfile");
-	// Optionally load a texture to override the model's provided texture. The default
-	//   Texture constructor creates an invalid Texture and is ignored by the modelobject
-	// TODO: Check if this texture has been loaded already
-	Texture override_texture = Texture();
+	auto new_model = std::make_shared<ModelObject>(engineRef, model_name, model_filepath);
+	// Set the (optional) texture override
 	if (YAMLHelper::DoesMapHaveField(model_node, "texture_override")) {
-		std::string tex_path =
+		std::string override_tex_path =
 			YAMLHelper::GetMapVal<std::string>(model_node, "texture_override");
-		override_texture = Texture(tex_path, Texture::TextureType::DIFFUSE);
+		// TODO: from this path, get the texture from the scene and pass to the modelobject
 	}
-	auto new_model = std::make_shared<ModelObject>(engineRef, model_name, model_filepath,
-		override_texture);
 	return new_model;
 }
 

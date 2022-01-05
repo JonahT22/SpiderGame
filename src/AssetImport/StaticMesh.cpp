@@ -10,7 +10,7 @@
 
 StaticMesh::StaticMesh(std::vector<Vertex>& vertices, 
                        std::vector<GLuint>& indices,
-                       std::vector<Texture>& textures) :
+                       std::vector<std::weak_ptr<Texture> >& textures) :
 	vertexArrayID(0),
 	vertexBufferID(0),
 	elementBufferID(0) {
@@ -43,11 +43,12 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	std::vector<GLuint> tex_counts(num_tex_types, 0);
 	// Try binding each texture and send the texture's unit to the shader
 	for (size_t i = 0; i < textureList.size(); ++i) {
+		std::shared_ptr<Texture> current_texture = textureList.at(i).lock();
 		// Bind textures to units 0, 1, 2, ...
-		textureList.at(i).Bind(i);
+		current_texture->Bind(i);
 
 		// Get a string representing this texture's type
-		const Texture::TextureType tex_type = textureList.at(i).GetType();
+		const Texture::TextureType tex_type = current_texture->GetType();
 		const std::string type_string = Texture::TypeToString(tex_type);
 		// Find the 'number' of this texture (i.e. diffuse_0 vs diffuse_1)
 		const GLuint tex_type_idx = static_cast<GLuint>(tex_type);
@@ -55,7 +56,7 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 		const std::string num_string = std::to_string(tex_counts.at(tex_type_idx)++);
 		
 		// Set the texture unit value on the shader
-		shader->SetIntUniform("texture" + type_string + num_string, i, true);
+		shader->SetIntUniform("texture" + type_string + num_string, i, false);
 	}
 
 	/* ----- Bind vertex data & draw the mesh ----- */
@@ -71,14 +72,6 @@ void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader) const {
 	// Set everything back to the defaults
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
-}
-
-void StaticMesh::AddTexture(const Texture& new_tex) {
-	textureList.emplace_back(new_tex);
-}
-
-void StaticMesh::ClearTextures() {
-	textureList.clear();
 }
 
 void StaticMesh::SetupVertexArray() {

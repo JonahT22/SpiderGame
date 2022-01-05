@@ -7,7 +7,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "Texture.h"
+class Texture;
 class ShaderProgram;
 
 ///
@@ -35,14 +35,10 @@ class StaticMesh {
 public:
 	StaticMesh(std::vector<Vertex>& vertices,
 	           std::vector<GLuint>& indices,
-	           std::vector<Texture>& textures);
+	           std::vector<std::weak_ptr<Texture> >& textures);
 	~StaticMesh();
 
 	void Render(const std::shared_ptr<ShaderProgram> shader) const;
-	// Add a new texture to the texture list
-	void AddTexture(const Texture& new_tex);
-	// Remove every texture from this object
-	void ClearTextures();
 
 private:
 	void SetupVertexArray();
@@ -63,6 +59,6 @@ private:
 
 	// Array of textures used by this mesh. Since textures are small objects (just
 	//   an ID and type), each mesh can store full copies of its texture objects
-	std::vector<Texture> textureList;
+	std::vector<std::weak_ptr<Texture> > textureList;
 };
 

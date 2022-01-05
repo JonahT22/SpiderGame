@@ -39,6 +39,7 @@ public:
 	bool IsKeyPressed(const int key) const;
 	const float GetPhysicsTimeStep() const;
 	std::string GetDefaultModelPath() const;
+	std::shared_ptr<Scene> GetCurrentScene() const;
 
 	/* ----- Setters ----- */
 	void SetCurrentCamera(const std::shared_ptr<Camera> new_camera);
@@ -48,7 +49,9 @@ private:
 	/* ----- Objects that the GameEngine exclusively controls ----- */
 	// TODO: do these need to be unique_ptrs, or can they just exist on the stack?
 	std::unique_ptr<Window> mainWindow;
-	std::unique_ptr<Scene> scene;
+	// The Scene should be kept as a shared ptr since some SceneObjects will query
+	//   the GameEngine to get references to it
+	std::shared_ptr<Scene> scene;
 
 	/* ----- Objects that the GameEngine references, but have lifetimes controlled by
 	other objects ----- */
