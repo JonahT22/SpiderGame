@@ -109,8 +109,6 @@ void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene,
 		LoadTexturesFromMaterial(material, aiTextureType_SPECULAR,
 			Texture::TextureType::SPECULAR, textures, scene_ref);
 	}
-	// TODO: get a default texture from the scene if there is no material, or if there
-	//   are no textures on the material
 
 	meshList.emplace_back(std::make_shared<StaticMesh>(vertices, indices, textures));
 }

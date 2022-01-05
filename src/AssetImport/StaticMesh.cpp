@@ -30,7 +30,6 @@ StaticMesh::~StaticMesh() {
 
 void StaticMesh::Render(const std::shared_ptr<ShaderProgram> shader,
                         const std::weak_ptr<Texture> tex_override) const {
-	
 	if (tex_override.lock()) {
 		// If the texture override points to a valid texture, ignore this mesh's
 		//   texturelist and just bind the override texture
