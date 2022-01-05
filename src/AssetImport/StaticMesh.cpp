@@ -22,7 +22,7 @@ StaticMesh::StaticMesh(std::vector<Vertex>& vertices,
 }
 
 StaticMesh::~StaticMesh() {
-    // Deallocate all of the buffers and arrays
+    // Deallocate all of the buffers and arrays from the GPU
     glDeleteVertexArrays(1, &vertexArrayID);
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &elementBufferID);

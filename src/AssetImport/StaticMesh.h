@@ -36,6 +36,8 @@ public:
 	StaticMesh(std::vector<Vertex>& vertices,
 	           std::vector<GLuint>& indices,
 	           std::vector<std::weak_ptr<Texture> >& textures);
+	// Deallocate this mesh's GPU resources (Note : Do NOT make copies of static
+	//   mesh objects to avoid accidental deallocation)
 	~StaticMesh();
 
 	// Draw the mesh, with an optional texture override

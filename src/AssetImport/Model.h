@@ -22,14 +22,6 @@ public:
 	Model(const std::string& filename, std::weak_ptr<Scene> scene_ref);
 	~Model() = default;
 
-	// Load the model into an assimp scene
-	// TODO: Always load the textures, and just override them later if necessary
-	// This allows multiple objects to use the same model, even though some might
-	//   not override the texture. Also, make texture overrides an optional thing
-	//   handled by the ModelObject (let the modelobject bind the override texture
-	//   to the 1st diffuse texture, and just skip the texture binding when
-	//   rendering the model's meshes). 
-
 	// Render each mesh in the model, with an optional texture override
 	void Render(const std::shared_ptr<ShaderProgram>& shader,
 	            const std::weak_ptr<Texture> tex_override) const;

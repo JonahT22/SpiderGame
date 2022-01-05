@@ -12,8 +12,6 @@
 #include "Texture.h"
 
 Model::Model(const std::string& filename, std::weak_ptr<Scene> scene_ref) {
-	// TODO remove
-	std::cout << "loading model " << filename << std::endl;
 	Assimp::Importer importer;
 	// Load the model's file into an Assimp scene (different than the Scene class)
 	// Read the file with some aiPostProcessSteps flags (see assimp->postprocess.h)
@@ -122,20 +120,32 @@ void Model::LoadTexturesFromMaterial(aiMaterial* material,
 	std::vector<std::weak_ptr<Texture> >& tex_list,
 	std::weak_ptr<Scene> scene_ref) {
 
+	// Keep track of how many materials of each type have been encountered
+	
+
 	for (size_t i = 0; i < material->GetTextureCount(ai_tex_type); ++i) {
 		// Construct a texture object from the path in the material
 		aiString local_tex_path;
 
-		// TODO: query the scene for the texture
-
 		material->GetTexture(ai_tex_type, i, &local_tex_path);
 		std::string path = modelDir + "/" + std::string(local_tex_path.C_Str());
 		tex_list.emplace_back(scene_ref.lock()->GetTexture(path, custom_tex_type));
-		// TODO: Get texture import info (wrapping, wireframe, 2 sided,
-		//     etc) from the material (see assimp material.h)
-		// TODO: have the scene hold a list of all imported textures (and models),
-		//   keep a hash map from paths -> indices in a master list,
-		//   and copy the entry from the list instead of loading a new texture from
-		//   scratch if it matches the path of an already-loaded texture
+		
+		// Note: if desired, you could also load more texture import options here, like
+		//   wrapping, 2 sided, etc. General idea here:
+		/*
+		// Before the for loop...
+		int type_counts[aiTextureType_UNKNOWN]{ 0 };
+		// In the for loop...
+		aiTextureType mapMode;
+		aiReturn status = material->Get(AI_MATKEY_MAPPINGMODE_U(ai_tex_type,
+		                                type_counts[ai_tex_type]), mapMode);
+		if (status != AI_SUCCESS) {
+			// Handle failure
+		}
+		// Make a mapping from aiTextureType to GLenum wrapType in TextureOptions
+		// Increment the counter for this material type
+		type_counts[ai_tex_type]++;
+		*/
 	}
 }
